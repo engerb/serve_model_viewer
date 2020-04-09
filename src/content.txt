@@ -1,0 +1,249 @@
+Enger Bewza: Product Design
+Defining new and emerging product experiences
+View my work >
+
+
+Robots that deliver your food
+    Serve, the autonomous delivery rover that safely navigates sidewalks today delivering food from restaurants to your door. 
+    2018 - Current
+    View project >
+
+The right size, from your phone
+    Ever buy shoes online only to realize they don't fit? Ya, that sucks. Dr. Scholl's 3D and Wiivv are a _step_ in the right direction.
+    2014 - 2018
+    View project >
+
+
+A few things I do
+    UX / UI design
+    UX and logic flows, such as checkout, shipment tracking and other transactional flows. 
+    Testing and iteration for increasing conversions.
+    Creating web and native app comps and documentation for dev handoff. 
+    Creating and maintaining design systems. 
+
+    Physical product and CMF
+    Prototypes using laser cutting and 3D printing, such as our rovers food storage.
+    CMF including concepts, renders and final manufacturability. 
+    Product packaging and out-of-box experience. 
+
+    Dev work
+    Web-dev work such as React for this website, the touch screen on our robot and Web-GL too. 
+    Servers and signal processing in python, currently learning Tensor-flow.
+    C / C++ on embedded systems as well as CUDA. 
+    All helpful in building prototypes, some even work their way into our end products. 
+
+
+Footer:
+    [Photo of Enger]
+    Hello! Thanks for checking out my work! 
+
+    I'm a product designer who loves going out of my comfort zone to design new and exciting user-experiences. I started out making games and websites in 2006, went to school for 3D animation, and then took an internship in 2011 creating product prototypes with 3D printing. Now I'm working on an autonomous delivery robot and all the machine learning and user challenges around that.
+
+    I'm passionate in working on the most challenging and undefined products, with cool people smarter than me.
+
+    Resume | Linkedin | Github | Codepen | Behance
+
+
+
+-------------------------------------------------------------------------
+
+
+Delivery robot
+    Serve: The autonomous delivery rover.
+    Safely navigates sidewalks today delivering food from restaurants to your door.
+
+    Postmates - X Team
+    2018 - Current
+
+    Categories:
+    UX/UI design, Dev, CMF, Prototyping
+
+    Tools used:
+    Figma, Sketch, Invision studio, Blender 3D, Adobe Ps/Ai/Ae/Pr/Au, Laser cutter, 3D printers, C/C++, JS, Python
+
+    Reading time:
+    15 minutes / 5 minutes quickread
+
+
+    Challenges
+        "I don't wan't some robot taking my job!"
+        "Robots are not there yet, I don't feel safe around one."
+        "Scooters and other crap already litter the sidewalk, we don't need more crap!"
+        "Why should I have to move out the way for some stupid tech company?"
+        "Tech companies run rampant and are out of touch with how their actions affect us"
+        "What about people in wheelchairs?"
+    
+    Initial concept
+        In 2018, I joined up with the X-team at Postmates, the goal being to start a design team and bring a product mindset to an engineering dominated space. < Up to that point, there were rovers that were operating, but very simple and a bit scary. 
+
+        Robotic companies at the time were either very engineering driven resulting in very unapproachable and scary products, or more cheerful, but not so useful toys. > <- It was my job to take threatening robots and turn it into something people would want to see on sidewalks.
+
+        [ Collage of existing robots with some "quote" notes of feedback on them ]
+
+        NDD did our initial concepts, and this is when I came on. Through meeting restaurants who use the Postmates platform, doing actual deliveries to meet end-users, and surveys of existing robots, we were able to put together a list of requirements for what we would want to create for autonomous food delivery. 
+    
+    Product requirements
+        - Friendly and approachable
+        - Able to communicate intent
+        - People should feel safe around it
+        - Secure and hygienic, yet easy to transact with
+        - Recognizable, not just some robot
+
+        A few things I pushed for personally were a touch screen because going into restaurants, I saw that they had 10 tablets, and they are not going unplug tablets and walk outside with them to unlock the rover. Another thing I felt was important was that it should have 4 wheels and steer like a car, not 6 and like a tank, this would allow the rover to communicate it's intended direction of travel. <- simplify as people don't really understand the whole tablets or problem thing, or maybe some picture / graphic
+
+        [ Concepts ]
+
+    Inception of Serve
+        After testing these concepts through the use of online surveys and out-in-the-wild cardboard model testing, we landed on Serve. Most people understood where the front was, it's face, and how to intuitively interact with it. 
+
+        [ Concept of Serve ]
+
+        Now that we had our product's concept, we needed to get to work on detailing all the interactions Serve may have with the humans.
+
+    Communication challenges, the "sidewalk UI"
+        We found the large majority of interactions would be with random people on the sidewalks and with cars at intersections. Pedestrians don't know how to, nor want to interact with a sidewalk robot. This means we must make these brief interactions seamless and pleasurable, paying particular attention to public acceptance and safety. 
+
+        We were essentially designing the sidewalk-UI, a similar concept to what Ford and Audi were attempting in their AV research. In those 3 seconds someone looks up from their phone and passes the robot, it needs to be safe, understandable, and they need to leave that interaction feeling like their space and agency was not violated. 
+
+        That means that we needed to use Serve lights, sounds, and motion to communicate that Serve has a purpose, while still being cheerful and intuitive.
+
+        Communication through lights
+            I started with a journey map of public interactions and end-to-end customer flows. This helped us enumerate every possible interaction we'd need to account for and design around.
+
+            For the eyes and strip, I got to work soldering on a hardware prototype. To create animations for this hardware, I put together a C library that translated and played 2D animations that I created via Photoshop and a Python script. For a full vision of the end product, I also implemented these animations onto a 3D render created in Blender.
+
+            [ Video and pics of Serve prototype hardware ]
+
+            We then put this all together into a test rig that we remotely operated through the busiest streets of Vancouver.
+
+            Here's some key learnings:
+                - No lights left people confused, thought it was rolling on it's own, broken.
+                - Lights produced a much more positive reaction, leaving people delighted instead of annoyed. 
+
+            [ video or pic of Serve prototype ]
+
+            Later on, Ken Kocienda, one of the engineers on the first iPhone, joined our design team and put our LED expression system on steroids. This allowed me to focus on designs while he focused on the implementation. 
+
+            [ Video of Ai Chechni and serve eyes ]
+
+        Communication through sounds
+            Sound design is hard... So, we decided to bring on an external sound designer with experience in the sound branding of vehicles, such as Telsa, to help define Serve's voice. I functioned as the project manager, keeping our goals of pleasant sounds and intuitive interactions top of mind. 
+
+            It was a challenge to try to find Serve's voice. This process involved a few months of back and forth to finally get something that really sounded like Serve. 
+
+            We made the decision to never have Serve "speak" with real words, as that would promise some kind of intelligent vocal interaction (as detailed in this paper). Instead, we made "voice" intonations similar to that of R2D2.
+
+            [ Some kind of graphic for sound or the sound layers ]
+
+            Since Serve was an electric vehicle that made no natural noise, I also wanted to clearly communicate it's speed. This is something that most EV's are required to do <link> today. It's important for safety, so that people are aware "something" is approaching behind them, coming around a corner, or increasing / decreasing in speed. 
+
+            To achieve this, we worked to find the right sound for modulation based on speed. Then, I wrote a python script that would express this "running" sound in real time based on Serve's motion. 
+
+            [ Video of Serve with running sound ] 
+
+        Communication through motion
+            Out of all of Serve's expressive features, movement is by far the most important. While watching our older prototypes drive, the slightest jitteriness and indecisiveness would cause an oncoming pedestrian to avoid the robot by walking into the road. This was not only embarrassing, but also a huge safety concern.
+            
+            We wanted to empower pedestrians to feel like they can safely share the sidewalk with our robot, putting an emphasis on safety, respect, and clear communication. This is why I encouraged the use of 4 wheels instead of 6, car-like steering through the angling of the wheels, and confident movement. 
+
+            [ Animated graphic of steering and motion paths ]
+
+            I also came up with a strategy that allowed Serve to successfully cut through a static crowd of people, as shown below. I was inspired by observing parents pushing strollers through dense crowds.
+
+            [ Graphic of Serve moving through crowd ]
+        
+        Transactional design: How to interact with Serve
+            [ Maybe some graphics on people loading Serve or instagram videos ]
+
+            All of our customers will end up using the built-in touch screen while interacting with Serve. In development, I put together a screen and lid prototype that would allow me to test with users and iterate on the experience. 
+
+            [ prototype and webflow ]
+
+            I then created the screen app for the final product that, when  combined with sounds and light animations, created an easy-to-understand and low-friction experience that tested well with users. 
+
+            [ some sizzle on the transactional flow ]
+
+    Food storage in Serve
+        Our initial food storage in Serve was a flexible insolation liner with a grate and cupholders. This design turned out to not be the most effective, so we went back to the drawing board. 
+
+        [ side by side drawing of old vs new serve cargo and maybe an current cargo insert ] 
+
+        For our latest revision on the cargo, we wanted to satisfy a few things:
+            - No moving parts or modularity.
+                Merchants should open Serve and thrown things in as fast as possible.
+            - Easily cleanable
+                The older liner was hard to clean. 
+            - Safely hold different types of food and drinks
+                Securing bags, holding drinks, and supporting pizza's were are biggest challenges. 
+
+        I created a few configurations in Blender that we measured with a many food items, pizza boxes and beverage cups. We gauged the average orders with the vast amount of order data to come up with what we felt was the most optimal configurations. 
+
+        I then laser cut and 3D printed some these configurations for us to test. 
+
+        [ renders and images of laser cut and 3D prints ]
+
+        The one that test best was 2 cupholders and an offset pizza shelf design. The allowed many different types of order combinations to fit and not move around too much during a delivery.
+
+    CMF - Serve's style
+        ...
+        The goals of Serve's "colour, material and finish" are as follow:
+            - Cheerful and fun 
+            - Not another robo-cop
+            - Not just some stark white robot
+            - Recognizable, establishing a brand
+
+        I created a template file that allowed me to create design concepts, narrow down different vinyl wraps, and also create designs around the limitations of other manufacturing methods for us to explore. 
+
+
+    Remote tele-operation
+        ... (comb the phantom article)
+        Sidewalks don't have lanes, pedestrian behavior is not as black and white as the rules of the road. As autonomy improves and we teach Serve how to navigate every new situations we enumerate, it makes sense that we can monitor Serve and make sure everything is safe and running smoothly. Our tele-ops interface allows operators to monitor and intervene if necessary. 
+
+        [ Allen looking at a monitor ]
+
+        My initial designs were based out camera projections onto lidar data to create a 3rd person perspective--much like how BMW or some other brands does well, but this was too far out of the execution zone so I scaled back and refocused on these requirements:
+            - Be able to monitor multiple rovers at once
+            - Scalable to a queue based intervention system
+            - Understand what the rover is going to do next so that you can focus on others instead of trying to guess what the rover will do next. 
+            - Understand what state of a job the rover is in
+
+        
+        Motion path
+        ...
+
+        State gem 
+        ... 
+
+        Job states
+        [older design]
+        [why it changed]
+
+    Asking for permission instead of forgiveness
+        Do you think if Uber or Lyft, when they were first starting asked each city for permission and permits, if they would have been as successful as they are today? Well, It's not 2010, and people today are more pessimistic towards tech than ever these days. Instead of unleashing Serve onto the streets of LA (And SF for testing), we instead went to the city council and asked for permits, and we had strategies and answers to the hard questions around labour, disabilities and safety. 
+
+        We ran small studies with people in wheelchairs, blind and deaf and incorporated their feedback into how Serve moves, and how it communicates. 
+
+        We also prepped lots of material on how Serve sees and safely navigates the world. 
+
+        We also modeled how Serve would take short walking distance jobs, usually the less preferred ones that a currier would have to do. 
+
+        It was difficult and slow, but we got the permits finally. 
+
+
+    
+    Essential services
+        During the COVID-19 outbreak, we were ruled an essential service and cities and detractors on social media changed their tone from: "Who needs some dumb robot?" to "Contactless robot delivery makes so much sense". Cities and districts that were slow to respond and bureaucratic with permits instead reached out and granted permits immediately. 
+
+        One thing we used to reduce exposure during this time was to automatically open the lid when a merchant approached, and same for the end-user. It's obviously not as secure but much less people are out so it was not difficult. 
+
+    
+    How people respond - Social media
+        [ collage of people going nuts from tic-tok / insta ]
+
+
+    
+
+
+
+
+
