@@ -1,5 +1,5 @@
-# Enger's portfolio site
-Built with React
+# Serve model viewer
+Built with React and Three.js
 
 # How to run
 * Install node_modules: `npm install`
