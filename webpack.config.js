@@ -1,5 +1,5 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-
+const path = require('path');
 
 module.exports = {
     module: {
@@ -43,6 +43,8 @@ module.exports = {
             'three/OrbitControls': path.join(__dirname, 'node_modules/three/examples/js/controls/OrbitControls.js'),
             'three/OBJLoader': path.join(__dirname, 'node_modules/three/examples/js/loaders/GLTFLoader.js'),
             'three/RGBELoader': path.join(__dirname, 'node_modules/three/examples/js/loaders/RoughnessMipmapper.js')
+            // ThreeLoaders: path.resolve(__dirname, 'node_modules/three/examples/js/controls/'),
+            // ThreeControls: path.resolve(__dirname, 'node_modules/three/examples/js/loaders/'),
         }
     },
     plugins: [
@@ -51,8 +53,8 @@ module.exports = {
             template: './src/index.html',
             filename: './index.html'
         }),
-        new webpack.ProvidePlugin({
-            'THREE': 'three'
-        }),
+        // new webpack.ProvidePlugin({
+        //     'THREE': 'three'
+        // }),
    ]
 };
