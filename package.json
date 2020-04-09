@@ -1,7 +1,7 @@
 {
-  "name": "enger-portfolio",
+  "name": "serve_model_viewer",
   "version": "1.0.0",
-  "description": "Enger's portfolio",
+  "description": "Model viewer for Serve rover 1.5 and up",
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/engerb/enger-portfolio.git"
+    "url": "git+https://github.com/engerb/serve_model_viewer.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/engerb/enger-portfolio/issues"
+    "url": "https://github.com/engerb/serve_model_viewer/issues"
   },
-  "homepage": "https://github.com/engerb/enger-portfolio#readme",
+  "homepage": "https://github.com/engerb/serve_model_viewer#readme",
   "devDependencies": {
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
