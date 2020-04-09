@@ -16,7 +16,7 @@ module.exports = {
             ],
         },
         {
-            test: /\.(png|svg|jpg|gif|glb)$/,
+            test: /\.(png|svg|jpg|gif|glb|hdr)$/,
             use: [{
                 loader: 'file-loader'
             }]
@@ -38,11 +38,21 @@ module.exports = {
         }, 
         ],
     },
+    resolve: {
+        alias: {
+            'three/OrbitControls': path.join(__dirname, 'node_modules/three/examples/js/controls/OrbitControls.js'),
+            'three/OBJLoader': path.join(__dirname, 'node_modules/three/examples/js/loaders/GLTFLoader.js'),
+            'three/RGBELoader': path.join(__dirname, 'node_modules/three/examples/js/loaders/RoughnessMipmapper.js')
+        }
+    },
     plugins: [
         new HtmlWebPackPlugin({
             hash: true,
             template: './src/index.html',
             filename: './index.html'
-        })
+        }),
+        new webpack.ProvidePlugin({
+            'THREE': 'three'
+        }),
    ]
 };
