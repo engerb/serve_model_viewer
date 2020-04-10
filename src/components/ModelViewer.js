@@ -79,8 +79,9 @@ class ModelViewer extends React.Component {
     animate() {
         requestAnimationFrame( ()=> { this.animate() } );
         
-        if (this.renderNeeded) {
+        if (this.renderNeeded) { // or animations playing
             this.renderScene();
+            // progress animation
             this.renderNeeded = false;
         }
 
