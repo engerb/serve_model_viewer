@@ -1,17 +1,16 @@
 import React from 'react';
-// import Example from "./components/Example";
+import ModelViewer from './components/ModelViewer';
 
 import 'three';
 import 'three/examples/js/controls/OrbitControls';
 import 'three/examples/js/loaders/GLTFLoader';
-
-console.log(THREE.OrbitControls);
-
+import 'three/examples/js/loaders/DRACOLoader';
+import 'three/examples/js/loaders/RGBELoader'; 
 
 function App() {
     return (
         <div>
-            
+            <ModelViewer/>
         </div>
     );
 }
