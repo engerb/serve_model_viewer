@@ -1,4 +1,5 @@
 import React from "react";
+import Serve from './Serve';
 
 class ModelViewer extends React.Component {
     constructor(props) {
@@ -8,8 +9,9 @@ class ModelViewer extends React.Component {
     }
 
     componentDidMount() {
+        this.renderNeeded = false;
         this.init();
-		this.renderScene();
+        this.animate();
     }
 
     init() {
@@ -33,33 +35,15 @@ class ModelViewer extends React.Component {
 
                 texture.dispose();
                 pmremGenerator.dispose();
-
-                this.renderScene();
             } );
-
-        var loader = new THREE.GLTFLoader();
-        var dracoLoader = new THREE.DRACOLoader();
-        dracoLoader.setDecoderPath( 'node_modules/three/examples/js/libs/draco/' ); //this is so dumb
-        loader.setDRACOLoader( dracoLoader );
-        loader.load( '/src/assets/3d/serve.glb',                
-            // called when the resource is loaded
-            ( gltf ) => {
-                gltf.scene.traverse( ( child )=> {
-                    if ( child.isMesh ) {
-                        // console.log(child);
-                    }
-                } );
-                this.scene.add(gltf.scene);
-                this.renderScene();
-            },
-            function (xhr) {
-                // console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-            },
-            function (error) {
-                console.log('An error happened');
-            }
-
-        );
+        
+        // Object with promise
+        this.serve = new Serve( this.scene, 'serve.glb', '/src/assets/3d/' )
+        this.serve.modelLoaded.then(() => {
+            this.scene.add( this.serve.scene );
+            this.renderNeeded = true;
+            // this.playIntro();
+        });
 
         this.renderer = new THREE.WebGLRenderer( { antialias: true } );
         this.renderer.setPixelRatio( window.devicePixelRatio );
@@ -73,15 +57,14 @@ class ModelViewer extends React.Component {
         pmremGenerator.compileEquirectangularShader();
 
         this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
-        this.controls.addEventListener( 'change', function() { // only render when we move or something else
-            this.renderScene();
-        }.bind(this));
+        this.controls.addEventListener('change', ()=>{ this.renderNeeded = true; } );
+
         this.controls.addEventListener
         this.controls.minDistance = 2;
         this.controls.maxDistance = 10
         this.controls.target.set( 0, 0.5, 0 );
-        // this.controls.enableDamping = true;
-        // this.controls.dampingFactor = 0.05;
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.3;
         this.controls.minPolarAngle = 0.3;
         this.controls.maxPolarAngle = 1.7;
         this.controls.update();
@@ -91,6 +74,17 @@ class ModelViewer extends React.Component {
         }.bind(this), false);
         
         this.mount.appendChild( this.container );
+    }
+
+    animate() {
+        requestAnimationFrame( ()=> { this.animate() } );
+        
+        if (this.renderNeeded) {
+            this.renderScene();
+            this.renderNeeded = false;
+        }
+
+        this.controls.update();
     }
 
     onWindowResize() {
@@ -103,8 +97,8 @@ class ModelViewer extends React.Component {
     }
 
     renderScene() {
-        // this.controls.update();
         this.renderer.render( this.scene, this.camera );
+        console.log('render');
     }
 
     render() {
