@@ -19,6 +19,7 @@ class ModelViewer extends React.Component {
         this.camera.position.set( 1.5, 1, 1.7 );
 
         this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color( 0xf8f8f8 );
 
         new THREE.RGBELoader()
             .setDataType( THREE.UnsignedByteType )
