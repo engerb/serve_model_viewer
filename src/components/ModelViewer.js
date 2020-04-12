@@ -1,31 +1,29 @@
 import React from "react";
+import Serve from '../assets/3d/Serve/Serve';
 
 class ModelViewer extends React.Component {
     constructor(props) {
         super(props);
         
-        // ...
+        this.state = { class: 'modelViewer' };
     }
 
     componentDidMount() {
+        this.renderNeeded = false;
         this.init();
-		this.renderScene();
+        this.animate();
     }
 
     init() {
-        this.container = document.createElement( 'div' );
-
         this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
         this.camera.position.set( 1.5, 1, 1.7 );
 
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color( 0xf8f8f8 );
 
         new THREE.RGBELoader()
             .setDataType( THREE.UnsignedByteType )
             .setPath( '/src/assets/3d/' )
-            .load( 'venetian_crossroads_1k.hdr', ( texture )=> {
-
+            .load( 'venice_sunset_1k.hdr', ( texture )=> {
                 var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
 
                 // this.scene.background = envMap; // if you want hdri as image
@@ -34,54 +32,35 @@ class ModelViewer extends React.Component {
                 texture.dispose();
                 pmremGenerator.dispose();
 
-                this.renderScene();
+                this.renderNeeded = true;
             } );
-
-        var loader = new THREE.GLTFLoader();
-        var dracoLoader = new THREE.DRACOLoader();
-        dracoLoader.setDecoderPath( 'node_modules/three/examples/js/libs/draco/' ); //this is so dumb
-        loader.setDRACOLoader( dracoLoader );
-        loader.load( '/src/assets/3d/serve.glb',                
-            // called when the resource is loaded
-            ( gltf ) => {
-                gltf.scene.traverse( ( child )=> {
-                    if ( child.isMesh ) {
-                        // console.log(child);
-                    }
-                } );
-                this.scene.add(gltf.scene);
-                this.renderScene();
-            },
-            function (xhr) {
-                // console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-            },
-            function (error) {
-                console.log('An error happened');
-            }
-
-        );
-
-        this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+        
+        // Object with promise
+        this.serve = new Serve() // give first cmf wrapps
+        this.serve.modelLoaded.then(() => {
+            this.scene.add( this.serve.scene );
+            this.renderNeeded = true;
+            this.playIntro();
+        });
+        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 0.8;
         this.renderer.outputEncoding = THREE.sRGBEncoding;
-        this.container.appendChild( this.renderer.domElement );
 
         var pmremGenerator = new THREE.PMREMGenerator( this.renderer );
         pmremGenerator.compileEquirectangularShader();
 
         this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
-        this.controls.addEventListener( 'change', function() { // only render when we move or something else
-            this.renderScene();
-        }.bind(this));
+        this.controls.addEventListener('change', ()=>{ this.renderNeeded = true; } );
+
         this.controls.addEventListener
-        this.controls.minDistance = 2;
+        this.controls.minDistance = 1;
         this.controls.maxDistance = 10
         this.controls.target.set( 0, 0.5, 0 );
-        // this.controls.enableDamping = true;
-        // this.controls.dampingFactor = 0.05;
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.3;
         this.controls.minPolarAngle = 0.3;
         this.controls.maxPolarAngle = 1.7;
         this.controls.update();
@@ -90,7 +69,19 @@ class ModelViewer extends React.Component {
             this.onWindowResize();
         }.bind(this), false);
         
-        this.mount.appendChild( this.container );
+        this.mount.appendChild( this.renderer.domElement );
+    }
+
+    animate() {
+        requestAnimationFrame( ()=> { this.animate() } );
+        
+        if (this.renderNeeded) { // or animations playing
+            this.renderScene();
+            // progress animation
+            this.renderNeeded = false;
+        }
+
+        this.controls.update();
     }
 
     onWindowResize() {
@@ -103,13 +94,18 @@ class ModelViewer extends React.Component {
     }
 
     renderScene() {
-        // this.controls.update();
         this.renderer.render( this.scene, this.camera );
+    }
+
+    playIntro() {
+        this.setState({
+            class: 'modelViewer visible'
+        });
     }
 
     render() {
         return (
-            <div ref={ref => (this.mount = ref)} />
+            <div className={this.state.class} ref={ref => (this.mount = ref)} />
         );
     }
 }
