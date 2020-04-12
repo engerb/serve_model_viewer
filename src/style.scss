@@ -2,3 +2,16 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
 }
+
+// a mice grey: #f8f8f8
+
+.modelViewer {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 1s, transform 1s;
+
+    &.visible {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

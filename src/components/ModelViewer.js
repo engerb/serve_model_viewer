@@ -1,11 +1,11 @@
 import React from "react";
-import Serve from './Serve';
+import Serve from '../assets/3d/Serve/Serve';
 
 class ModelViewer extends React.Component {
     constructor(props) {
         super(props);
         
-        // ...
+        this.state = { class: 'modelViewer' };
     }
 
     componentDidMount() {
@@ -15,19 +15,15 @@ class ModelViewer extends React.Component {
     }
 
     init() {
-        this.container = document.createElement( 'div' );
-
         this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
         this.camera.position.set( 1.5, 1, 1.7 );
 
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color( 0xf8f8f8 );
 
         new THREE.RGBELoader()
             .setDataType( THREE.UnsignedByteType )
             .setPath( '/src/assets/3d/' )
-            .load( 'venetian_crossroads_1k.hdr', ( texture )=> {
-
+            .load( 'venice_sunset_1k.hdr', ( texture )=> {
                 var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
 
                 // this.scene.background = envMap; // if you want hdri as image
@@ -35,23 +31,23 @@ class ModelViewer extends React.Component {
 
                 texture.dispose();
                 pmremGenerator.dispose();
+
+                this.renderNeeded = true;
             } );
         
         // Object with promise
-        this.serve = new Serve( this.scene, 'serve.glb', '/src/assets/3d/' )
+        this.serve = new Serve() // give first cmf wrapps
         this.serve.modelLoaded.then(() => {
             this.scene.add( this.serve.scene );
             this.renderNeeded = true;
-            // this.playIntro();
+            this.playIntro();
         });
-
-        this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 0.8;
         this.renderer.outputEncoding = THREE.sRGBEncoding;
-        this.container.appendChild( this.renderer.domElement );
 
         var pmremGenerator = new THREE.PMREMGenerator( this.renderer );
         pmremGenerator.compileEquirectangularShader();
@@ -60,7 +56,7 @@ class ModelViewer extends React.Component {
         this.controls.addEventListener('change', ()=>{ this.renderNeeded = true; } );
 
         this.controls.addEventListener
-        this.controls.minDistance = 2;
+        this.controls.minDistance = 1;
         this.controls.maxDistance = 10
         this.controls.target.set( 0, 0.5, 0 );
         this.controls.enableDamping = true;
@@ -73,7 +69,7 @@ class ModelViewer extends React.Component {
             this.onWindowResize();
         }.bind(this), false);
         
-        this.mount.appendChild( this.container );
+        this.mount.appendChild( this.renderer.domElement );
     }
 
     animate() {
@@ -99,12 +95,17 @@ class ModelViewer extends React.Component {
 
     renderScene() {
         this.renderer.render( this.scene, this.camera );
-        console.log('render');
+    }
+
+    playIntro() {
+        this.setState({
+            class: 'modelViewer visible'
+        });
     }
 
     render() {
         return (
-            <div ref={ref => (this.mount = ref)} />
+            <div className={this.state.class} ref={ref => (this.mount = ref)} />
         );
     }
 }
