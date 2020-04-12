@@ -1,5 +1,6 @@
 import React from "react";
 import Serve from '../assets/3d/Serve/Serve';
+import Customizer from './Customizer';
 
 class ModelViewer extends React.Component {
     constructor(props) {
@@ -23,7 +24,7 @@ class ModelViewer extends React.Component {
         new THREE.RGBELoader()
             .setDataType( THREE.UnsignedByteType )
             .setPath( '/src/assets/3d/' )
-            .load( 'venice_sunset_1k.hdr', ( texture )=> {
+            .load( 'venice_sunset_1k.hdr', ( texture ) => {
                 var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
 
                 // this.scene.background = envMap; // if you want hdri as image
@@ -33,7 +34,7 @@ class ModelViewer extends React.Component {
                 pmremGenerator.dispose();
 
                 this.renderNeeded = true;
-            } );
+            });
         
         // Object with promise
         this.serve = new Serve() // give first cmf wrapps

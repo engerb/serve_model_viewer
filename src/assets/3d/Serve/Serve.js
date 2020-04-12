@@ -2,6 +2,11 @@ class Serve {
     constructor(file = 'serve.glb', path = '/src/assets/3d/Serve/') {
         this.file = file;
         this.path = path;
+        
+        this.animation = false;
+        this.lid = 'close';
+        this.speed = 0.0;
+        this.steering = 0.0; 
 
         this.createMats();
         this.loader();
@@ -32,6 +37,34 @@ class Serve {
                 }
             );
         });
+    }
+
+    loadLidWrap(url) {
+        new Promise(( resolve, reject ) => { 
+            // image loader
+        }).then(( ) => {
+
+        });
+    }
+
+    loadBinWrap(url) {
+        new Promise(( resolve, reject ) => { 
+            // image loader
+        }).then(( ) => {
+
+        });
+    }
+
+    toggleLid( action = 'open' ) {
+
+    }
+
+    tireSpeed( speed = 0.0 ) {
+
+    }
+
+    tireAngle( angle = 0.0 ) {
+
     }
 
     handleChildren( child ) {
@@ -145,7 +178,6 @@ class Serve {
     createMats() {
         this.tire_ao = new THREE.TextureLoader().load( require('./tire_ao.jpg').default );
         this.tire_normal = new THREE.TextureLoader().load( require('./tire_normal.jpg').default );
-        this.tire_ao.wrapS = this.tire_ao.wrapT = this.tire_normal.wrapS = this.tire_normal.wrapT = THREE.RepeatWrapping;
         this.bin_ao = new THREE.TextureLoader().load( require('./bin_ao.jpg').default );
         this.lid_ao = new THREE.TextureLoader().load( require('./lid_ao.jpg').default );
         this.floor_ao = new THREE.TextureLoader().load( require('./floor_ao.jpg').default );
@@ -155,9 +187,13 @@ class Serve {
         this.cloud_spec = new THREE.TextureLoader().load( require('./cloud_spec.jpg').default );
         this.cloud_light_spec = new THREE.TextureLoader().load( require('./cloud_light_spec.jpg').default );
 
-        // Use loader since these change
-        this.bin_dif = new THREE.TextureLoader().load( require('./wraps/bin_dif.png').default );
-        this.lid_dif = new THREE.TextureLoader().load( require('./wraps/lid_dif.png').default );
+        this.bin_dif = new THREE.TextureLoader().load( require('./wraps/bin_dif.png').default ); // take args for texture
+        this.lid_dif = new THREE.TextureLoader().load( require('./wraps/lid_dif.png').default ); // take args for texture
+
+        this.tire_ao.wrapS = 
+        this.tire_ao.wrapT = 
+        this.tire_normal.wrapS = 
+        this.tire_normal.wrapT = THREE.RepeatWrapping;
 
         this.tire_ao.flipY =
         this.tire_normal.flipY =
@@ -213,13 +249,14 @@ class Serve {
 
         this.mat_black_plastic = new THREE.MeshPhysicalMaterial({
             roughness: 0.8,
-            color: 0x1D1D1D,
+            color: 0x111111,
             aoMap: this.black_ao,
             roughnessMap: this.cloud_light_spec,
+            aoMapIntensity: 1.5,
         });
 
         this.mat_white_plastic = new THREE.MeshPhysicalMaterial({
-            roughness: 0.2,
+            roughness: 0.5,
             color: 0xEEEEEE,
             aoMap: this.white_ao,
             roughnessMap: this.cloud_light_spec,
@@ -261,21 +298,21 @@ class Serve {
             roughnessMap: this.cloud_light_spec,
         });
 
+        // emissive combine layers for later
         this.mat_strip_eyes = new THREE.MeshPhysicalMaterial({
             clearcoat: 1.0,
             clearcoatRoughness: 0.1,
             roughness: 0.2,
-            color: 0xE6E3E3,
+            color: 0xACACAC,
             roughnessMap: this.cloud_light_spec,
         });
 
         this.mat_tail_lights = new THREE.MeshPhysicalMaterial({
             roughness: 0,
-            color: 0xB13131,
+            color: 0x9F1313,
             roughnessMap: this.cloud_light_spec,
         });
 
-        // emissive combine layers for later
         this.mat_black_metal_rough = new THREE.MeshPhysicalMaterial({
             metalness: 0.9,
             roughness: 0.7,
@@ -290,6 +327,7 @@ class Serve {
             color: 0x1D1D1D,
             aoMap: this.black_ao,
             roughnessMap: this.cloud_light_spec,
+            aoMapIntensity: 1.5,
         });
 
         this.mat_blocker = new THREE.MeshLambertMaterial({
