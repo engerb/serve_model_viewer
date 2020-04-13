@@ -6,12 +6,53 @@ body {
 // a mice grey: #f8f8f8
 
 .modelViewer {
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 1s, transform 1s;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
 
+    canvas {
+        opacity: 0;
+        transform: scale(0.8);
+        transition: opacity 1s, transform 1s;
+    }
+    
     &.visible {
-        opacity: 1;
-        transform: scale(1);
+        canvas {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+}
+
+.customizer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    .lids, .bins {
+        display: flex;
+
+        .addedLids, .addedBins {
+            display: flex;
+
+            .lid, .bin {
+                width: 60px;
+                height: 60px;
+                margin: 5px;
+                cursor: pointer;
+                // pointer-events: none;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.22), 0 2px 4px rgba(0,0,0,0.25);
+            }
+
+            .lid {
+                background-size: 130%;
+            }
+
+            .bin {
+                background-size: 280%;
+            }
+        }
     }
 }

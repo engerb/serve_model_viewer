@@ -19,9 +19,44 @@ class Customizer extends React.Component {
         props.setDefaults(this.bins[0], this.lids[0]);
     }
 
+    addLid() {
+
+    }
+
+    addBin() {
+        
+    }
+
+    selectLid(idx) {
+        this.props.updateLidTexture( this.lids[idx] );
+        // remove all selected class and add to this
+    }
+
+    selectBin(idx) {
+        this.props.updateBinTexture( this.bins[idx] );
+        // remove all selected class and add to this
+    }
+
     render() {
         return (
-            <div className='yolo' />
+            <div className='customizer'>
+                <div className='lids'>
+                    <div className='addedLids'>
+                        {this.lids.map( (texture, index) => {
+                            return <div className='lid' key={ index } data-key={ index } style={{backgroundImage: `url(${texture})`}} onClick = {(e) => this.selectLid( Number( e.target.getAttribute('data-key')) )} />;  
+                        })}
+                    </div>
+                    <div className='addNew' onClick = {this.addLid()} />
+                </div>
+                <div className='bins'>
+                    <div className='addedBins'>
+                        {this.bins.map( (texture, index) => { 
+                            return <div className='bin' key={ index } data-key={ index } style={{backgroundImage: `url(${texture})`}} onClick = {(e) => this.selectBin( Number( e.target.getAttribute('data-key')) )} />;  
+                        })}
+                    </div>
+                    <div className='addNew' onClick = {this.addBin()} />
+                </div>
+            </div>
         );
     }
 }

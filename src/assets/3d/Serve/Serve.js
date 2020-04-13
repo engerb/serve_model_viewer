@@ -5,6 +5,7 @@ class Serve {
         this.file = props.hasOwnProperty('file') ? props.file : 'serve.glb';
         this.path = props.hasOwnProperty('path') ? props.path : '/src/assets/3d/Serve/';
         
+        this.renderNeeded = false;
         this.animation = false;
         this.lid = 'close';
         this.speed = 0.0;
@@ -34,7 +35,7 @@ class Serve {
                     // console.log((xhr.loaded / xhr.total * 100) + '% loaded');
                 },
                 ( error ) => {
-                    console.log('An error happened');
+                    console.log('Serve model: An error happened.');
                     reject();
                 }
             );
@@ -42,19 +43,31 @@ class Serve {
     }
 
     loadLidWrap(url) {
-        new Promise(( resolve, reject ) => { 
-            // image loader
-        }).then(( ) => {
-
-        });
+        new THREE.TextureLoader().load( url,
+            ( texture ) => {
+                texture.flipY = false;
+                this.mat_vinyl_lid.map = texture;
+                this.renderNeeded = true;
+            },
+            undefined,
+            ( err ) => {
+                console.error( 'Loading lid wrap: An error happened.' );
+            }
+        );
     }
 
     loadBinWrap(url) {
-        new Promise(( resolve, reject ) => { 
-            // image loader
-        }).then(( ) => {
-
-        });
+        new THREE.TextureLoader().load( url,
+            ( texture ) => {
+                texture.flipY = false;
+                this.mat_vinyl_bin.map = texture;
+                this.renderNeeded = true;
+            },
+            undefined,
+            ( err ) => {
+                console.error( 'Loading bin wrap: An error happened.' );
+            }
+        );
     }
 
     toggleLid( action = 'open' ) {
@@ -189,10 +202,8 @@ class Serve {
         this.cloud_spec = new THREE.TextureLoader().load( require('./cloud_spec.jpg').default );
         this.cloud_light_spec = new THREE.TextureLoader().load( require('./cloud_light_spec.jpg').default );
 
-        // this.bin_dif = new THREE.TextureLoader().load( require('./wraps/bin_1.png').default ); // take args for texture
-        // this.lid_dif = new THREE.TextureLoader().load( require('./wraps/lid_1.png').default ); // take args for texture
-        this.bin_dif = new THREE.TextureLoader().load( this.props.bin ); // take args for texture
-        this.lid_dif = new THREE.TextureLoader().load( this.props.lid ); // take args for texture
+        this.bin_dif = new THREE.TextureLoader().load( this.props.bin ); 
+        this.lid_dif = new THREE.TextureLoader().load( this.props.lid ); 
 
         this.tire_ao.wrapS = 
         this.tire_ao.wrapT = 

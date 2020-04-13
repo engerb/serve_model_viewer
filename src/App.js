@@ -9,9 +9,7 @@ import 'three/examples/js/loaders/RGBELoader';
 
 function App() {
     return (
-        <div>
-            <ModelViewer/>
-        </div>
+        <ModelViewer/>
     );
 }
 
