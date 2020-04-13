@@ -29,6 +29,7 @@ class ModelViewer extends React.Component {
     }
 
     updateLidTexture(texture) {
+        this.serve.toggleLid();
         this.serve.loadLidWrap(texture);
         // camera to lid
     }
@@ -107,14 +108,14 @@ class ModelViewer extends React.Component {
     animate() {
         requestAnimationFrame( ()=> { this.animate() } );
         
-        if ( this.renderNeeded || this.serve.animation || this.cameraAnimation || this.serve.renderNeeded ) {
+        if ( this.renderNeeded || TWEEN.getAll().length || this.serve.renderNeeded ) {
             this.renderScene();
-            // progress animation here?
             this.renderNeeded = false;
             this.serve.renderNeeded = false;
         }
 
         this.controls.update();
+        TWEEN.update();
     }
 
     onWindowResize() {

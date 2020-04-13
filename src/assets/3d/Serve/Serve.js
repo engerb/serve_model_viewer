@@ -6,8 +6,7 @@ class Serve {
         this.path = props.hasOwnProperty('path') ? props.path : '/src/assets/3d/Serve/';
         
         this.renderNeeded = false;
-        this.animation = false;
-        this.lid = 'close';
+        this.lidState = 'close';
         this.speed = 0.0;
         this.steering = 0.0; 
 
@@ -71,29 +70,29 @@ class Serve {
     }
 
     setLidColor(col) {
-        // this.mat_lid.color.setHex(0xff0000); //= 0x152622; 
-        // this.geo_lid.material.color.setHex(0xff0000);
-        // console.log(
-        // this.geo_lid.material[1].col
-        // this.geo_lid.material[1].col = new THREE.Color( 0x1414d6 ); //);
-        // console.log( this.geo_lid.material[1].col );
-        // this.mat_lid.color = new THREE.Color( 0x1414d6 );
-        // console.log( this.mat_lid_base.col );
-        // this.mat_lid_base.col = new THREE.Color( 0x1414d6 );
-        // console.log( this.mat_lid_base.col );
-        // cube.material.color.set( color )
         this.mat_lid_base.color.set( col );
         this.renderNeeded = true;
     }
 
     setBinColor(col) {
-        // this.mat_bin.color = col;
         this.mat_bin_base.color.set( col );
         this.renderNeeded = true;
     }
 
-    toggleLid( action = 'open' ) {
+    toggleLid() {
+        const from = { x : this.handle_lid.rotation.x };
+        const to = { x : ((this.lidState == 'close') ? (-1) : (0)) };
+        const duration = 2000; // should be divided by remainder of distance left
+        this.lidState = ((this.lidState == 'close') ? ('open') : ('close'));
+        this.lidTween = new TWEEN.Tween(from).to(to, duration); 
 
+        this.lidTween.onUpdate(()=>{
+            this.handle_lid.rotation.x = from.x;
+        });
+
+        this.lidTween.easing(TWEEN.Easing.Quadratic.InOut);
+
+        this.lidTween.start();
     }
 
     tireSpeed( speed = 0.0 ) {
