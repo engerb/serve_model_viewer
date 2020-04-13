@@ -1,7 +1,9 @@
 class Serve {
-    constructor(file = 'serve.glb', path = '/src/assets/3d/Serve/') {
-        this.file = file;
-        this.path = path;
+    constructor( props ) {
+        this.props = props;
+        
+        this.file = props.hasOwnProperty('file') ? props.file : 'serve.glb';
+        this.path = props.hasOwnProperty('path') ? props.path : '/src/assets/3d/Serve/';
         
         this.animation = false;
         this.lid = 'close';
@@ -187,8 +189,10 @@ class Serve {
         this.cloud_spec = new THREE.TextureLoader().load( require('./cloud_spec.jpg').default );
         this.cloud_light_spec = new THREE.TextureLoader().load( require('./cloud_light_spec.jpg').default );
 
-        this.bin_dif = new THREE.TextureLoader().load( require('./wraps/bin_dif.png').default ); // take args for texture
-        this.lid_dif = new THREE.TextureLoader().load( require('./wraps/lid_dif.png').default ); // take args for texture
+        // this.bin_dif = new THREE.TextureLoader().load( require('./wraps/bin_1.png').default ); // take args for texture
+        // this.lid_dif = new THREE.TextureLoader().load( require('./wraps/lid_1.png').default ); // take args for texture
+        this.bin_dif = new THREE.TextureLoader().load( this.props.bin ); // take args for texture
+        this.lid_dif = new THREE.TextureLoader().load( this.props.lid ); // take args for texture
 
         this.tire_ao.wrapS = 
         this.tire_ao.wrapT = 

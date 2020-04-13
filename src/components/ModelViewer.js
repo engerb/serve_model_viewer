@@ -7,12 +7,31 @@ class ModelViewer extends React.Component {
         super(props);
         
         this.state = { class: 'modelViewer' };
+        this.updateBin = this.updateBin.bind(this);
+        this.updateLid = this.updateLid.bind(this);
+        this.setDefaults = this.setDefaults.bind(this);
+        this.currentBin;
+        this.currentLid;
+        this.renderNeeded = false;
+        this.cameraAnimation = false;
     }
 
     componentDidMount() {
-        this.renderNeeded = false;
         this.init();
         this.animate();
+    }
+
+    updateBin(texture) {
+        this.serve.loadBinWrap(texture);
+    }
+
+    updateLid(texture) {
+        this.serve.loadLidWrap(texture);
+    }
+
+    setDefaults(bin, lid) {
+        this.currentBin = bin;
+        this.currentLid = lid;
     }
 
     init() {
@@ -35,9 +54,9 @@ class ModelViewer extends React.Component {
 
                 this.renderNeeded = true;
             });
-        
+
         // Object with promise
-        this.serve = new Serve() // give first cmf wrapps
+        this.serve = new Serve({bin: this.currentBin, lid: this.currentLid}) // give first cmf wrapps
         this.serve.modelLoaded.then(() => {
             this.scene.add( this.serve.scene );
             this.renderNeeded = true;
@@ -58,7 +77,7 @@ class ModelViewer extends React.Component {
 
         this.controls.addEventListener
         this.controls.minDistance = 1;
-        this.controls.maxDistance = 10
+        this.controls.maxDistance = 5;
         this.controls.target.set( 0, 0.5, 0 );
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.3;
@@ -76,9 +95,10 @@ class ModelViewer extends React.Component {
     animate() {
         requestAnimationFrame( ()=> { this.animate() } );
         
-        if (this.renderNeeded) { // or animations playing
+        // camera and serve animation could set renderNeeded to false when done, but they could clober eachother
+        if ( this.renderNeeded || this.serve.animation || this.cameraAnimation ) {
             this.renderScene();
-            // progress animation
+            // progress animation here?
             this.renderNeeded = false;
         }
 
@@ -106,7 +126,10 @@ class ModelViewer extends React.Component {
 
     render() {
         return (
-            <div className={this.state.class} ref={ref => (this.mount = ref)} />
+            <div>
+                <Customizer updateBin = {this.updateBin} updateLid = {this.updateLid} setDefaults = {this.setDefaults} />
+                <div className={this.state.class} ref={ref => (this.mount = ref)} />
+            </div>
         );
     }
 }
