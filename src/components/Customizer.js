@@ -4,6 +4,11 @@ class Customizer extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            lidColor: '#eeeeee',
+            binColor: '#eeeeee',
+        }
+
         // Start these texture arrrays with what we currently have in folder
         this.bins = [
             require('../assets/3d/Serve/wraps/bin_1.png').default,
@@ -20,7 +25,10 @@ class Customizer extends React.Component {
     }
 
     addLid() {
-
+        // invoke file open
+        // convert to base 64 
+        // add to array
+        // create elem
     }
 
     addBin() {
@@ -41,19 +49,57 @@ class Customizer extends React.Component {
         return (
             <div className='customizer'>
                 <div className='lids'>
+                    <input 
+                        className='colorPicker' 
+                        type='color'  
+                        value={this.state.lidColor}
+                        onChange = {(e) => {
+                            this.setState({ lidColor: e.target.value });
+                            this.value = this.state.lidColor;
+                            this.props.setLidColor( e.target.value );
+                        }}
+                    />
                     <div className='addedLids'>
                         {this.lids.map( (texture, index) => {
-                            return <div className='lid' key={ index } data-key={ index } style={{backgroundImage: `url(${texture})`}} onClick = {(e) => this.selectLid( Number( e.target.getAttribute('data-key')) )} />;  
+                            return <div 
+                                    className='lid' 
+                                    key={ index } 
+                                    data-key={ index } 
+                                    style={{backgroundImage: `url(${texture})`}} 
+                                    onClick = {(e) => this.selectLid( e.target.getAttribute('data-key') )} 
+                                />;  
                         })}
                     </div>
                     <div className='addNew' onClick = {this.addLid()} />
                 </div>
                 <div className='bins'>
+                    <input 
+                        className='colorPicker' 
+                        type='color'  
+                        value={this.state.binColor}
+                        onChange = {(e) => {
+                            this.setState({ binColor: e.target.value });
+                            this.value = this.state.binColor;
+                            this.props.setBinColor( e.target.value );
+                        }}
+                    />
                     <div className='addedBins'>
                         {this.bins.map( (texture, index) => { 
-                            return <div className='bin' key={ index } data-key={ index } style={{backgroundImage: `url(${texture})`}} onClick = {(e) => this.selectBin( Number( e.target.getAttribute('data-key')) )} />;  
+                            return <div 
+                                    className='bin' 
+                                    key={ index } 
+                                    data-key={ index } 
+                                    style={{backgroundImage: `url(${texture})`}} 
+                                    onClick = {(e) => this.selectBin( e.target.getAttribute('data-key') )} 
+                                />;  
                         })}
                     </div>
+                    {/* <input id="myInput"
+                        type="file"
+                        ref={(ref) => this.upload = ref}
+                        style={{display: 'none'}}
+                        onChange={this.onChangeFile.bind(this)}
+                    /> */}
                     <div className='addNew' onClick = {this.addBin()} />
                 </div>
             </div>

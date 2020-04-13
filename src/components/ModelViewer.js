@@ -9,17 +9,13 @@ class ModelViewer extends React.Component {
         this.state = { class: 'modelViewer' };
         this.updateBinTexture = this.updateBinTexture.bind(this);
         this.updateLidTexture = this.updateLidTexture.bind(this);
+        this.setLidColor = this.setLidColor.bind(this);
+        this.setBinColor = this.setBinColor.bind(this);
         this.setDefaults = this.setDefaults.bind(this);
-        this.setRenderNeeded = this.setRenderNeeded.bind(this);
         this.currentBin;
         this.currentLid;
         this.renderNeeded = false;
         this.cameraAnimation = false;
-    }
-
-    setRenderNeeded() {
-        console.log("hellloo");
-        this.renderNeeded = true;
     }
 
     componentDidMount() {
@@ -35,6 +31,14 @@ class ModelViewer extends React.Component {
     updateLidTexture(texture) {
         this.serve.loadLidWrap(texture);
         // camera to lid
+    }
+
+    setLidColor(col) {
+        this.serve.setLidColor( col );
+    }
+
+    setBinColor(col) {
+        this.serve.setBinColor( col );
     }
 
     setDefaults(bin, lid) {
@@ -64,7 +68,7 @@ class ModelViewer extends React.Component {
             });
 
         // Load our model with some default textures and add when loaded via promise
-        this.serve = new Serve({bin: this.currentBin, lid: this.currentLid, setRenderNeeded: this.setRenderNeeded})
+        this.serve = new Serve({bin: this.currentBin, lid: this.currentLid})
         this.serve.modelLoaded.then(() => {
             this.scene.add( this.serve.scene );
             this.renderNeeded = true;
@@ -139,6 +143,8 @@ class ModelViewer extends React.Component {
                 <Customizer 
                     updateBinTexture = {this.updateBinTexture} 
                     updateLidTexture = {this.updateLidTexture} 
+                    setBinColor = {this.setBinColor}
+                    setLidColor = {this.setLidColor}
                     setDefaults = {this.setDefaults} />
             </div>
         );

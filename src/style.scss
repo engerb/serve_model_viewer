@@ -40,10 +40,9 @@ body {
                 height: 60px;
                 margin: 5px;
                 cursor: pointer;
-                // pointer-events: none;
                 background-color: white;
                 border-radius: 10px;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.22), 0 2px 4px rgba(0,0,0,0.25);
+                box-shadow: 0 2px 6px 0 rgba(51,105,231,.4);
             }
 
             .lid {
@@ -53,6 +52,37 @@ body {
             .bin {
                 background-size: 280%;
             }
+        }
+
+        .addNew {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            background-color: #e2e2e2;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+
+            &::before {
+                content: "+";
+                font-size: 52px;
+                font-weight: 100;
+                color: white;
+                text-align: center;
+                width: 100%;
+                top: 0;
+                left: 0;
+                position: absolute;
+            }
+        }
+
+        .colorPicker {
+            width: 20px;
+            height: 60px;
+            border: none;
+            margin: 5px;
+            // border-radius: 10px;
+            box-shadow: 0 2px 6px 0 rgba(51,105,231,.4);
         }
     }
 }

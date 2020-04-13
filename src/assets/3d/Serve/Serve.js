@@ -70,6 +70,28 @@ class Serve {
         );
     }
 
+    setLidColor(col) {
+        // this.mat_lid.color.setHex(0xff0000); //= 0x152622; 
+        // this.geo_lid.material.color.setHex(0xff0000);
+        // console.log(
+        // this.geo_lid.material[1].col
+        // this.geo_lid.material[1].col = new THREE.Color( 0x1414d6 ); //);
+        // console.log( this.geo_lid.material[1].col );
+        // this.mat_lid.color = new THREE.Color( 0x1414d6 );
+        // console.log( this.mat_lid_base.col );
+        // this.mat_lid_base.col = new THREE.Color( 0x1414d6 );
+        // console.log( this.mat_lid_base.col );
+        // cube.material.color.set( color )
+        this.mat_lid_base.color.set( col );
+        this.renderNeeded = true;
+    }
+
+    setBinColor(col) {
+        // this.mat_bin.color = col;
+        this.mat_bin_base.color.set( col );
+        this.renderNeeded = true;
+    }
+
     toggleLid( action = 'open' ) {
 
     }
@@ -234,7 +256,7 @@ class Serve {
             roughnessMap: this.cloud_light_spec,
         });
 
-        this.mat_bin = new THREE.MeshPhysicalMaterial({
+        this.mat_bin_base = new THREE.MeshPhysicalMaterial({
             roughness: 0.3,
             color: 0xEEEEEE,
             aoMap: this.bin_ao,
@@ -252,15 +274,15 @@ class Serve {
             roughnessMap: this.cloud_light_spec,
         });
 
-        this.mat_lid = new THREE.MeshPhysicalMaterial({
+        this.mat_lid_base = new THREE.MeshPhysicalMaterial({
             roughness: 0.3,
             color: 0xEEEEEE,
             aoMap: this.lid_ao,
             roughnessMap: this.cloud_light_spec,
         });
 
-        this.mat_bin = [ this.mat_vinyl_bin, this.mat_bin ];
-        this.mat_lid = [ this.mat_vinyl_lid, this.mat_lid ];
+        this.mat_bin = [ this.mat_vinyl_bin, this.mat_bin_base ];
+        this.mat_lid = [ this.mat_vinyl_lid, this.mat_lid_base ];
 
         this.mat_black_plastic = new THREE.MeshPhysicalMaterial({
             roughness: 0.8,
