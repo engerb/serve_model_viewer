@@ -12,7 +12,6 @@ class ModelViewer extends React.Component {
         this.setLidColor = this.setLidColor.bind(this);
         this.setBinColor = this.setBinColor.bind(this);
         this.setDefaults = this.setDefaults.bind(this);
-        // this.toggleLid = this.toggleLid.bind(this);
         this.currentBin;
         this.currentLid;
         this.renderNeeded = false;
@@ -151,6 +150,9 @@ class ModelViewer extends React.Component {
                     setBinColor = {this.setBinColor}
                     setLidColor = {this.setLidColor}
                     setDefaults = {this.setDefaults} />
+                <div className='toggleLid' onClick = {(e) => this.toggleLid()}>
+                    <p>Toggle lid</p>
+                </div>
             </div>
         );
     }

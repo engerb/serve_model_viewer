@@ -14,31 +14,19 @@ class Customizer extends React.Component {
             lids: [
                 require('../assets/3d/Serve/wraps/lid_1.png').default,
                 require('../assets/3d/Serve/wraps/lid_2.png').default,
-            ]
+            ],
+            selectedBin: 0,
+            selectedLid: 0,
         }
-
-        // Start these texture arrrays with what we currently have in folder
-        // this.bins = [
-        //     require('../assets/3d/Serve/wraps/bin_1.png').default,
-        //     require('../assets/3d/Serve/wraps/bin_2.png').default,
-        // ]
-
-        // this.lids = [
-        //     require('../assets/3d/Serve/wraps/lid_1.png').default,
-        //     require('../assets/3d/Serve/wraps/lid_2.png').default,
-        // ]
 
         // Send up first of the textures for model load
         props.setDefaults(this.state.bins[0], this.state.lids[0]);
 
         this.handleLidUpload = this.handleLidUpload.bind(this);
         this.handleBinUpload = this.handleBinUpload.bind(this);
-
-        // this.ref = React.createRef();
-
-        // const inputFile = useRef(null) 
     }
 
+    // No need to actually "upload" or any of that base64 stuff!
     handleLidUpload(event) {
         event.stopPropagation();
         event.preventDefault();
@@ -48,9 +36,11 @@ class Customizer extends React.Component {
         const newArr = this.state.lids;
         newArr.push(url);
 
-        return this.setState({
+        this.setState({
             lids: newArr,
         });
+
+        this.selectLid(newArr.length - 1);
     }
 
     handleBinUpload(event) {
@@ -62,19 +52,27 @@ class Customizer extends React.Component {
         const newArr = this.state.bins;
         newArr.push(url);
 
-        return this.setState({
+        this.setState({
             bins: newArr,
         });
+
+        this.selectBin(newArr.length - 1);
     }
 
     selectLid(idx) {
         this.props.updateLidTexture( this.state.lids[idx] );
         // remove all selected class and add to this
+        this.setState({
+            selectedLid: idx,
+        });
     }
 
     selectBin(idx) {
         this.props.updateBinTexture( this.state.bins[idx] );
         // remove all selected class and add to this
+        this.setState({
+            selectedBin: idx,
+        });
     }
 
     render() {
@@ -94,7 +92,7 @@ class Customizer extends React.Component {
                     <div className='addedLids'>
                         {this.state.lids.map( (texture, index) => {
                             return <div 
-                                    className='lid' 
+                                    className={`lid selecter ${(index == this.state.selectedLid) ? "active" : ""}`} 
                                     key={ index } 
                                     data-key={ index } 
                                     style={{backgroundImage: `url(${texture})`}} 
@@ -130,7 +128,7 @@ class Customizer extends React.Component {
                     <div className='addedBins'>
                         {this.state.bins.map( (texture, index) => { 
                             return <div 
-                                    className='bin' 
+                                    className={`bin selecter ${(index == this.state.selectedBin) ? "active" : ""}`} 
                                     key={ index } 
                                     data-key={ index } 
                                     style={{backgroundImage: `url(${texture})`}} 
