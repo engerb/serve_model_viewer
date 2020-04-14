@@ -54,5 +54,8 @@ module.exports = {
         new webpack.ProvidePlugin({
             THREE: 'three',
         }),
+        new webpack.ProvidePlugin({
+            TWEEN: 'tween',
+        }),
     ]
 };

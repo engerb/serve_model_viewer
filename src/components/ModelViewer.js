@@ -1,17 +1,53 @@
 import React from "react";
 import Serve from '../assets/3d/Serve/Serve';
+import Customizer from './Customizer';
 
 class ModelViewer extends React.Component {
     constructor(props) {
         super(props);
         
         this.state = { class: 'modelViewer' };
+        this.updateBinTexture = this.updateBinTexture.bind(this);
+        this.updateLidTexture = this.updateLidTexture.bind(this);
+        this.setLidColor = this.setLidColor.bind(this);
+        this.setBinColor = this.setBinColor.bind(this);
+        this.setDefaults = this.setDefaults.bind(this);
+        this.currentBin;
+        this.currentLid;
+        this.renderNeeded = false;
+        this.cameraAnimation = false;
     }
 
     componentDidMount() {
-        this.renderNeeded = false;
         this.init();
         this.animate();
+    }
+
+    updateBinTexture(texture) {
+        this.serve.loadBinWrap(texture);
+        // camera to bin
+    }
+
+    updateLidTexture(texture) {
+        this.serve.loadLidWrap(texture);
+        // camera to lid
+    }
+
+    setLidColor(col) {
+        this.serve.setLidColor( col );
+    }
+
+    setBinColor(col) {
+        this.serve.setBinColor( col );
+    }
+
+    toggleLid() {
+        this.serve.toggleLid();
+    }
+
+    setDefaults(bin, lid) {
+        this.currentBin = bin;
+        this.currentLid = lid;
     }
 
     init() {
@@ -23,7 +59,7 @@ class ModelViewer extends React.Component {
         new THREE.RGBELoader()
             .setDataType( THREE.UnsignedByteType )
             .setPath( '/src/assets/3d/' )
-            .load( 'venice_sunset_1k.hdr', ( texture )=> {
+            .load( 'venice_sunset_1k.hdr', ( texture ) => {
                 var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
 
                 // this.scene.background = envMap; // if you want hdri as image
@@ -33,10 +69,10 @@ class ModelViewer extends React.Component {
                 pmremGenerator.dispose();
 
                 this.renderNeeded = true;
-            } );
-        
-        // Object with promise
-        this.serve = new Serve() // give first cmf wrapps
+            });
+
+        // Load our model with some default textures and add when loaded via promise
+        this.serve = new Serve({bin: this.currentBin, lid: this.currentLid})
         this.serve.modelLoaded.then(() => {
             this.scene.add( this.serve.scene );
             this.renderNeeded = true;
@@ -57,7 +93,7 @@ class ModelViewer extends React.Component {
 
         this.controls.addEventListener
         this.controls.minDistance = 1;
-        this.controls.maxDistance = 10
+        this.controls.maxDistance = 5;
         this.controls.target.set( 0, 0.5, 0 );
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.3;
@@ -75,13 +111,14 @@ class ModelViewer extends React.Component {
     animate() {
         requestAnimationFrame( ()=> { this.animate() } );
         
-        if (this.renderNeeded) { // or animations playing
+        if ( this.renderNeeded || TWEEN.getAll().length || this.serve.renderNeeded ) {
             this.renderScene();
-            // progress animation
             this.renderNeeded = false;
+            this.serve.renderNeeded = false;
         }
 
         this.controls.update();
+        TWEEN.update();
     }
 
     onWindowResize() {
@@ -105,7 +142,18 @@ class ModelViewer extends React.Component {
 
     render() {
         return (
-            <div className={this.state.class} ref={ref => (this.mount = ref)} />
+            <div className="modelViewerMain">
+                <div className={this.state.class} ref={ref => (this.mount = ref)} />
+                <Customizer 
+                    updateBinTexture = {this.updateBinTexture} 
+                    updateLidTexture = {this.updateLidTexture} 
+                    setBinColor = {this.setBinColor}
+                    setLidColor = {this.setLidColor}
+                    setDefaults = {this.setDefaults} />
+                <div className='toggleLid' onClick = {(e) => this.toggleLid()}>
+                    <p>Toggle lid</p>
+                </div>
+            </div>
         );
     }
 }
