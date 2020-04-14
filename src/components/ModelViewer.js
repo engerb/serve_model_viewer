@@ -58,8 +58,7 @@ class ModelViewer extends React.Component {
 
         new THREE.RGBELoader()
             .setDataType( THREE.UnsignedByteType )
-            .setPath( '/src/assets/3d/' )
-            .load( 'venice_sunset_1k.hdr', ( texture ) => {
+            .load( require('../assets/3d/venice_sunset_1k.hdr').default, ( texture ) => {
                 var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
 
                 // this.scene.background = envMap; // if you want hdri as image
