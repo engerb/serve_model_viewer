@@ -12,6 +12,7 @@ class ModelViewer extends React.Component {
         this.setLidColor = this.setLidColor.bind(this);
         this.setBinColor = this.setBinColor.bind(this);
         this.setDefaults = this.setDefaults.bind(this);
+        // this.toggleLid = this.toggleLid.bind(this);
         this.currentBin;
         this.currentLid;
         this.renderNeeded = false;
@@ -29,7 +30,6 @@ class ModelViewer extends React.Component {
     }
 
     updateLidTexture(texture) {
-        this.serve.toggleLid();
         this.serve.loadLidWrap(texture);
         // camera to lid
     }
@@ -40,6 +40,10 @@ class ModelViewer extends React.Component {
 
     setBinColor(col) {
         this.serve.setBinColor( col );
+    }
+
+    toggleLid() {
+        this.serve.toggleLid();
     }
 
     setDefaults(bin, lid) {
