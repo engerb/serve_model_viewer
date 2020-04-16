@@ -17,7 +17,8 @@ class Serve {
         this.modelLoaded = new Promise(( resolve, reject ) => {
             var loader = new THREE.GLTFLoader();
             var dracoLoader = new THREE.DRACOLoader();
-            dracoLoader.setDecoderPath( 'node_modules/three/examples/js/libs/draco/' );
+            // dracoLoader.setDecoderPath( 'node_modules/three/examples/js/libs/draco/' );
+            dracoLoader.setDecoderPath('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/js/libs/draco/'); 
             loader.setDRACOLoader( dracoLoader );
             loader.load( this.assetUrl,                
                 // called when the resource is loaded
