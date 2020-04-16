@@ -3,7 +3,7 @@ Built with React and Three.js
 
 # How to run
 * Install node_modules: `npm install`
-* Run (dev): `npm start-dev`
+* Run (dev): `npm run-script start-dev`
 
 # How to build and deploy
 * Build: `npm run-script build`

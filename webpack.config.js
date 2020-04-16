@@ -52,7 +52,8 @@ module.exports = {
         new HtmlWebPackPlugin({
             hash: true,
             template: './src/index.html',
-            filename: './index.html'
+            filename: './index.html',
+            favicon: './src/assets/img/favicon.svg'
         }),
         new webpack.ProvidePlugin({
             THREE: 'three',
