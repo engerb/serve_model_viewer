@@ -137,6 +137,7 @@ class ModelViewer extends React.Component {
         this.setState({
             class: 'modelViewer visible'
         });
+        this.serve.playIntro();
     }
 
     render() {

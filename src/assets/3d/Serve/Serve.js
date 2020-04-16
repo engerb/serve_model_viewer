@@ -55,6 +55,46 @@ class Serve {
         );
     }
 
+    playIntro() {
+        const from = { 
+            rootPos : this.handle_root.position.z - 3,
+            wheelTurn : this.handle_wheel_fl.rotation.x - 50,
+            // wheelAngle : this.handle_wheel_fl.rotation.y + .5,
+            // rootAngle: this.handle_root.rotation.y - .5
+        };
+        const to = { 
+            rootPos : this.handle_root.position.z,
+            wheelTurn : this.handle_wheel_fl.rotation.x,
+            // wheelAngle : this.handle_wheel_fl.rotation.y,
+            // rootAngle: this.handle_root.rotation.y
+        };
+
+        this.positionTween = new TWEEN.Tween(from).to(to, 3000); 
+        this.positionTween.onUpdate(()=>{
+            this.handle_root.position.z = from.rootPos;
+            this.handle_wheel_fl.rotation.x = from.wheelTurn;
+            this.handle_wheel_fr.rotation.x = from.wheelTurn;
+            this.handle_wheel_rl.rotation.x = from.wheelTurn;
+            this.handle_wheel_rr.rotation.x = from.wheelTurn;
+
+            // this.handle_wheel_fl.children[0].rotation.x = from.wheelTurn;
+            // this.handle_wheel_fr.children[0].rotation.x = from.wheelTurn;
+            // this.handle_wheel_fl.children[1].rotation.x = from.wheelTurn;
+            // this.handle_wheel_fr.children[1].rotation.x = from.wheelTurn;
+            // this.handle_wheel_fl.children[2].rotation.x = from.wheelTurn;
+            // this.handle_wheel_fr.children[2].rotation.x = from.wheelTurn;
+
+            // this.handle_wheel_fl.rotation.y = from.wheelAngle;
+            // this.handle_wheel_fr.rotation.y = from.wheelAngle;
+
+            // this.handle_root.rotation.y = from.rootAngle;
+        });
+
+        this.positionTween.easing(TWEEN.Easing.Cubic.Out);
+
+        this.positionTween.start();
+    }
+
     loadBinWrap(url) {
         new THREE.TextureLoader().load( url,
             ( texture ) => {
