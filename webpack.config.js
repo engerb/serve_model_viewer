@@ -16,6 +16,9 @@ module.exports = {
             'sass-loader',
             ],
         },
+        // test for glb or somethin to signify uncompressed
+        // run draco
+        // give compressed to file-loader instead
         {
             test: /\.(png|svg|jpg|gif|glb|hdr)$/,
             use: [{
@@ -23,7 +26,7 @@ module.exports = {
             }]
         },
         {
-            test: /\.(js|jsx)$/,
+            test: /\.(js|jsx|jsm)$/,
             exclude: /node_modules/,
             use: {
                 loader: "babel-loader"

@@ -2,8 +2,6 @@ class Serve {
     constructor( props ) {
         this.props = props;
         
-        // this.file = props.hasOwnProperty('file') ? props.file : 'serve.glb';
-        // this.path = props.hasOwnProperty('path') ? props.path : '/src/assets/3d/Serve/';
         this.assetUrl = require('./serve.glb').default;
         
         this.renderNeeded = false;
