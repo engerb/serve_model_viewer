@@ -57,8 +57,8 @@ class Serve {
 
     playIntro() {
         const from = { 
-            rootPos : this.handle_root.position.z - 3,
-            wheelTurn : this.handle_wheel_fl.rotation.x - 50,
+            rootPos : this.handle_root.position.z - 2,
+            wheelTurn : this.handle_wheel_fl.rotation.x - 30,
             // wheelAngle : this.handle_wheel_fl.rotation.y + .5,
             // rootAngle: this.handle_root.rotation.y - .5
         };
