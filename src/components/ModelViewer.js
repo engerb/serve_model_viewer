@@ -59,7 +59,7 @@ class ModelViewer extends React.Component {
         new THREE.RGBELoader()
             .setDataType( THREE.UnsignedByteType )
             .load( require('../assets/3d/venice_sunset_1k.hdr').default, ( texture ) => {
-                var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+                const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
 
                 // this.scene.background = envMap; // if you want hdri as image
                 this.scene.environment = envMap;
@@ -77,6 +77,7 @@ class ModelViewer extends React.Component {
             this.renderNeeded = true;
             this.playIntro();
         });
+
         this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
