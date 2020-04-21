@@ -61,7 +61,15 @@ class Customizer extends React.Component {
                     selectedLid: true,
                 },
             ],
-            menuState: 'binColors', // binColors, binWraps, lidColors, lidWraps, options
+            // binColors, binWraps, lidColors, lidWraps, options
+            menuState: 'binColors', 
+            menuStateCopy: {
+                binColors: 'Base bin colour',
+                binWraps: 'Vinyl decals / wrap on bin',
+                lidColors: 'Base lid colour',
+                lidWraps: 'Vinyl decals / wrap on lid',
+                options: 'Other options',
+            }
         }
 
         // Send up first of the textures for model load
@@ -82,8 +90,24 @@ class Customizer extends React.Component {
     }
 
     setColor( index, menuState = this.state.menuState ) {
-        console.log([index, menuState]);
-        return;
+        const selectAttr = ((menuState == 'binColors') ? 'selectedBin' : 'selectedLid');
+
+        // Copy and mutate colour object
+        const newObj = this.state.colors;
+        newObj[ newObj.findIndex(obj => obj[selectAttr]) ][selectAttr] = false;
+        newObj[ index ][selectAttr] = true; 
+
+        // Update state with mutated sub object
+        this.setState({
+            colors: newObj,
+        });
+
+        // Then apply new colour
+        if (menuState == 'binColors') {
+            this.props.setBinColor( newObj[ index ].color );
+        } else {
+            this.props.setLidColor( newObj[ index ].color );
+        }
     }
 
     setWrap( index, menuState = this.state.menuState ) {
@@ -143,13 +167,14 @@ class Customizer extends React.Component {
                                     key = { index } 
                                     data-index = { index } 
                                     style = { {backgroundColor: `${obj.color}`} } 
+                                    // onClick = {(event) => this.setColor( event.target.getAttribute('data-index'), menuState )}
                                     onClick = {(() => {
                                         // Can not re-select is allready selected
                                         if ((menuState == 'binColors' && !obj.selectedBin) || (menuState == 'lidColors' && !obj.selectedLid)) {
                                             return (event) => this.setColor( event.target.getAttribute('data-index'), menuState )
                                         }
-                                    })}
-                                />;  
+                                    })()}
+                                />
                             })}
                             
                             {/* // optionally add more colours  */}
@@ -157,19 +182,22 @@ class Customizer extends React.Component {
                         </div>
                     })} 
                     {['binWraps', 'lidWraps'].map((menuState, menuKey) => {
-                        return <div className = {`${menuState} ${(menuState == this.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
+                        return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
                             {this.state[menuState].map( (obj, index) => {
                                 return <div className = {`${ obj.selected ? 'active' : ''}`} 
                                     key = { index } 
                                     data-index = { index } 
-                                    style={{backgroundImage: `url(${obj.img})`}} 
+                                    style={{
+                                        backgroundImage: `url(${obj.img})`,
+                                        backgroundColor: `${this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binWraps') ? 'selectedBin' : 'selectedLid') ]) ].color}`
+                                    }} 
                                     onClick = {(() => {
                                         // Can not re-select is allready selected
-                                        if (menuState != this.menuState) {
+                                        if (menuState != this.state.menuState) {
                                             return (event) => this.setWrap( event.target.getAttribute('data-index'), menuState )
                                         }
-                                    })}
-                                />;  
+                                    })()}
+                                />
                             })}
 
                             <input id='myInput'
@@ -183,7 +211,44 @@ class Customizer extends React.Component {
                             <div className='addWrap' onClick={()=>{this.refs[`fileUploader_${menuState}`].click()}} />
                         </div>
                     })} 
+                    <div className = {`'options' ${(this.menuState == 'options') ? 'active' : 'hidden'}`} >
+                        {/* lid */}
+                        {/* speed */}
+                        {/* steering */}
+                        {/* render */}
+                    </div>
                 </div>
+
+                <div className = {'label'}>
+                        <p>
+                            {this.state.menuStateCopy[ this.state.menuState ]}
+                        </p>
+                        <h3>
+                            {(() => {
+                                if (this.state.menuState == 'lidWraps' || this.state.menuState == 'binWraps') {
+                                    return this.state[ this.state.menuState ][ this.state[ this.state.menuState ].findIndex(obj => obj.selected) ].name
+                                } else if (this.state.menuState == 'binColors' || this.state.menuState == 'lidColors') {
+                                    return this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binColors') ? 'selectedBin' : 'selectedLid') ]) ].name
+                                } else {
+                                    return 'selected action...'
+                                }
+                            })()}
+                        </h3>
+                    </div>
+
+                    <div className = {'menuStateSelector'}>
+                        {['binColors', 'lidColors', 'lidColors', 'lidWraps', 'options'].map((menuState, menuKey) => {
+                            return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : ''}`} 
+                                key = { menuKey }
+                                onClick = {(() => {
+                                    // Can not re-select is allready selected
+                                    if (menuState != this.state.menuState) {
+                                        return () => this.setState({ menuState: menuState })
+                                    }
+                                })()}
+                            /> 
+                        })} 
+                    </div>
             </div>
         );
     }

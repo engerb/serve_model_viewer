@@ -20,89 +20,96 @@ body {
     }
 }
 
-.toggleLid {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    cursor: pointer;
-    background-color: white;
-    border-radius: 25px;
-    box-shadow: 0 2px 6px 0 rgba(51,105,231,.4);
-    margin: 10px;
-
-    p {
-        margin: 15px 30px;
-    }
-}
-
 .customizer {
     position: absolute;
     left: 0;
     bottom: 0;
 
-    .lids, .bins {
-        display: flex;
-
-        .addedLids, .addedBins {
-            display: flex;
-
-            .lid, .bin {
-                width: 60px;
-                height: 60px;
-                margin: 5px;
+    .actions {
+        div {
+            &.hidden {
+                display: none;
+            }
+            
+            &.active {
+                display: flex;
                 cursor: pointer;
-                background-color: white;
-                border-radius: 10px;
-                box-shadow: 0 2px 6px 0 rgba(51,105,231,.4);
 
-                box-sizing: border-box;
-                border: 0px #4e84f8 solid;
-                transition: all 100ms;
-                transform: scale(1);
+                &.binColors, &.lidColors {
 
-                &.active {
-                    border: 1px #4e84f8 solid;
-                    transform: scale(1.1);
+                    div {
+                        width: 20px;
+                        height: 20px;
+                        margin: 15px 15px 15px 0;
+                        border-radius: 10px;
+                        flex-shrink: 0;
+                        flex-grow: 0;
+                        box-sizing: border-box;
+
+                        &.stroke {
+                            border: 1px #B8B8B8 solid;
+                        }
+
+                        &.active {
+
+                            &.lowContrast {
+
+                            }
+                        }
+                    }
+                }
+
+                &.binWraps, &.lidWraps {
+                    div {
+
+                    }
                 }
             }
+        }
+    }
 
-            .lid {
-                background-size: 130%;
-            }
+    .label {
+        p {
 
-            .bin {
-                background-size: 280%;
+        }
+
+        h3 {
+
+        }
+    }
+
+    .menuStateSelector {
+
+        div {
+
+        }
+
+        .binColors {
+
+            &.active {
+
             }
         }
 
-        .addNew {
-            width: 60px;
-            height: 60px;
-            margin: 5px;
-            background-color: #e2e2e2;
-            border-radius: 10px;
-            cursor: pointer;
-            position: relative;
+        .lidColors  {
 
-            &::before {
-                content: "+";
-                font-size: 52px;
-                font-weight: 100;
-                color: white;
-                text-align: center;
-                width: 100%;
-                top: 0;
-                left: 0;
-                position: absolute;
+            &.active {
+
             }
         }
 
-        .colorPicker {
-            width: 20px;
-            height: 60px;
-            border: none;
-            margin: 5px;
-            box-shadow: 0 2px 6px 0 rgba(51,105,231,.4);
+        .lidWraps {
+
+            &.active {
+
+            }
+        }
+
+        .options {
+
+            &.active {
+
+            }
         }
     }
 }

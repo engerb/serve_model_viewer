@@ -101,11 +101,13 @@ class Serve {
 
     setBinColor( binColor ) {
         this.mat_bin_base.color.set( binColor );
+        this.mat_bin_base.color.convertSRGBToLinear();
         this.renderNeeded = true;
     }
 
     setLidColor( lidColor ) {
         this.mat_lid_base.color.set( lidColor );
+        this.mat_lid_base.color.convertSRGBToLinear();
         this.renderNeeded = true;
     }
 
@@ -275,7 +277,7 @@ class Serve {
         this.aluminum_1024px_ao.flipY = false;
 
         this.mat_vinyl_bin = new THREE.MeshPhysicalMaterial({
-            roughness: 0.4,
+            roughness: 0.5,
             color: 0xFFFFFF, 
             transparency: 0, 
             opacity: 1,                
@@ -285,14 +287,15 @@ class Serve {
         });
 
         this.mat_bin_base = new THREE.MeshPhysicalMaterial({
-            roughness: 0.3,
+            roughness: 0.4,
             color: 0xFFFFFF,
             aoMap: this.bin_ao,
             roughnessMap: this.cloud_light_spec,
         });
+        // this.mat_bin_base.color.convertLinearToSRGB();
 
         this.mat_vinyl_lid = new THREE.MeshPhysicalMaterial({
-            roughness: 0.4,
+            roughness: 0.5,
             color: 0xFFFFFF,
             transparency: 0, 
             opacity: 1,                
@@ -302,11 +305,12 @@ class Serve {
         });
 
         this.mat_lid_base = new THREE.MeshPhysicalMaterial({
-            roughness: 0.3,
+            roughness: 0.4,
             color: 0xFFFFFF,
             aoMap: this.lid_ao,
             roughnessMap: this.cloud_light_spec,
         });
+        // this.mat_lid_base.color.convertLinearToSRGB();
         
         // sub arr for col and texture, fade
         this.mat_bin = [ this.mat_vinyl_bin, this.mat_bin_base ];

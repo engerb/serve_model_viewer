@@ -20,6 +20,26 @@ class ModelViewer extends React.Component {
         this.setLidColor = this.setLidColor.bind(this);
         this.setDefaults = this.setDefaults.bind(this);
         this.setLidPos = this.setLidPos.bind(this);
+        this.setSpeed = this.setSpeed.bind(this);
+        this.setSteer = this.setSteer.bind(this);
+        this.renderOut = this.renderOut.bind(this);
+    }
+
+    setSpeed() {
+
+    }
+
+    setSteer() {
+
+    }
+
+    renderOut() {
+        // give user a png of serve
+        // store current cam loc
+        // move to defaul pos
+        // render
+        // save
+        // return camera to user pos
     }
 
     componentDidMount() {
@@ -67,6 +87,16 @@ class ModelViewer extends React.Component {
 
         this.scene = new THREE.Scene();
 
+        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
+        this.renderer.setPixelRatio( window.devicePixelRatio );
+        this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 0.8;
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
+
+        var pmremGenerator = new THREE.PMREMGenerator( this.renderer );
+        pmremGenerator.compileEquirectangularShader();
+
         new THREE.RGBELoader()
             .setDataType( THREE.UnsignedByteType )
             .load( require('../assets/3d/venice_sunset_1k.hdr').default, ( texture ) => {
@@ -95,15 +125,8 @@ class ModelViewer extends React.Component {
             this.playIntro();
         });
 
-        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-        this.renderer.setPixelRatio( window.devicePixelRatio );
-        this.renderer.setSize( window.innerWidth, window.innerHeight );
-        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 0.8;
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
-
-        var pmremGenerator = new THREE.PMREMGenerator( this.renderer );
-        pmremGenerator.compileEquirectangularShader();
+        // var pmremGenerator = new THREE.PMREMGenerator( this.renderer );
+        // pmremGenerator.compileEquirectangularShader();
 
         this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
         this.controls.addEventListener('change', ()=>{ this.setState({ renderNeeded: true }) } );
@@ -169,6 +192,9 @@ class ModelViewer extends React.Component {
                     setLidColor = { this.setLidColor.bind(this) }
                     setDefaults = { this.setDefaults.bind(this) }
                     setLidPos = { this.setLidPos.bind(this) }
+                    setSpeed = { this.setSpeed.bind(this) }
+                    setSteer = { this.setSteer.bind(this) }
+                    renderOut = { this.renderOut.bind(this) }
                 />
             </div>
         );
