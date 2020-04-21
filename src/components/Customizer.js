@@ -5,80 +5,159 @@ class Customizer extends React.Component {
         super(props);
 
         this.state = {
-            lidColor: '#eeeeee',
-            binColor: '#eeeeee',
-            bins: [
-                require('../assets/3d/Serve/wraps/bin_1.png').default,
-                require('../assets/3d/Serve/wraps/bin_2.png').default,
+            binWraps: [
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_1.png').default,
+                    name: 'bin_1',
+                    selected: true,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_2.png').default,
+                    name: 'bin_2',
+                    selected: false,
+                },
             ],
-            lids: [
-                require('../assets/3d/Serve/wraps/lid_1.png').default,
-                require('../assets/3d/Serve/wraps/lid_2.png').default,
+            lidWraps: [
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_1.png').default,
+                    name: 'lid_1',
+                    selected: true,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_2.png').default,
+                    name: 'lid_2',
+                    selected: false,
+                },
             ],
-            selectedBin: 0,
-            selectedLid: 0,
+            colors: [
+                {
+                    color: '#1A1A1A',
+                    name: 'Black',
+                    selectedBin: false,
+                    selectedLid: false,
+                },
+                {
+                    color: '#FDF150',
+                    name: 'Postmates yellow',
+                    selectedBin: false,
+                    selectedLid: false,
+                },
+                {
+                    color: '#5499ED',
+                    name: 'Blue',
+                    selectedBin: false,
+                    selectedLid: false,
+                },
+                {
+                    color: '#FABC0F',
+                    name: 'Safety yellow',
+                    selectedBin: false,
+                    selectedLid: false,
+                },
+                {
+                    color: '#FFFFFF',
+                    name: 'Default white',
+                    selectedBin: true,
+                    selectedLid: true,
+                },
+            ],
+            menuState: 'binColors', // binColors, binWraps, lidColors, lidWraps, options
+            // allMenuStates: ['binColors', 'binWraps', 'lidColors', 'lidWraps', 'options'],
         }
 
         // Send up first of the textures for model load
-        props.setDefaults(this.state.bins[0], this.state.lids[0]);
+        props.setDefaults({
+            binWrap: this.state.binWraps[ this.state.binWraps.findIndex(obj => obj.selected) ].img,
+            lidWrap: this.state.lidWraps[ this.state.lidWraps.findIndex(obj => obj.selected) ].img,
+            binColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedBin) ].color,
+            lidColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedLid) ].color,
+        });
 
-        this.handleLidUpload = this.handleLidUpload.bind(this);
-        this.handleBinUpload = this.handleBinUpload.bind(this);
+        // this.handleLidUpload = this.handleLidUpload.bind(this);
+        // this.handleBinUpload = this.handleBinUpload.bind(this);
     }
 
-    // No need to actually "upload" or any of that base64 stuff!
-    handleLidUpload(event) {
-        event.stopPropagation();
-        event.preventDefault();
+    // // No need to actually "upload" or any of that base64 stuff!
+    // handleLidUpload(event) {
+    //     event.stopPropagation();
+    //     event.preventDefault();
         
-        const file = event.target.files[0];
-        const url = URL.createObjectURL(file);
-        const newArr = this.state.lids;
-        newArr.push(url);
+    //     const file = event.target.files[0];
+    //     const url = URL.createObjectURL(file);
+    //     const newArr = this.state.binWraps;
 
-        this.setState({
-            lids: newArr,
-        });
+    //     newArr.push({
 
-        this.selectLid(newArr.length - 1);
-    }
+    //     });
 
-    handleBinUpload(event) {
-        event.stopPropagation();
-        event.preventDefault();
+    //     this.setState({
+    //         lidWraps: newArr,
+    //     });
+
+    //     this.selectLid(newArr.length - 1);
+    // }
+
+    // handleBinUpload(event) {
+    //     event.stopPropagation();
+    //     event.preventDefault();
         
-        const file = event.target.files[0];
-        const url = URL.createObjectURL(file);
-        const newArr = this.state.bins;
-        newArr.push(url);
+    //     const file = event.target.files[0];
+    //     const url = URL.createObjectURL(file);
+    //     const newArr = this.state.bins;
+    //     newArr.push(url);
 
-        this.setState({
-            bins: newArr,
-        });
+    //     this.setState({
+    //         binWraps: newArr,
+    //     });
 
-        this.selectBin(newArr.length - 1);
-    }
+    //     this.selectBin(newArr.length - 1);
+    // }
 
-    selectLid(idx) {
-        this.props.updateLidTexture( this.state.lids[idx] );
-        // remove all selected class and add to this
-        this.setState({
-            selectedLid: idx,
-        });
-    }
+    // selectLidWrap(idx) {
+    //     this.props.updateLidTexture( this.state.lids[idx] );
+        
 
-    selectBin(idx) {
-        this.props.updateBinTexture( this.state.bins[idx] );
-        // remove all selected class and add to this
-        this.setState({
-            selectedBin: idx,
-        });
+
+    //     this.setState({
+    //         selectedLidWrap: idx,
+    //     });
+    // }
+
+    // selectBinWrap(idx) {
+    //     this.props.updateBinTexture( this.state.bins[idx] );
+        
+
+    //     this.setState({
+    //         selectedBinWrap: idx,
+    //     });
+    // }
+
+    checkContrast(hex) {
+        // check if low contrast against white, then return 'lowContrast'
+
+        return;
     }
 
     render() {
         return (
             <div className='customizer'>
-                <div className='lids'>
+                
+                {[].map(() => {
+                    return <div className={`binColors ${(this.menuState == 'binColors') ? "active" : ""}`}>
+                        {this.state.colors.map( (obj, index) => {
+                        return <div className = {
+                                    `binColors ${this.checkContrast(obj.color)} ${(obj.selectedBin) ? "active" : ""} ${(obj.color == '#FFFFFF') ? "stroke" : ""}`
+                                } 
+                                key = { index } 
+                                data-key = { index } 
+                                style = { {backgroundColor: `${obj.color}`} } 
+                                // onClick = {(e) => this.selectColor( e.target.getAttribute('data-key'), 'binColors' )} 
+                            />;  
+                        })}
+                </div>
+                }   
+
+                {/* <div className='lids'>
                     <input 
                         className='colorPicker' 
                         type='color'  
@@ -126,7 +205,7 @@ class Customizer extends React.Component {
                         }}
                     />
                     <div className='addedBins'>
-                        {this.state.bins.map( (texture, index) => { 
+                        {this.state.binWraps.map( (texture, index) => { 
                             return <div 
                                     className={`bin selecter ${(index == this.state.selectedBin) ? "active" : ""}`} 
                                     key={ index } 
@@ -149,7 +228,7 @@ class Customizer extends React.Component {
                         className='addNew' 
                         onClick={()=>{this.refs.binFileUploader.click()}}
                     />
-                </div>
+                </div> */}
             </div>
         );
     }

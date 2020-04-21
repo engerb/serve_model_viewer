@@ -6,16 +6,20 @@ class ModelViewer extends React.Component {
     constructor(props) {
         super(props);
         
-        this.state = { class: 'modelViewer' };
-        this.updateBinTexture = this.updateBinTexture.bind(this);
-        this.updateLidTexture = this.updateLidTexture.bind(this);
-        this.setLidColor = this.setLidColor.bind(this);
+        this.state = { 
+            visible: '',
+            lidOpen: false,
+            renderNeeded: false,
+        };
+
+        // these should all be in state with serve observing state as a real component instead of a js object
+        // all this shit will use react three, but maybe a propper state manager too?
+        this.setBinWrap = this.setBinWrap.bind(this);
+        this.setLidWrap = this.setLidWrap.bind(this);
         this.setBinColor = this.setBinColor.bind(this);
+        this.setLidColor = this.setLidColor.bind(this);
         this.setDefaults = this.setDefaults.bind(this);
-        this.currentBin;
-        this.currentLid;
-        this.renderNeeded = false;
-        this.cameraAnimation = false;
+        this.setLidPos = this.setLidPos.bind(this);
     }
 
     componentDidMount() {
@@ -23,31 +27,38 @@ class ModelViewer extends React.Component {
         this.animate();
     }
 
-    updateBinTexture(texture) {
-        this.serve.loadBinWrap(texture);
-        // camera to bin
+    setBinWrap( binWrap ) {
+        this.setState({ binWrap: binWrap });
+        this.serve.setBinWrap( binWrap );
     }
 
-    updateLidTexture(texture) {
-        this.serve.loadLidWrap(texture);
-        // camera to lid
+    setLidWrap( lidWrap ) {
+        this.setState({ lidWrap: lidWrap });
+        this.serve.setLidWrap( lidWrap );
     }
 
-    setLidColor(col) {
-        this.serve.setLidColor( col );
+    setBinColor( binColor ) {
+        this.setState({ binColor: binColor });
+        this.serve.setBinColor( binColor );
     }
 
-    setBinColor(col) {
-        this.serve.setBinColor( col );
+    setLidColor( lidColor ) {
+        this.setState({ lidColor: lidColor });
+        this.serve.setLidColor( lidColor );
     }
 
-    toggleLid() {
-        this.serve.toggleLid();
+    setLidPos( lidOpen ) { 
+        this.setState({ lidOpen: !lidOpen });
+        this.serve.setLidPos( lidOpen ); 
     }
 
-    setDefaults(bin, lid) {
-        this.currentBin = bin;
-        this.currentLid = lid;
+    setDefaults( obj ) {
+        this.setState({
+            binWrap: obj.binWrap,
+            lidWrap: obj.lidWrap,
+            binColor: obj.binColor, 
+            lidColor: obj.lidColor,
+        });
     }
 
     init() {
@@ -67,14 +78,20 @@ class ModelViewer extends React.Component {
                 texture.dispose();
                 pmremGenerator.dispose();
 
-                this.renderNeeded = true;
+                this.setState({ renderNeeded: true });
             });
 
         // Load our model with some default textures and add when loaded via promise
-        this.serve = new Serve({bin: this.currentBin, lid: this.currentLid})
+        this.serve = new Serve();
         this.serve.modelLoaded.then(() => {
             this.scene.add( this.serve.scene );
-            this.renderNeeded = true;
+            this.setState({ renderNeeded: true });
+
+            this.serve.setBinWrap( this.state.binWrap );
+            this.serve.setLidWrap( this.state.lidWrap );
+            this.serve.setBinColor( this.state.binColor );
+            this.serve.setLidColor( this.state.lidColor );
+
             this.playIntro();
         });
 
@@ -89,18 +106,18 @@ class ModelViewer extends React.Component {
         pmremGenerator.compileEquirectangularShader();
 
         this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
-        this.controls.addEventListener('change', ()=>{ this.renderNeeded = true; } );
-
-        this.controls.addEventListener
-        this.controls.minDistance = 1;
-        this.controls.maxDistance = 5;
+        this.controls.addEventListener('change', ()=>{ this.setState({ renderNeeded: true }) } );
         this.controls.target.set( 0, 0.5, 0 );
-        this.controls.enableDamping = true;
-        this.controls.dampingFactor = 0.3;
-        this.controls.minPolarAngle = 0.3;
-        this.controls.maxPolarAngle = 1.7;
-        this.controls.update();
+        Object.assign(this.controls, {
+            minDistance: 1,
+            maxDistance: 5,
+            enableDamping: true,
+            dampingFactor: 0.3,
+            minPolarAngle: 0.3,
+            maxPolarAngle: 1.7,
+        });
 
+        // react?
         window.addEventListener('resize', function() {
             this.onWindowResize();
         }.bind(this), false);
@@ -111,9 +128,9 @@ class ModelViewer extends React.Component {
     animate() {
         requestAnimationFrame( ()=> { this.animate() } );
         
-        if ( this.renderNeeded || TWEEN.getAll().length || this.serve.renderNeeded ) {
+        if ( this.state.renderNeeded || TWEEN.getAll().length || this.serve.renderNeeded ) {
             this.renderScene();
-            this.renderNeeded = false;
+            this.setState({ renderNeeded: false });
             this.serve.renderNeeded = false;
         }
 
@@ -136,7 +153,7 @@ class ModelViewer extends React.Component {
 
     playIntro() {
         this.setState({
-            class: 'modelViewer visible'
+            visible: 'visible'
         });
         this.serve.playIntro();
     }
@@ -144,16 +161,15 @@ class ModelViewer extends React.Component {
     render() {
         return (
             <div className="modelViewerMain">
-                <div className={this.state.class} ref={ref => (this.mount = ref)} />
+                <div className={`modelViewer ${this.state.visible}`} ref={ref => (this.mount = ref)} /> 
                 <Customizer 
-                    updateBinTexture = {this.updateBinTexture} 
-                    updateLidTexture = {this.updateLidTexture} 
-                    setBinColor = {this.setBinColor}
-                    setLidColor = {this.setLidColor}
-                    setDefaults = {this.setDefaults} />
-                <div className='toggleLid' onClick = {(e) => this.toggleLid()}>
-                    <p>Toggle lid</p>
-                </div>
+                    setBinWrap = { this.setBinWrap.bind(this) }
+                    setLidWrap = { this.setLidWrap.bind(this) }
+                    setBinColor = { this.setBinColor.bind(this) }
+                    setLidColor = { this.setLidColor.bind(this) }
+                    setDefaults = { this.setDefaults.bind(this) }
+                    setLidPos = { this.setLidPos.bind(this) }
+                />
             </div>
         );
     }
