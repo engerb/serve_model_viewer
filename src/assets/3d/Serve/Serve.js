@@ -307,7 +307,8 @@ class Serve {
             aoMap: this.lid_ao,
             roughnessMap: this.cloud_light_spec,
         });
-
+        
+        // sub arr for col and texture, fade
         this.mat_bin = [ this.mat_vinyl_bin, this.mat_bin_base ];
         this.mat_lid = [ this.mat_vinyl_lid, this.mat_lid_base ];
 
