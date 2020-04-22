@@ -8,24 +8,54 @@ class Customizer extends React.Component {
             binWraps: [
                 {
                     img: require('../assets/3d/Serve/wraps/bin_1.png').default,
-                    name: 'bin_1',
+                    name: 'Bin 1',
                     selected: true,
                 },
                 {
                     img: require('../assets/3d/Serve/wraps/bin_2.png').default,
-                    name: 'bin_2',
+                    name: 'Bin 2',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_3.png').default,
+                    name: 'Bin 3',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_4.png').default,
+                    name: 'Bin 4',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_5.png').default,
+                    name: 'Bin 5',
                     selected: false,
                 },
             ],
             lidWraps: [
                 {
                     img: require('../assets/3d/Serve/wraps/lid_1.png').default,
-                    name: 'lid_1',
+                    name: 'Lid 1',
                     selected: true,
                 },
                 {
                     img: require('../assets/3d/Serve/wraps/lid_2.png').default,
-                    name: 'lid_2',
+                    name: 'Lid 2',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_3.png').default,
+                    name: 'Lid 3',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_4.png').default,
+                    name: 'Lid 4',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_5.png').default,
+                    name: 'Lid 5',
                     selected: false,
                 },
             ],
