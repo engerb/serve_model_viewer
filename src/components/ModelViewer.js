@@ -33,7 +33,7 @@ class ModelViewer extends React.Component {
 
     }
 
-    renderOut() {
+    renderOut( options ) {
         // give user a png of serve
         // store current cam loc
         // move to defaul pos
@@ -67,7 +67,7 @@ class ModelViewer extends React.Component {
         this.serve.setLidColor( lidColor );
     }
 
-    setLidPos( lidOpen ) { 
+    setLidPos( lidOpen = this.state.lidOpen ) { 
         this.setState({ lidOpen: !lidOpen });
         this.serve.setLidPos( lidOpen ); 
     }
@@ -91,7 +91,7 @@ class ModelViewer extends React.Component {
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 0.8;
+        this.renderer.toneMappingExposure = 1;//0.8;
         this.renderer.outputEncoding = THREE.sRGBEncoding;
 
         var pmremGenerator = new THREE.PMREMGenerator( this.renderer );

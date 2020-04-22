@@ -31,7 +31,7 @@ class Customizer extends React.Component {
             ],
             colors: [
                 {
-                    color: '#1A1A1A',
+                color: '#1A1A1A',
                     name: 'Black',
                     selectedBin: false,
                     selectedLid: false,
@@ -68,7 +68,7 @@ class Customizer extends React.Component {
                 binWraps: 'Vinyl decals / wrap on bin',
                 lidColors: 'Base lid colour',
                 lidWraps: 'Vinyl decals / wrap on lid',
-                options: 'Other options',
+                options: '',
             }
         }
 
@@ -84,9 +84,19 @@ class Customizer extends React.Component {
     }
 
     checkContrast( hex ) {
-        // check if low contrast against white, then return 'lowContrast'
-
-        return "";
+        const threshold = 160; // close to half 256 ~130
+			
+        const r = parseInt( hex.substring(1, 3), 16);
+        const g = parseInt( hex.substring(3, 5), 16);
+        const b = parseInt( hex.substring(5, 7), 16);
+            
+        const cBrightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        
+        if (cBrightness > threshold) {
+            return 'black';
+        } else { 
+            return 'white';
+        }	
     }
 
     setColor( index, menuState = this.state.menuState ) {
@@ -152,7 +162,7 @@ class Customizer extends React.Component {
         });
 
         // Then select newly added wrap
-        this.setWrap( newObj.findIndex(obj => obj.selected), menuState );
+        this.setWrap( newObj.length - 1, menuState );
     }
 
     render() {
@@ -193,7 +203,7 @@ class Customizer extends React.Component {
                                     }} 
                                     onClick = {(() => {
                                         // Can not re-select is allready selected
-                                        if (menuState != this.state.menuState) {
+                                        if (!obj.selected) {
                                             return (event) => this.setWrap( event.target.getAttribute('data-index'), menuState )
                                         }
                                     })()}
@@ -211,11 +221,17 @@ class Customizer extends React.Component {
                             <div className='addWrap' onClick={()=>{this.refs[`fileUploader_${menuState}`].click()}} />
                         </div>
                     })} 
-                    <div className = {`'options' ${(this.menuState == 'options') ? 'active' : 'hidden'}`} >
-                        {/* lid */}
-                        {/* speed */}
-                        {/* steering */}
-                        {/* render */}
+                    <div className = {`options ${(this.state.menuState == 'options') ? 'active' : 'hidden'}`} >
+                        {/* speed and wheel angle too could be nice */}
+                        <div className='button' onClick = {(event) => this.props.setLidPos(  )}>
+                            <p>Toggle lid</p>
+                        </div>
+                        <div className='button' onClick = {(event) => this.props.renderOut({ type: 'image' })}>
+                            <p>Render png 🖼</p>
+                        </div>
+                        <div className='button' onClick = {(event) => this.props.renderOut({ type: 'video' })}>
+                            <p>Render video 🎬</p>
+                        </div>
                     </div>
                 </div>
 
@@ -230,14 +246,14 @@ class Customizer extends React.Component {
                                 } else if (this.state.menuState == 'binColors' || this.state.menuState == 'lidColors') {
                                     return this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binColors') ? 'selectedBin' : 'selectedLid') ]) ].name
                                 } else {
-                                    return 'selected action...'
+                                    return ''
                                 }
                             })()}
                         </h3>
                     </div>
 
                     <div className = {'menuStateSelector'}>
-                        {['binColors', 'lidColors', 'lidColors', 'lidWraps', 'options'].map((menuState, menuKey) => {
+                        {['binColors', 'binWraps', 'lidColors', 'lidWraps', 'options'].map((menuState, menuKey) => {
                             return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : ''}`} 
                                 key = { menuKey }
                                 onClick = {(() => {

@@ -73,6 +73,7 @@ class Serve {
         new THREE.TextureLoader().load( binWrap,
             ( texture ) => {
                 texture.flipY = false;
+                texture.encoding = THREE.sRGBEncoding;
                 this.mat_vinyl_bin.map = texture;
                 this.mat_vinyl_bin.needsUpdate = true;
                 this.renderNeeded = true;
@@ -88,6 +89,7 @@ class Serve {
         new THREE.TextureLoader().load( lidWrap,
             ( texture ) => {
                 texture.flipY = false;
+                texture.encoding = THREE.sRGBEncoding;
                 this.mat_vinyl_lid.map = texture;
                 this.mat_vinyl_lid.needsUpdate = true;
                 this.renderNeeded = true;
@@ -101,19 +103,19 @@ class Serve {
 
     setBinColor( binColor ) {
         this.mat_bin_base.color.set( binColor );
-        this.mat_bin_base.color.convertSRGBToLinear();
+        this.mat_bin_base.color.convertSRGBToLinear(); // try srgb with scaller instead?
         this.renderNeeded = true;
     }
 
     setLidColor( lidColor ) {
         this.mat_lid_base.color.set( lidColor );
-        this.mat_lid_base.color.convertSRGBToLinear();
+        this.mat_lid_base.color.convertSRGBToLinear(); // try srgb with scaller instead?
         this.renderNeeded = true;
     }
 
     setLidPos( lidOpen ) {
         const from = { x : this.handle_lid.rotation.x };
-        const to = { x : ((lidOpen) ? (-1) : (0)) };
+        const to = { x : ((lidOpen) ? (0) : (-1)) };
         const duration = 2000; // should be divided by remainder of distance left
         // this.lidState = ((this.lidState == 'close') ? ('open') : ('close'));
         this.lidTween = new TWEEN.Tween(from).to(to, duration); 
