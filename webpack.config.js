@@ -16,14 +16,17 @@ module.exports = {
             'sass-loader',
             ],
         },
+        // test for glb or somethin to signify uncompressed
+        // run draco
+        // give compressed to file-loader instead
         {
-            test: /\.(png|svg|jpg|gif|glb|hdr)$/,
+            test: /\.(png|svg|jpg|gif|glb|hdr|zip)$/,
             use: [{
                 loader: 'file-loader'
             }]
         },
         {
-            test: /\.(js|jsx)$/,
+            test: /\.(js|jsx|jsm)$/,
             exclude: /node_modules/,
             use: {
                 loader: "babel-loader"
@@ -49,13 +52,13 @@ module.exports = {
         new HtmlWebPackPlugin({
             hash: true,
             template: './src/index.html',
-            filename: './index.html'
+            filename: './index.html',
+            favicon: './src/assets/img/favicon.svg'
         }),
         new webpack.ProvidePlugin({
             THREE: 'three',
-        }),
-        new webpack.ProvidePlugin({
             TWEEN: 'tween',
+            // CCapture: 'ccapture',
         }),
     ]
 };

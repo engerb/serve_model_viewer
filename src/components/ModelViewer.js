@@ -6,16 +6,81 @@ class ModelViewer extends React.Component {
     constructor(props) {
         super(props);
         
-        this.state = { class: 'modelViewer' };
-        this.updateBinTexture = this.updateBinTexture.bind(this);
-        this.updateLidTexture = this.updateLidTexture.bind(this);
-        this.setLidColor = this.setLidColor.bind(this);
+        this.state = { 
+            visible: '',
+            lidOpen: false,
+            renderNeeded: false,
+        };
+
+        // these should all be in state with serve observing state as a real component instead of a js object
+        // all this shit will use react three, but maybe a propper state manager too?
+        this.setBinWrap = this.setBinWrap.bind(this);
+        this.setLidWrap = this.setLidWrap.bind(this);
         this.setBinColor = this.setBinColor.bind(this);
+        this.setLidColor = this.setLidColor.bind(this);
         this.setDefaults = this.setDefaults.bind(this);
-        this.currentBin;
-        this.currentLid;
-        this.renderNeeded = false;
-        this.cameraAnimation = false;
+        this.setLidPos = this.setLidPos.bind(this);
+        this.setSpeed = this.setSpeed.bind(this);
+        this.setSteer = this.setSteer.bind(this);
+        this.renderOut = this.renderOut.bind(this);
+    }
+
+    setSpeed() {
+
+    }
+
+    setSteer() {
+
+    }
+
+    renderOut( options ) {
+        this.userCameraLoc = { x: this.camera.position.x, y: this.camera.position.y, z: this.camera.position.z };
+
+        if (options.type == 'video') {
+            
+            this.capturer = new CCapture( {
+                framerate: 24,
+                format: 'png',
+                name: 'animation',
+            } );
+
+            this.capturer.start();
+
+            const from = { x: 1.5, y: 1, z: 1.7 };
+            const to = {x: -1.483, y: 1.4, z: 1.54 };
+            const duration = 2000; 
+            
+            const animation = new TWEEN.Tween(from).to(to, duration); 
+    
+            animation.onUpdate(()=>{
+                this.capturer.capture( this.renderer.domElement );
+                this.camera.position.set( from.x, from.y, from.z );
+            });
+
+            animation.onComplete(() => { 
+                this.camera.position.set( this.userCameraLoc.x, this.userCameraLoc.y, this.userCameraLoc.z );
+
+                this.capturer.stop();  
+                this.capturer.save( ( blob ) => { 
+                    const url = window.URL.createObjectURL( blob );
+                    const tempLink = document.createElement('a');
+                    tempLink.href = url;
+                    tempLink.setAttribute('download', 'animation.tar');
+                    tempLink.click();
+                });
+            });
+    
+            animation.start();
+
+        } else {
+            this.renderer.domElement.toBlob( ( blob ) => {
+                    const url = window.URL.createObjectURL( blob );
+                    const tempLink = document.createElement('a');
+                    tempLink.href = url;
+                    tempLink.setAttribute('download', 'render.png');
+                    tempLink.click();
+            }, 'image/png');
+        }
     }
 
     componentDidMount() {
@@ -23,43 +88,60 @@ class ModelViewer extends React.Component {
         this.animate();
     }
 
-    updateBinTexture(texture) {
-        this.serve.loadBinWrap(texture);
-        // camera to bin
+    setBinWrap( binWrap ) {
+        this.setState({ binWrap: binWrap });
+        this.serve.setBinWrap( binWrap );
     }
 
-    updateLidTexture(texture) {
-        this.serve.loadLidWrap(texture);
-        // camera to lid
+    setLidWrap( lidWrap ) {
+        this.setState({ lidWrap: lidWrap });
+        this.serve.setLidWrap( lidWrap );
     }
 
-    setLidColor(col) {
-        this.serve.setLidColor( col );
+    setBinColor( binColor ) {
+        this.setState({ binColor: binColor });
+        this.serve.setBinColor( binColor );
     }
 
-    setBinColor(col) {
-        this.serve.setBinColor( col );
+    setLidColor( lidColor ) {
+        this.setState({ lidColor: lidColor });
+        this.serve.setLidColor( lidColor );
     }
 
-    toggleLid() {
-        this.serve.toggleLid();
+    setLidPos( lidOpen = this.state.lidOpen ) { 
+        this.setState({ lidOpen: !lidOpen });
+        this.serve.setLidPos( lidOpen ); 
     }
 
-    setDefaults(bin, lid) {
-        this.currentBin = bin;
-        this.currentLid = lid;
+    setDefaults( obj ) {
+        this.setState({
+            binWrap: obj.binWrap,
+            lidWrap: obj.lidWrap,
+            binColor: obj.binColor, 
+            lidColor: obj.lidColor,
+        });
     }
 
     init() {
         this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
-        this.camera.position.set( 1.5, 1, 1.7 );
+        this.camera.position.set( 1.5, 1, 1.7 ); 
 
         this.scene = new THREE.Scene();
+
+        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true, preserveDrawingBuffer: true } );
+        this.renderer.setPixelRatio( window.devicePixelRatio );
+        this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 1;//0.8;
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
+
+        var pmremGenerator = new THREE.PMREMGenerator( this.renderer );
+        pmremGenerator.compileEquirectangularShader();
 
         new THREE.RGBELoader()
             .setDataType( THREE.UnsignedByteType )
             .load( require('../assets/3d/venice_sunset_1k.hdr').default, ( texture ) => {
-                var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+                const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
 
                 // this.scene.background = envMap; // if you want hdri as image
                 this.scene.environment = envMap;
@@ -67,39 +149,36 @@ class ModelViewer extends React.Component {
                 texture.dispose();
                 pmremGenerator.dispose();
 
-                this.renderNeeded = true;
+                this.setState({ renderNeeded: true });
             });
 
         // Load our model with some default textures and add when loaded via promise
-        this.serve = new Serve({bin: this.currentBin, lid: this.currentLid})
+        this.serve = new Serve();
         this.serve.modelLoaded.then(() => {
             this.scene.add( this.serve.scene );
-            this.renderNeeded = true;
+            this.setState({ renderNeeded: true });
+
+            this.serve.setBinWrap( this.state.binWrap );
+            this.serve.setLidWrap( this.state.lidWrap );
+            this.serve.setBinColor( this.state.binColor );
+            this.serve.setLidColor( this.state.lidColor );
+
             this.playIntro();
         });
-        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
-        this.renderer.setPixelRatio( window.devicePixelRatio );
-        this.renderer.setSize( window.innerWidth, window.innerHeight );
-        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 0.8;
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
-
-        var pmremGenerator = new THREE.PMREMGenerator( this.renderer );
-        pmremGenerator.compileEquirectangularShader();
 
         this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
-        this.controls.addEventListener('change', ()=>{ this.renderNeeded = true; } );
-
-        this.controls.addEventListener
-        this.controls.minDistance = 1;
-        this.controls.maxDistance = 5;
+        this.controls.addEventListener('change', ()=>{ this.setState({ renderNeeded: true }) } );
         this.controls.target.set( 0, 0.5, 0 );
-        this.controls.enableDamping = true;
-        this.controls.dampingFactor = 0.3;
-        this.controls.minPolarAngle = 0.3;
-        this.controls.maxPolarAngle = 1.7;
-        this.controls.update();
+        Object.assign(this.controls, {
+            minDistance: 1,
+            maxDistance: 5,
+            enableDamping: true,
+            dampingFactor: 0.3,
+            minPolarAngle: 0.3,
+            maxPolarAngle: 1.7,
+        });
 
+        // react?
         window.addEventListener('resize', function() {
             this.onWindowResize();
         }.bind(this), false);
@@ -110,9 +189,9 @@ class ModelViewer extends React.Component {
     animate() {
         requestAnimationFrame( ()=> { this.animate() } );
         
-        if ( this.renderNeeded || TWEEN.getAll().length || this.serve.renderNeeded ) {
+        if ( this.state.renderNeeded || TWEEN.getAll().length || this.serve.renderNeeded ) {
             this.renderScene();
-            this.renderNeeded = false;
+            this.setState({ renderNeeded: false });
             this.serve.renderNeeded = false;
         }
 
@@ -135,23 +214,26 @@ class ModelViewer extends React.Component {
 
     playIntro() {
         this.setState({
-            class: 'modelViewer visible'
+            visible: 'visible'
         });
+        this.serve.playIntro();
     }
 
     render() {
         return (
             <div className="modelViewerMain">
-                <div className={this.state.class} ref={ref => (this.mount = ref)} />
+                <div className={`modelViewer ${this.state.visible}`} ref={ref => (this.mount = ref)} /> 
                 <Customizer 
-                    updateBinTexture = {this.updateBinTexture} 
-                    updateLidTexture = {this.updateLidTexture} 
-                    setBinColor = {this.setBinColor}
-                    setLidColor = {this.setLidColor}
-                    setDefaults = {this.setDefaults} />
-                <div className='toggleLid' onClick = {(e) => this.toggleLid()}>
-                    <p>Toggle lid</p>
-                </div>
+                    setBinWrap = { this.setBinWrap.bind(this) }
+                    setLidWrap = { this.setLidWrap.bind(this) }
+                    setBinColor = { this.setBinColor.bind(this) }
+                    setLidColor = { this.setLidColor.bind(this) }
+                    setDefaults = { this.setDefaults.bind(this) }
+                    setLidPos = { this.setLidPos.bind(this) }
+                    setSpeed = { this.setSpeed.bind(this) }
+                    setSteer = { this.setSteer.bind(this) }
+                    renderOut = { this.renderOut.bind(this) }
+                />
             </div>
         );
     }

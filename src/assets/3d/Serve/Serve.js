@@ -1,13 +1,13 @@
+// All of this will move to react three / fiber
+
 class Serve {
     constructor( props ) {
         this.props = props;
         
-        // this.file = props.hasOwnProperty('file') ? props.file : 'serve.glb';
-        // this.path = props.hasOwnProperty('path') ? props.path : '/src/assets/3d/Serve/';
         this.assetUrl = require('./serve.glb').default;
         
         this.renderNeeded = false;
-        this.lidState = 'close';
+        this.loaded = false;
         this.speed = 0.0;
         this.steering = 0.0; 
 
@@ -19,7 +19,8 @@ class Serve {
         this.modelLoaded = new Promise(( resolve, reject ) => {
             var loader = new THREE.GLTFLoader();
             var dracoLoader = new THREE.DRACOLoader();
-            dracoLoader.setDecoderPath( 'node_modules/three/examples/js/libs/draco/' );
+            // dracoLoader.setDecoderPath( 'node_modules/three/examples/js/libs/draco/' );
+            dracoLoader.setDecoderPath('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/js/libs/draco/'); 
             loader.setDRACOLoader( dracoLoader );
             loader.load( this.assetUrl,                
                 // called when the resource is loaded
@@ -29,6 +30,7 @@ class Serve {
                     });
 
                     this.scene = gltf.scene;
+                    this.loaded = true;
                     resolve();
                 },
                 ( xhr ) => {
@@ -42,25 +44,37 @@ class Serve {
         });
     }
 
-    loadLidWrap(url) {
-        new THREE.TextureLoader().load( url,
-            ( texture ) => {
-                texture.flipY = false;
-                this.mat_vinyl_lid.map = texture;
-                this.renderNeeded = true;
-            },
-            undefined,
-            ( err ) => {
-                console.error( 'Loading lid wrap: An error happened.' );
-            }
-        );
+    playIntro() {
+        const from = { 
+            rootPos : this.handle_root.position.z - 2,
+            wheelTurn : this.handle_wheel_fl.rotation.x - 30,
+        };
+        const to = { 
+            rootPos : this.handle_root.position.z,
+            wheelTurn : this.handle_wheel_fl.rotation.x,
+        };
+
+        this.positionTween = new TWEEN.Tween(from).to(to, 3000); 
+        this.positionTween.onUpdate(()=>{
+            this.handle_root.position.z = from.rootPos;
+            this.handle_wheel_fl.rotation.x = from.wheelTurn;
+            this.handle_wheel_fr.rotation.x = from.wheelTurn;
+            this.handle_wheel_rl.rotation.x = from.wheelTurn;
+            this.handle_wheel_rr.rotation.x = from.wheelTurn;
+        });
+
+        this.positionTween.easing(TWEEN.Easing.Cubic.Out);
+
+        this.positionTween.start();
     }
 
-    loadBinWrap(url) {
-        new THREE.TextureLoader().load( url,
+    setBinWrap( binWrap ) {
+        new THREE.TextureLoader().load( binWrap,
             ( texture ) => {
                 texture.flipY = false;
+                texture.encoding = THREE.sRGBEncoding;
                 this.mat_vinyl_bin.map = texture;
+                this.mat_vinyl_bin.needsUpdate = true;
                 this.renderNeeded = true;
             },
             undefined,
@@ -70,21 +84,38 @@ class Serve {
         );
     }
 
-    setLidColor(col) {
-        this.mat_lid_base.color.set( col );
+    setLidWrap( lidWrap ) {
+        new THREE.TextureLoader().load( lidWrap,
+            ( texture ) => {
+                texture.flipY = false;
+                texture.encoding = THREE.sRGBEncoding;
+                this.mat_vinyl_lid.map = texture;
+                this.mat_vinyl_lid.needsUpdate = true;
+                this.renderNeeded = true;
+            },
+            undefined,
+            ( err ) => {
+                console.error( 'Loading lid wrap: An error happened.' );
+            }
+        );
+    }
+
+    setBinColor( binColor ) {
+        this.mat_bin_base.color.set( binColor );
+        this.mat_bin_base.color.convertSRGBToLinear(); // try srgb with scaller instead?
         this.renderNeeded = true;
     }
 
-    setBinColor(col) {
-        this.mat_bin_base.color.set( col );
+    setLidColor( lidColor ) {
+        this.mat_lid_base.color.set( lidColor );
+        this.mat_lid_base.color.convertSRGBToLinear(); // try srgb with scaller instead?
         this.renderNeeded = true;
     }
 
-    toggleLid() {
+    setLidPos( lidOpen ) {
         const from = { x : this.handle_lid.rotation.x };
-        const to = { x : ((this.lidState == 'close') ? (-1) : (0)) };
+        const to = { x : ((lidOpen) ? (0) : (-1)) };
         const duration = 2000; // should be divided by remainder of distance left
-        this.lidState = ((this.lidState == 'close') ? ('open') : ('close'));
         this.lidTween = new TWEEN.Tween(from).to(to, duration); 
 
         this.lidTween.onUpdate(()=>{
@@ -92,16 +123,15 @@ class Serve {
         });
 
         this.lidTween.easing(TWEEN.Easing.Quadratic.InOut);
-
         this.lidTween.start();
     }
 
     tireSpeed( speed = 0.0 ) {
-
+        // ...
     }
 
     tireAngle( angle = 0.0 ) {
-
+        // ...
     }
 
     handleChildren( child ) {
@@ -213,6 +243,12 @@ class Serve {
     }
 
     createMats() {
+        // most of this will move into the object
+            // export from here once model is loaded
+            // import to new blender file
+            // create those mats in the source file to match
+            // also create a tire angle root!
+            // thest textures should be bundled with that
         this.tire_ao = new THREE.TextureLoader().load( require('./tire_ao.jpg').default );
         this.tire_normal = new THREE.TextureLoader().load( require('./tire_normal.jpg').default );
         this.bin_ao = new THREE.TextureLoader().load( require('./bin_ao.jpg').default );
@@ -224,9 +260,6 @@ class Serve {
         this.cloud_spec = new THREE.TextureLoader().load( require('./cloud_spec.jpg').default );
         this.cloud_light_spec = new THREE.TextureLoader().load( require('./cloud_light_spec.jpg').default );
 
-        this.bin_dif = new THREE.TextureLoader().load( this.props.bin ); 
-        this.lid_dif = new THREE.TextureLoader().load( this.props.lid ); 
-
         this.tire_ao.wrapS = 
         this.tire_ao.wrapT = 
         this.tire_normal.wrapS = 
@@ -236,8 +269,6 @@ class Serve {
         this.tire_normal.flipY =
         this.bin_ao.flipY =
         this.lid_ao.flipY =
-        this.bin_dif.flipY =
-        this.lid_dif.flipY =
         this.floor_ao.flipY =
         this.black_ao.flipY =
         this.white_ao.flipY =
@@ -246,41 +277,40 @@ class Serve {
         this.aluminum_1024px_ao.flipY = false;
 
         this.mat_vinyl_bin = new THREE.MeshPhysicalMaterial({
-            roughness: 0.4,
-            color: 0xffffff,
+            roughness: 0.5,
+            color: 0xFFFFFF, 
             transparency: 0, 
             opacity: 1,                
             transparent: true,
             aoMap: this.bin_ao,
-            map: this.bin_dif,
             roughnessMap: this.cloud_light_spec,
         });
 
         this.mat_bin_base = new THREE.MeshPhysicalMaterial({
-            roughness: 0.3,
-            color: 0xEEEEEE,
+            roughness: 0.4,
+            color: 0xFFFFFF,
             aoMap: this.bin_ao,
             roughnessMap: this.cloud_light_spec,
         });
 
         this.mat_vinyl_lid = new THREE.MeshPhysicalMaterial({
-            roughness: 0.4,
-            color: 0xffffff,
+            roughness: 0.5,
+            color: 0xFFFFFF,
             transparency: 0, 
             opacity: 1,                
             transparent: true,
             aoMap: this.lid_ao,
-            map: this.lid_dif,
             roughnessMap: this.cloud_light_spec,
         });
 
         this.mat_lid_base = new THREE.MeshPhysicalMaterial({
-            roughness: 0.3,
-            color: 0xEEEEEE,
+            roughness: 0.4,
+            color: 0xFFFFFF,
             aoMap: this.lid_ao,
             roughnessMap: this.cloud_light_spec,
         });
-
+        
+        // sub arr for col and texture, fade
         this.mat_bin = [ this.mat_vinyl_bin, this.mat_bin_base ];
         this.mat_lid = [ this.mat_vinyl_lid, this.mat_lid_base ];
 

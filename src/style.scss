@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .modelViewer {
@@ -10,30 +12,13 @@ body {
 
     canvas {
         opacity: 0;
-        transform: scale(0.8);
-        transition: opacity 1s, transform 1s;
+        transition: opacity 2s ease-in;
     }
     
     &.visible {
         canvas {
             opacity: 1;
-            transform: scale(1);
         }
-    }
-}
-
-.toggleLid {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    cursor: pointer;
-    background-color: white;
-    border-radius: 25px;
-    box-shadow: 0 2px 6px 0 rgba(51,105,231,.4);
-    margin: 10px;
-
-    p {
-        margin: 15px 30px;
     }
 }
 
@@ -41,71 +26,207 @@ body {
     position: absolute;
     left: 0;
     bottom: 0;
+    width: 400px;
+    max-width: 100vw;
 
-    .lids, .bins {
-        display: flex;
+    box-sizing: border-box;
+    padding: 15px 20px;
 
-        .addedLids, .addedBins {
-            display: flex;
+    @media (max-width: 400px) {
+        background-color: white;
+    }
 
-            .lid, .bin {
-                width: 60px;
-                height: 60px;
-                margin: 5px;
-                cursor: pointer;
-                background-color: white;
-                border-radius: 10px;
-                box-shadow: 0 2px 6px 0 rgba(51,105,231,.4);
+    .actions {
+        margin-top: 15px;
+        margin-bottom: 5px;
 
-                box-sizing: border-box;
-                border: 0px #4e84f8 solid;
-                transition: all 100ms;
-                transform: scale(1);
+        div {
+            &.hidden {
+                display: none;
+            }
+            
+            &.active {
+                display: flex;
+                flex-wrap: wrap;
+                
+                div {
+                    cursor: pointer;
+                    flex-shrink: 0;
+                    flex-grow: 0;
+                    box-sizing: border-box;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                }
 
-                &.active {
-                    border: 1px #4e84f8 solid;
-                    transform: scale(1.1);
+                &.binColors, &.lidColors {
+
+                    div {
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 15px;
+                        margin-bottom: 15px;
+                        border-radius: 10px;
+                        
+
+                        &.stroke {
+                            border: 1px #B8B8B8 solid;
+                        }
+
+                        &.active {
+                            &.black {
+                                background-image: url('./assets/img/check-black.png');
+                            }
+
+                            &.white {
+                                background-image: url('./assets/img/check-white.png');
+                            }
+                        }
+                    }
+                }
+
+                &.binWraps, &.lidWraps {
+                    div {
+                        width: 40px;
+                        height: 40px;
+                        margin-right: 15px;
+                        margin-bottom: 15px;
+                        border-radius: 20px;
+                        position: relative;
+
+                        &.active {
+                            &::before {
+                                content: "";
+                                background-color: rgba(0, 0, 0, 0.6);
+                                background-image: url('./assets/img/check-white.png');
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                top: 0;
+                                left: 0;
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 20px;
+                                position: absolute;
+                            }
+                        }
+                    }
+
+                    .addWrap {
+                        background-color: #B8B8B8;
+                        background-image: url('./assets/img/plus-white.png');
+                        background-size: contain;
+                    }
+                }
+
+                &.options {
+                    .button {
+                        background-color: black;
+                        border-radius: 4px;
+                        margin-right: 15px;
+                        margin-bottom: 15px;
+                        p {
+                            color: white;
+                            font-weight: 500;
+                            margin: 15px 30px;
+                        }
+                    }
+                }
+
+                &.binWraps {
+                    div {
+                        background-size: 280%;
+                    }
+                    
+                }
+                &.lidWraps {
+                    div {
+                        background-size: 140%;
+                    }
                 }
             }
+        }
+    }
 
-            .lid {
-                background-size: 130%;
-            }
+    .label {
+        margin-bottom: 20px;
 
-            .bin {
-                background-size: 280%;
-            }
+        p { 
+            margin: 0;
+            font-size: 12pt;
+            font-weight: 400;
+            color: #6E6E6E;
         }
 
-        .addNew {
-            width: 60px;
-            height: 60px;
-            margin: 5px;
-            background-color: #e2e2e2;
-            border-radius: 10px;
+        h3 {
+            margin: 0;
+            font-size: 18pt;
+            font-weight: 500;
+            color: #0A0A0A;
+        }
+    }
+
+    .menuStateSelector {
+        display: flex;
+        position: relative;
+        
+
+        @media (max-width: 400px) {
+            justify-content: space-between;
+        }
+
+        div {
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            margin-right: 34px;
             cursor: pointer;
-            position: relative;
+            flex-shrink: 0;
+            flex-grow: 0;
+            box-sizing: border-box;
+            background-size: contain;
+            background-repeat: no-repeat;
 
-            &::before {
-                content: "+";
-                font-size: 52px;
-                font-weight: 100;
-                color: white;
-                text-align: center;
-                width: 100%;
-                top: 0;
-                left: 0;
-                position: absolute;
+            @media (max-width: 400px) {
+                margin-right: 0;
+            }
+
+            &.active {
+                background-color: black;
             }
         }
 
-        .colorPicker {
-            width: 20px;
-            height: 60px;
-            border: none;
-            margin: 5px;
-            // border-radius: 10px;
-            box-shadow: 0 2px 6px 0 rgba(51,105,231,.4);
+        .binColors {
+            background-image: url('./assets/img/bin-colour-black.png');
+            &.active {
+                background-image: url('./assets/img/bin-colour-white.png');
+            }
+        }
+
+        .lidColors  {
+            background-image: url('./assets/img/lid-colour-black.png');
+            &.active {
+                background-image: url('./assets/img/lid-colour-white.png');
+            }
+        }
+
+        .binWraps {
+            background-image: url('./assets/img/bin-wrap-black.png');
+            &.active {
+                background-image: url('./assets/img/bin-wrap-white.png');
+            }
+        }
+
+        .lidWraps {
+            background-image: url('./assets/img/lid-wrap-black.png');
+            &.active {
+                background-image: url('./assets/img/lid-wrap-white.png');
+            }
+        }
+
+        .options {
+            background-image: url('./assets/img/settings-black.png');
+            &.active {
+                background-image: url('./assets/img/settings-white.png');
+            }
         }
     }
 }

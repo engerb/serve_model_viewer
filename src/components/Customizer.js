@@ -5,150 +5,297 @@ class Customizer extends React.Component {
         super(props);
 
         this.state = {
-            lidColor: '#eeeeee',
-            binColor: '#eeeeee',
-            bins: [
-                require('../assets/3d/Serve/wraps/bin_1.png').default,
-                require('../assets/3d/Serve/wraps/bin_2.png').default,
+            binWraps: [
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_1.png').default,
+                    name: 'Bin 1',
+                    selected: true,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_2.png').default,
+                    name: 'Bin 2',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_3.png').default,
+                    name: 'Bin 3',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_4.png').default,
+                    name: 'Bin 4',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/bin_5.png').default,
+                    name: 'Bin 5',
+                    selected: false,
+                },
             ],
-            lids: [
-                require('../assets/3d/Serve/wraps/lid_1.png').default,
-                require('../assets/3d/Serve/wraps/lid_2.png').default,
+            lidWraps: [
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_1.png').default,
+                    name: 'Lid 1',
+                    selected: true,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_2.png').default,
+                    name: 'Lid 2',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_3.png').default,
+                    name: 'Lid 3',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_4.png').default,
+                    name: 'Lid 4',
+                    selected: false,
+                },
+                {
+                    img: require('../assets/3d/Serve/wraps/lid_5.png').default,
+                    name: 'Lid 5',
+                    selected: false,
+                },
             ],
-            selectedBin: 0,
-            selectedLid: 0,
+            colors: [
+                {
+                color: '#1A1A1A',
+                    name: 'Black',
+                    selectedBin: false,
+                    selectedLid: false,
+                },
+                {
+                    color: '#FDF150',
+                    name: 'Postmates yellow',
+                    selectedBin: false,
+                    selectedLid: false,
+                },
+                {
+                    color: '#5499ED',
+                    name: 'Blue',
+                    selectedBin: false,
+                    selectedLid: false,
+                },
+                {
+                    color: '#FABC0F',
+                    name: 'Safety yellow',
+                    selectedBin: false,
+                    selectedLid: false,
+                },
+                {
+                    color: '#FFFFFF',
+                    name: 'Default white',
+                    selectedBin: true,
+                    selectedLid: true,
+                },
+            ],
+            // binColors, binWraps, lidColors, lidWraps, options
+            menuState: 'binColors', 
+            menuStateCopy: {
+                binColors: 'Base bin colour',
+                binWraps: 'Vinyl decals / wrap on bin',
+                lidColors: 'Base lid colour',
+                lidWraps: 'Vinyl decals / wrap on lid',
+                options: '',
+            }
         }
 
         // Send up first of the textures for model load
-        props.setDefaults(this.state.bins[0], this.state.lids[0]);
+        props.setDefaults({
+            binWrap: this.state.binWraps[ this.state.binWraps.findIndex(obj => obj.selected) ].img,
+            lidWrap: this.state.lidWraps[ this.state.lidWraps.findIndex(obj => obj.selected) ].img,
+            binColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedBin) ].color,
+            lidColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedLid) ].color,
+        });
 
-        this.handleLidUpload = this.handleLidUpload.bind(this);
-        this.handleBinUpload = this.handleBinUpload.bind(this);
+        this.newWrap = this.newWrap.bind(this);
     }
 
-    // No need to actually "upload" or any of that base64 stuff!
-    handleLidUpload(event) {
+    checkContrast( hex ) {
+        const threshold = 160; // close to half 256 ~130
+			
+        const r = parseInt( hex.substring(1, 3), 16);
+        const g = parseInt( hex.substring(3, 5), 16);
+        const b = parseInt( hex.substring(5, 7), 16);
+            
+        const cBrightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        
+        if (cBrightness > threshold) {
+            return 'black';
+        } else { 
+            return 'white';
+        }	
+    }
+
+    setColor( index, menuState = this.state.menuState ) {
+        const selectAttr = ((menuState == 'binColors') ? 'selectedBin' : 'selectedLid');
+
+        // Copy and mutate colour object
+        const newObj = this.state.colors;
+        newObj[ newObj.findIndex(obj => obj[selectAttr]) ][selectAttr] = false;
+        newObj[ index ][selectAttr] = true; 
+
+        // Update state with mutated sub object
+        this.setState({
+            colors: newObj,
+        });
+
+        // Then apply new colour
+        if (menuState == 'binColors') {
+            this.props.setBinColor( newObj[ index ].color );
+        } else {
+            this.props.setLidColor( newObj[ index ].color );
+        }
+    }
+
+    setWrap( index, menuState = this.state.menuState ) {
+        // Copy and mutate correct wraps object
+        const newObj = this.state[menuState];
+        newObj[ newObj.findIndex(obj => obj.selected) ].selected = false;
+        newObj[ index ].selected = true; 
+
+        // Update state with mutated sub object
+        this.setState({
+            [menuState]: newObj,
+        });
+
+        // Then apply new wrap
+        if (menuState == 'binWraps') {
+            this.props.setBinWrap( newObj[ index ].img );
+        } else {
+            this.props.setLidWrap( newObj[ index ].img );
+        }
+    }
+
+    newWrap( event, menuState = this.state.menuState ) {
         event.stopPropagation();
         event.preventDefault();
         
+        // Get the file and name
         const file = event.target.files[0];
+        const fileName = event.target.files[0].name;
         const url = URL.createObjectURL(file);
-        const newArr = this.state.lids;
-        newArr.push(url);
-
-        this.setState({
-            lids: newArr,
-        });
-
-        this.selectLid(newArr.length - 1);
-    }
-
-    handleBinUpload(event) {
-        event.stopPropagation();
-        event.preventDefault();
         
-        const file = event.target.files[0];
-        const url = URL.createObjectURL(file);
-        const newArr = this.state.bins;
-        newArr.push(url);
-
-        this.setState({
-            bins: newArr,
+        // Copy and mutate correct wraps object
+        const newObj = this.state[menuState];
+        newObj.push({
+            img: url,
+            name: fileName,
+            selected: false,
         });
 
-        this.selectBin(newArr.length - 1);
-    }
-
-    selectLid(idx) {
-        this.props.updateLidTexture( this.state.lids[idx] );
-        // remove all selected class and add to this
+        // Update state with mutated sub object
         this.setState({
-            selectedLid: idx,
+            [menuState]: newObj,
         });
-    }
 
-    selectBin(idx) {
-        this.props.updateBinTexture( this.state.bins[idx] );
-        // remove all selected class and add to this
-        this.setState({
-            selectedBin: idx,
-        });
+        // Then select newly added wrap
+        this.setWrap( newObj.length - 1, menuState );
     }
 
     render() {
         return (
-            <div className='customizer'>
-                <div className='lids'>
-                    <input 
-                        className='colorPicker' 
-                        type='color'  
-                        value={this.state.lidColor}
-                        onChange = {(e) => {
-                            this.setState({ lidColor: e.target.value });
-                            this.value = this.state.lidColor;
-                            this.props.setLidColor( e.target.value );
-                        }}
-                    />
-                    <div className='addedLids'>
-                        {this.state.lids.map( (texture, index) => {
-                            return <div 
-                                    className={`lid selecter ${(index == this.state.selectedLid) ? "active" : ""}`} 
-                                    key={ index } 
-                                    data-key={ index } 
-                                    style={{backgroundImage: `url(${texture})`}} 
-                                    onClick = {(e) => this.selectLid( e.target.getAttribute('data-key') )} 
-                                />;  
-                        })}
+            <div className = 'customizer'>
+                
+                <div className = 'actions' >
+                    {['binColors', 'lidColors'].map((menuState, menuKey) => {
+                        return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
+                            {this.state.colors.map( (obj, index) => {
+                                return <div className = {`${this.checkContrast(obj.color)} ${( ( (menuState == 'binColors') ? obj.selectedBin : obj.selectedLid ) ) ? 'active' : ''} ${(obj.color == '#FFFFFF') ? 'stroke' : ''}`} 
+                                    key = { index } 
+                                    data-index = { index } 
+                                    style = { {backgroundColor: `${obj.color}`} } 
+                                    onClick = {(() => {
+                                        // Can not re-select is allready selected
+                                        if ((menuState == 'binColors' && !obj.selectedBin) || (menuState == 'lidColors' && !obj.selectedLid)) {
+                                            return (event) => this.setColor( event.target.getAttribute('data-index'), menuState )
+                                        }
+                                    })()}
+                                />
+                            })}
+                            
+                            {/* // optionally add more colours  */}
+                            {/* <div className = 'customColor'/> */}
+                        </div>
+                    })} 
+                    {['binWraps', 'lidWraps'].map((menuState, menuKey) => {
+                        return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
+                            {this.state[menuState].map( (obj, index) => {
+                                return <div className = {`${ obj.selected ? 'active' : ''}`} 
+                                    key = { index } 
+                                    data-index = { index } 
+                                    style={{
+                                        backgroundImage: `url(${obj.img})`,
+                                        backgroundColor: `${this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binWraps') ? 'selectedBin' : 'selectedLid') ]) ].color}`
+                                    }} 
+                                    onClick = {(() => {
+                                        // Can not re-select is allready selected
+                                        if (!obj.selected) {
+                                            return (event) => this.setWrap( event.target.getAttribute('data-index'), menuState )
+                                        }
+                                    })()}
+                                />
+                            })}
+
+                            <input id='myInput'
+                                type = 'file'
+                                accept = 'image/*'
+                                ref = {`fileUploader_${menuState}`}
+                                style = {{display: 'none'}}
+                                onChange = { (event)=> this.newWrap(event, menuState) }
+                            />
+
+                            <div className='addWrap' onClick={()=>{this.refs[`fileUploader_${menuState}`].click()}} />
+                        </div>
+                    })} 
+                    <div className = {`options ${(this.state.menuState == 'options') ? 'active' : 'hidden'}`} >
+                        {/* speed and wheel angle too could be nice */}
+                        <div className='button' onClick = {(event) => this.props.setLidPos(  )}>
+                            <p>Toggle lid</p>
+                        </div>
+                        <div className='button' onClick = {(event) => this.props.renderOut({ type: 'image' })}>
+                            <p>Render png</p>
+                        </div>
+                        <div className='button' onClick = {(event) => this.props.renderOut({ type: 'video' })}>
+                            <p>Render video</p>
+                        </div>
+                        <a className='button' href={ require('../assets/template.zip').default } target='_blank' download='template.zip'>
+                            <p>Download template</p>
+                        </a>
                     </div>
-
-                    <input id='myInput'
-                        type='file'
-                        accept='image/*'
-                        ref='lidFileUploader'
-                        style={{display: 'none'}}
-                        onChange={this.handleLidUpload}
-                    />
-
-                    <div 
-                        className='addNew' 
-                        onClick={()=>{this.refs.lidFileUploader.click()}}
-                    />
                 </div>
-                <div className='bins'>
-                    <input 
-                        className='colorPicker' 
-                        type='color'  
-                        value={this.state.binColor}
-                        onChange = {(e) => {
-                            this.setState({ binColor: e.target.value });
-                            this.value = this.state.binColor;
-                            this.props.setBinColor( e.target.value );
-                        }}
-                    />
-                    <div className='addedBins'>
-                        {this.state.bins.map( (texture, index) => { 
-                            return <div 
-                                    className={`bin selecter ${(index == this.state.selectedBin) ? "active" : ""}`} 
-                                    key={ index } 
-                                    data-key={ index } 
-                                    style={{backgroundImage: `url(${texture})`}} 
-                                    onClick = {(e) => this.selectBin( e.target.getAttribute('data-key') )} 
-                                />;  
-                        })}
-                    </div>
 
-                    <input id='myInput'
-                        type='file'
-                        accept='image/*'
-                        ref='binFileUploader'
-                        style={{display: 'none'}}
-                        onChange={this.handleBinUpload}
-                    />
+                <div className = {'label'}>
+                    <p>
+                        {this.state.menuStateCopy[ this.state.menuState ]}
+                    </p>
+                    <h3>
+                        {(() => {
+                            if (this.state.menuState == 'lidWraps' || this.state.menuState == 'binWraps') {
+                                return this.state[ this.state.menuState ][ this.state[ this.state.menuState ].findIndex(obj => obj.selected) ].name
+                            } else if (this.state.menuState == 'binColors' || this.state.menuState == 'lidColors') {
+                                return this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binColors') ? 'selectedBin' : 'selectedLid') ]) ].name
+                            } else {
+                                return ''
+                            }
+                        })()}
+                    </h3>
+                </div>
 
-                    <div 
-                        className='addNew' 
-                        onClick={()=>{this.refs.binFileUploader.click()}}
-                    />
+                <div className = {'menuStateSelector'}>
+                    {['binColors', 'binWraps', 'lidColors', 'lidWraps', 'options'].map((menuState, menuKey) => {
+                        return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : ''}`} 
+                            key = { menuKey }
+                            onClick = {(() => {
+                                // Can not re-select is allready selected
+                                if (menuState != this.state.menuState) {
+                                    return () => this.setState({ menuState: menuState })
+                                }
+                            })()}
+                        /> 
+                    })} 
                 </div>
             </div>
         );
