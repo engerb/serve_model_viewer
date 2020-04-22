@@ -207,7 +207,6 @@ class Customizer extends React.Component {
                                     key = { index } 
                                     data-index = { index } 
                                     style = { {backgroundColor: `${obj.color}`} } 
-                                    // onClick = {(event) => this.setColor( event.target.getAttribute('data-index'), menuState )}
                                     onClick = {(() => {
                                         // Can not re-select is allready selected
                                         if ((menuState == 'binColors' && !obj.selectedBin) || (menuState == 'lidColors' && !obj.selectedLid)) {

@@ -70,7 +70,6 @@ class ModelViewer extends React.Component {
                 });
             });
     
-            // animation.easing(TWEEN.Easing.Quadratic.InOut);
             animation.start();
 
         } else {
@@ -167,9 +166,6 @@ class ModelViewer extends React.Component {
             this.playIntro();
         });
 
-        // var pmremGenerator = new THREE.PMREMGenerator( this.renderer );
-        // pmremGenerator.compileEquirectangularShader();
-
         this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
         this.controls.addEventListener('change', ()=>{ this.setState({ renderNeeded: true }) } );
         this.controls.target.set( 0, 0.5, 0 );
@@ -198,8 +194,6 @@ class ModelViewer extends React.Component {
             this.setState({ renderNeeded: false });
             this.serve.renderNeeded = false;
         }
-
-        // console.log(this.camera.position)
 
         this.controls.update();
         TWEEN.update();

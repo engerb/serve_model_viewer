@@ -8,7 +8,6 @@ class Serve {
         
         this.renderNeeded = false;
         this.loaded = false;
-        this.lidState = 'close';
         this.speed = 0.0;
         this.steering = 0.0; 
 
@@ -117,7 +116,6 @@ class Serve {
         const from = { x : this.handle_lid.rotation.x };
         const to = { x : ((lidOpen) ? (0) : (-1)) };
         const duration = 2000; // should be divided by remainder of distance left
-        // this.lidState = ((this.lidState == 'close') ? ('open') : ('close'));
         this.lidTween = new TWEEN.Tween(from).to(to, duration); 
 
         this.lidTween.onUpdate(()=>{
@@ -129,11 +127,11 @@ class Serve {
     }
 
     tireSpeed( speed = 0.0 ) {
-
+        // ...
     }
 
     tireAngle( angle = 0.0 ) {
-
+        // ...
     }
 
     handleChildren( child ) {
@@ -294,7 +292,6 @@ class Serve {
             aoMap: this.bin_ao,
             roughnessMap: this.cloud_light_spec,
         });
-        // this.mat_bin_base.color.convertLinearToSRGB();
 
         this.mat_vinyl_lid = new THREE.MeshPhysicalMaterial({
             roughness: 0.5,
@@ -312,7 +309,6 @@ class Serve {
             aoMap: this.lid_ao,
             roughnessMap: this.cloud_light_spec,
         });
-        // this.mat_lid_base.color.convertLinearToSRGB();
         
         // sub arr for col and texture, fade
         this.mat_bin = [ this.mat_vinyl_bin, this.mat_bin_base ];
