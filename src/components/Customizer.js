@@ -227,44 +227,47 @@ class Customizer extends React.Component {
                             <p>Toggle lid</p>
                         </div>
                         <div className='button' onClick = {(event) => this.props.renderOut({ type: 'image' })}>
-                            <p>Render png 🖼</p>
+                            <p>Render png</p>
                         </div>
                         <div className='button' onClick = {(event) => this.props.renderOut({ type: 'video' })}>
-                            <p>Render video 🎬</p>
+                            <p>Render video</p>
                         </div>
+                        <a className='button' href={ require('../assets/template.zip').default } target='_blank' download='template.zip'>
+                            <p>Download template</p>
+                        </a>
                     </div>
                 </div>
 
                 <div className = {'label'}>
-                        <p>
-                            {this.state.menuStateCopy[ this.state.menuState ]}
-                        </p>
-                        <h3>
-                            {(() => {
-                                if (this.state.menuState == 'lidWraps' || this.state.menuState == 'binWraps') {
-                                    return this.state[ this.state.menuState ][ this.state[ this.state.menuState ].findIndex(obj => obj.selected) ].name
-                                } else if (this.state.menuState == 'binColors' || this.state.menuState == 'lidColors') {
-                                    return this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binColors') ? 'selectedBin' : 'selectedLid') ]) ].name
-                                } else {
-                                    return ''
+                    <p>
+                        {this.state.menuStateCopy[ this.state.menuState ]}
+                    </p>
+                    <h3>
+                        {(() => {
+                            if (this.state.menuState == 'lidWraps' || this.state.menuState == 'binWraps') {
+                                return this.state[ this.state.menuState ][ this.state[ this.state.menuState ].findIndex(obj => obj.selected) ].name
+                            } else if (this.state.menuState == 'binColors' || this.state.menuState == 'lidColors') {
+                                return this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binColors') ? 'selectedBin' : 'selectedLid') ]) ].name
+                            } else {
+                                return ''
+                            }
+                        })()}
+                    </h3>
+                </div>
+
+                <div className = {'menuStateSelector'}>
+                    {['binColors', 'binWraps', 'lidColors', 'lidWraps', 'options'].map((menuState, menuKey) => {
+                        return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : ''}`} 
+                            key = { menuKey }
+                            onClick = {(() => {
+                                // Can not re-select is allready selected
+                                if (menuState != this.state.menuState) {
+                                    return () => this.setState({ menuState: menuState })
                                 }
                             })()}
-                        </h3>
-                    </div>
-
-                    <div className = {'menuStateSelector'}>
-                        {['binColors', 'binWraps', 'lidColors', 'lidWraps', 'options'].map((menuState, menuKey) => {
-                            return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : ''}`} 
-                                key = { menuKey }
-                                onClick = {(() => {
-                                    // Can not re-select is allready selected
-                                    if (menuState != this.state.menuState) {
-                                        return () => this.setState({ menuState: menuState })
-                                    }
-                                })()}
-                            /> 
-                        })} 
-                    </div>
+                        /> 
+                    })} 
+                </div>
             </div>
         );
     }

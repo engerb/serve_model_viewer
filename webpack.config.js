@@ -20,7 +20,7 @@ module.exports = {
         // run draco
         // give compressed to file-loader instead
         {
-            test: /\.(png|svg|jpg|gif|glb|hdr)$/,
+            test: /\.(png|svg|jpg|gif|glb|hdr|zip)$/,
             use: [{
                 loader: 'file-loader'
             }]
