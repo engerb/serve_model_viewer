@@ -34,12 +34,54 @@ class ModelViewer extends React.Component {
     }
 
     renderOut( options ) {
-        // give user a png of serve
-        // store current cam loc
-        // move to defaul pos
-        // render
-        // save
-        // return camera to user pos
+        this.userCameraLoc = { x: this.camera.position.x, y: this.camera.position.y, z: this.camera.position.z };
+
+        if (options.type == 'video') {
+            
+            this.capturer = new CCapture( {
+                framerate: 24,
+                format: 'png',
+                name: 'animation',
+            } );
+
+            this.capturer.start();
+
+            const from = { x: 1.5, y: 1, z: 1.7 };
+            const to = {x: -1.483, y: 1.4, z: 1.54 };
+            const duration = 2000; 
+            
+            const animation = new TWEEN.Tween(from).to(to, duration); 
+    
+            animation.onUpdate(()=>{
+                this.capturer.capture( this.renderer.domElement );
+                this.camera.position.set( from.x, from.y, from.z );
+            });
+
+            animation.onComplete(() => { 
+                this.camera.position.set( this.userCameraLoc.x, this.userCameraLoc.y, this.userCameraLoc.z );
+
+                this.capturer.stop();  
+                this.capturer.save( ( blob ) => { 
+                    const url = window.URL.createObjectURL( blob );
+                    const tempLink = document.createElement('a');
+                    tempLink.href = url;
+                    tempLink.setAttribute('download', 'animation.tar');
+                    tempLink.click();
+                });
+            });
+    
+            // animation.easing(TWEEN.Easing.Quadratic.InOut);
+            animation.start();
+
+        } else {
+            this.renderer.domElement.toBlob( ( blob ) => {
+                    const url = window.URL.createObjectURL( blob );
+                    const tempLink = document.createElement('a');
+                    tempLink.href = url;
+                    tempLink.setAttribute('download', 'render.png');
+                    tempLink.click();
+            }, 'image/png');
+        }
     }
 
     componentDidMount() {
@@ -83,11 +125,11 @@ class ModelViewer extends React.Component {
 
     init() {
         this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
-        this.camera.position.set( 1.5, 1, 1.7 );
+        this.camera.position.set( 1.5, 1, 1.7 ); 
 
         this.scene = new THREE.Scene();
 
-        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
+        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true, preserveDrawingBuffer: true } );
         this.renderer.setPixelRatio( window.devicePixelRatio );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -156,6 +198,8 @@ class ModelViewer extends React.Component {
             this.setState({ renderNeeded: false });
             this.serve.renderNeeded = false;
         }
+
+        // console.log(this.camera.position)
 
         this.controls.update();
         TWEEN.update();
