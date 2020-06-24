@@ -1,6 +1,8 @@
 # Serve model viewer
 Built with React and Three.js, you can view the hosted app [here](https://serve-cmf.herokuapp.com/).
 
+![Demo](demo/demo.gif?raw=true "Demo")
+
 # How to run
 * Install node_modules: `npm install`
 * Run (dev): `npm run-script start-dev`
