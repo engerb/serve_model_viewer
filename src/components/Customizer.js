@@ -196,60 +196,77 @@ class Customizer extends React.Component {
     }
 
     render() {
+        const colors = (() => {
+            return ['binColors', 'lidColors'].map((menuState, menuKey) => {
+                return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
+                    {this.state.colors.map( (obj, index) => {
+                        return <div className = {`${this.checkContrast(obj.color)} ${( ( (menuState == 'binColors') ? obj.selectedBin : obj.selectedLid ) ) ? 'active' : ''} ${(obj.color == '#FFFFFF') ? 'stroke' : ''}`} 
+                            key = { index } 
+                            data-index = { index } 
+                            style = { {backgroundColor: `${obj.color}`} } 
+                            onClick = {(() => {
+                                // Can not re-select is already selected
+                                if ((menuState == 'binColors' && !obj.selectedBin) || (menuState == 'lidColors' && !obj.selectedLid)) {
+                                    return (event) => this.setColor( event.target.getAttribute('data-index'), menuState )
+                                }
+                            })()}
+                        />
+                    })}
+                    
+                    {/* // optionally add more colours  */}
+                    {/* <div className = 'customColor'/> */}
+                </div>
+            });
+        })();
+
+        const wraps = (() => {
+            return ['binWraps', 'lidWraps'].map((menuState, menuKey) => {
+                return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
+                    {this.state[menuState].map( (obj, index) => {
+                        return <div className = {`${ obj.selected ? 'active' : ''}`} 
+                            key = { index } 
+                            data-index = { index } 
+                            style={{
+                                backgroundImage: `url(${obj.img})`, // Event when loaded?
+                                backgroundColor: `${this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binWraps') ? 'selectedBin' : 'selectedLid') ]) ].color}`
+                            }} 
+                            onClick = {(() => {
+                                // Can not re-select is allready selected
+                                if (!obj.selected) {
+                                    return (event) => this.setWrap( event.target.getAttribute('data-index'), menuState )
+                                }
+                            })()}
+                        />
+                    })}
+
+                    <input id='myInput'
+                        type = 'file'
+                        accept = 'image/*'
+                        ref = {`fileUploader_${menuState}`}
+                        style = {{display: 'none'}}
+                        onChange = { (event)=> this.newWrap(event, menuState) }
+                    />
+
+                    <div className='addWrap' onClick={()=>{this.refs[`fileUploader_${menuState}`].click()}} />
+                </div>
+            })
+        })();
+
+        const title = (() => {
+            if (this.state.menuState == 'lidWraps' || this.state.menuState == 'binWraps') {
+                return this.state[ this.state.menuState ][ this.state[ this.state.menuState ].findIndex(obj => obj.selected) ].name
+            } else if (this.state.menuState == 'binColors' || this.state.menuState == 'lidColors') {
+                return this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binColors') ? 'selectedBin' : 'selectedLid') ]) ].name
+            } else {
+                return ''
+            }
+        })();
+
         return (
             <div className = 'customizer'>
-                
                 <div className = 'actions' >
-                    {['binColors', 'lidColors'].map((menuState, menuKey) => {
-                        return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
-                            {this.state.colors.map( (obj, index) => {
-                                return <div className = {`${this.checkContrast(obj.color)} ${( ( (menuState == 'binColors') ? obj.selectedBin : obj.selectedLid ) ) ? 'active' : ''} ${(obj.color == '#FFFFFF') ? 'stroke' : ''}`} 
-                                    key = { index } 
-                                    data-index = { index } 
-                                    style = { {backgroundColor: `${obj.color}`} } 
-                                    onClick = {(() => {
-                                        // Can not re-select is allready selected
-                                        if ((menuState == 'binColors' && !obj.selectedBin) || (menuState == 'lidColors' && !obj.selectedLid)) {
-                                            return (event) => this.setColor( event.target.getAttribute('data-index'), menuState )
-                                        }
-                                    })()}
-                                />
-                            })}
-                            
-                            {/* // optionally add more colours  */}
-                            {/* <div className = 'customColor'/> */}
-                        </div>
-                    })} 
-                    {['binWraps', 'lidWraps'].map((menuState, menuKey) => {
-                        return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
-                            {this.state[menuState].map( (obj, index) => {
-                                return <div className = {`${ obj.selected ? 'active' : ''}`} 
-                                    key = { index } 
-                                    data-index = { index } 
-                                    style={{
-                                        backgroundImage: `url(${obj.img})`,
-                                        backgroundColor: `${this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binWraps') ? 'selectedBin' : 'selectedLid') ]) ].color}`
-                                    }} 
-                                    onClick = {(() => {
-                                        // Can not re-select is allready selected
-                                        if (!obj.selected) {
-                                            return (event) => this.setWrap( event.target.getAttribute('data-index'), menuState )
-                                        }
-                                    })()}
-                                />
-                            })}
-
-                            <input id='myInput'
-                                type = 'file'
-                                accept = 'image/*'
-                                ref = {`fileUploader_${menuState}`}
-                                style = {{display: 'none'}}
-                                onChange = { (event)=> this.newWrap(event, menuState) }
-                            />
-
-                            <div className='addWrap' onClick={()=>{this.refs[`fileUploader_${menuState}`].click()}} />
-                        </div>
-                    })} 
+                    {colors}
+                    {wraps} 
                     <div className = {`options ${(this.state.menuState == 'options') ? 'active' : 'hidden'}`} >
                         {/* speed and wheel angle too could be nice */}
                         <div className='button' onClick = {(event) => this.props.setLidPos(  )}>
@@ -268,20 +285,8 @@ class Customizer extends React.Component {
                 </div>
 
                 <div className = {'label'}>
-                    <p>
-                        {this.state.menuStateCopy[ this.state.menuState ]}
-                    </p>
-                    <h3>
-                        {(() => {
-                            if (this.state.menuState == 'lidWraps' || this.state.menuState == 'binWraps') {
-                                return this.state[ this.state.menuState ][ this.state[ this.state.menuState ].findIndex(obj => obj.selected) ].name
-                            } else if (this.state.menuState == 'binColors' || this.state.menuState == 'lidColors') {
-                                return this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binColors') ? 'selectedBin' : 'selectedLid') ]) ].name
-                            } else {
-                                return ''
-                            }
-                        })()}
-                    </h3>
+                    <p>{this.state.menuStateCopy[ this.state.menuState ]}</p>
+                    <h3>{title}</h3>
                 </div>
 
                 <div className = {'menuStateSelector'}>
@@ -289,7 +294,7 @@ class Customizer extends React.Component {
                         return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : ''}`} 
                             key = { menuKey }
                             onClick = {(() => {
-                                // Can not re-select is allready selected
+                                // Can not re-select is already selected
                                 if (menuState != this.state.menuState) {
                                     return () => this.setState({ menuState: menuState })
                                 }
