@@ -1,8 +1,8 @@
 import React from 'react';
-import ModelViewer from './components/ModelViewer';
+import Scene from './components/Scene';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-// import DefaultCMF from './DefaultCMF';
+import DefaultCMF from './DefaultCMF';
 
 import 'three';
 import 'three/examples/js/controls/OrbitControls';
@@ -24,10 +24,17 @@ class App extends React.Component {
             <Router>
                 <Switch>
                     <Route path='/demo'>
-                        <ModelViewer />
+                        <Scene 
+                            customizer = {false} 
+                            bg = {'black'}
+                        />
                     </Route>
                     <Route path='/'>
-                        <ModelViewer />
+                        <Scene 
+                            customizer = {true}
+                            bg = {'white'}
+                            DefaultCMF = {DefaultCMF}
+                        />
                     </Route>
                 </Switch>
             </Router>

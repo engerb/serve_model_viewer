@@ -4,111 +4,15 @@ class Customizer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            binWraps: [
-                {
-                    img: require('../assets/3d/Serve/wraps/bin_1.png').default,
-                    name: 'Bin 1',
-                    selected: true,
-                },
-                {
-                    img: require('../assets/3d/Serve/wraps/bin_2.png').default,
-                    name: 'Bin 2',
-                    selected: false,
-                },
-                {
-                    img: require('../assets/3d/Serve/wraps/bin_3.png').default,
-                    name: 'Bin 3',
-                    selected: false,
-                },
-                {
-                    img: require('../assets/3d/Serve/wraps/bin_4.png').default,
-                    name: 'Bin 4',
-                    selected: false,
-                },
-                {
-                    img: require('../assets/3d/Serve/wraps/bin_5.png').default,
-                    name: 'Bin 5',
-                    selected: false,
-                },
-            ],
-            lidWraps: [
-                {
-                    img: require('../assets/3d/Serve/wraps/lid_1.png').default,
-                    name: 'Lid 1',
-                    selected: true,
-                },
-                {
-                    img: require('../assets/3d/Serve/wraps/lid_2.png').default,
-                    name: 'Lid 2',
-                    selected: false,
-                },
-                {
-                    img: require('../assets/3d/Serve/wraps/lid_3.png').default,
-                    name: 'Lid 3',
-                    selected: false,
-                },
-                {
-                    img: require('../assets/3d/Serve/wraps/lid_4.png').default,
-                    name: 'Lid 4',
-                    selected: false,
-                },
-                {
-                    img: require('../assets/3d/Serve/wraps/lid_5.png').default,
-                    name: 'Lid 5',
-                    selected: false,
-                },
-            ],
-            colors: [
-                {
-                color: '#1A1A1A',
-                    name: 'Black',
-                    selectedBin: false,
-                    selectedLid: false,
-                },
-                {
-                    color: '#FDF150',
-                    name: 'Postmates yellow',
-                    selectedBin: false,
-                    selectedLid: false,
-                },
-                {
-                    color: '#5499ED',
-                    name: 'Blue',
-                    selectedBin: false,
-                    selectedLid: false,
-                },
-                {
-                    color: '#FABC0F',
-                    name: 'Safety yellow',
-                    selectedBin: false,
-                    selectedLid: false,
-                },
-                {
-                    color: '#FFFFFF',
-                    name: 'Default white',
-                    selectedBin: true,
-                    selectedLid: true,
-                },
-            ],
-            // binColors, binWraps, lidColors, lidWraps, options
-            menuState: 'binColors', 
-            menuStateCopy: {
-                binColors: 'Base bin colour',
-                binWraps: 'Vinyl decals / wrap on bin',
-                lidColors: 'Base lid colour',
-                lidWraps: 'Vinyl decals / wrap on lid',
-                options: '',
-            }
-        }
+        this.state = this.props.DefaultCMF;
 
         // Send up first of the textures for model load
-        props.setDefaults({
-            binWrap: this.state.binWraps[ this.state.binWraps.findIndex(obj => obj.selected) ].img,
-            lidWrap: this.state.lidWraps[ this.state.lidWraps.findIndex(obj => obj.selected) ].img,
-            binColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedBin) ].color,
-            lidColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedLid) ].color,
-        });
+        // props.setDefaults({
+        //     binWrap: this.state.binWraps[ this.state.binWraps.findIndex(obj => obj.selected) ].img,
+        //     lidWrap: this.state.lidWraps[ this.state.lidWraps.findIndex(obj => obj.selected) ].img,
+        //     binColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedBin) ].color,
+        //     lidColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedLid) ].color,
+        // });
 
         this.newWrap = this.newWrap.bind(this);
     }

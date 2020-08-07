@@ -2,7 +2,7 @@ import React from "react";
 import Serve from '../assets/3d/Serve/Serve';
 import Customizer from './Customizer';
 
-class ModelViewer extends React.Component {
+class Scene extends React.Component {
     constructor(props) {
         super(props);
         
@@ -14,15 +14,15 @@ class ModelViewer extends React.Component {
 
         // these should all be in state with serve observing state as a real component instead of a js object
         // all this shit will use react three, but maybe a propper state manager too?
-        this.setBinWrap = this.setBinWrap.bind(this);
-        this.setLidWrap = this.setLidWrap.bind(this);
-        this.setBinColor = this.setBinColor.bind(this);
-        this.setLidColor = this.setLidColor.bind(this);
-        this.setDefaults = this.setDefaults.bind(this);
-        this.setLidPos = this.setLidPos.bind(this);
-        this.setSpeed = this.setSpeed.bind(this);
-        this.setSteer = this.setSteer.bind(this);
-        this.renderOut = this.renderOut.bind(this);
+        // this.setBinWrap = this.setBinWrap.bind(this);
+        // this.setLidWrap = this.setLidWrap.bind(this);
+        // this.setBinColor = this.setBinColor.bind(this);
+        // this.setLidColor = this.setLidColor.bind(this);
+        // this.setDefaults = this.setDefaults.bind(this);
+        // this.setLidPos = this.setLidPos.bind(this);
+        // this.setSpeed = this.setSpeed.bind(this);
+        // this.setSteer = this.setSteer.bind(this);
+        // this.renderOut = this.renderOut.bind(this);
     }
 
     setSpeed() {
@@ -88,39 +88,39 @@ class ModelViewer extends React.Component {
         this.animate();
     }
 
-    setBinWrap( binWrap ) {
-        this.setState({ binWrap: binWrap });
-        this.serve.setBinWrap( binWrap );
-    }
+    // setBinWrap( binWrap ) {
+    //     this.setState({ binWrap: binWrap });
+    //     this.serve.setBinWrap( binWrap );
+    // }
 
-    setLidWrap( lidWrap ) {
-        this.setState({ lidWrap: lidWrap });
-        this.serve.setLidWrap( lidWrap );
-    }
+    // setLidWrap( lidWrap ) {
+    //     this.setState({ lidWrap: lidWrap });
+    //     this.serve.setLidWrap( lidWrap );
+    // }
 
-    setBinColor( binColor ) {
-        this.setState({ binColor: binColor });
-        this.serve.setBinColor( binColor );
-    }
+    // setBinColor( binColor ) {
+    //     this.setState({ binColor: binColor });
+    //     this.serve.setBinColor( binColor );
+    // }
 
-    setLidColor( lidColor ) {
-        this.setState({ lidColor: lidColor });
-        this.serve.setLidColor( lidColor );
-    }
+    // setLidColor( lidColor ) {
+    //     this.setState({ lidColor: lidColor });
+    //     this.serve.setLidColor( lidColor );
+    // }
 
-    setLidPos( lidOpen = this.state.lidOpen ) { 
-        this.setState({ lidOpen: !lidOpen });
-        this.serve.setLidPos( lidOpen ); 
-    }
+    // setLidPos( lidOpen = this.state.lidOpen ) { 
+    //     this.setState({ lidOpen: !lidOpen });
+    //     this.serve.setLidPos( lidOpen ); 
+    // }
 
-    setDefaults( obj ) {
-        this.setState({
-            binWrap: obj.binWrap,
-            lidWrap: obj.lidWrap,
-            binColor: obj.binColor, 
-            lidColor: obj.lidColor,
-        });
-    }
+    // setDefaults( obj ) {
+    //     this.setState({
+    //         binWrap: obj.binWrap,
+    //         lidWrap: obj.lidWrap,
+    //         binColor: obj.binColor, 
+    //         lidColor: obj.lidColor,
+    //     });
+    // }
 
     init() {
         this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.25, 20 );
@@ -223,20 +223,22 @@ class ModelViewer extends React.Component {
         return (
             <div className="modelViewerMain">
                 <div className={`modelViewer ${this.state.visible}`} ref={ref => (this.mount = ref)} /> 
-                <Customizer 
-                    setBinWrap = { this.setBinWrap.bind(this) }
-                    setLidWrap = { this.setLidWrap.bind(this) }
-                    setBinColor = { this.setBinColor.bind(this) }
-                    setLidColor = { this.setLidColor.bind(this) }
-                    setDefaults = { this.setDefaults.bind(this) }
-                    setLidPos = { this.setLidPos.bind(this) }
-                    setSpeed = { this.setSpeed.bind(this) }
-                    setSteer = { this.setSteer.bind(this) }
-                    renderOut = { this.renderOut.bind(this) }
-                />
+                
+                {this.props.customizer ? <Customizer 
+                    // setBinWrap = { this.setBinWrap.bind(this) }
+                    // setLidWrap = { this.setLidWrap.bind(this) }
+                    // setBinColor = { this.setBinColor.bind(this) }
+                    // setLidColor = { this.setLidColor.bind(this) }
+                    // setDefaults = { this.setDefaults.bind(this) }
+                    // setLidPos = { this.setLidPos.bind(this) }
+                    // setSpeed = { this.setSpeed.bind(this) }
+                    // setSteer = { this.setSteer.bind(this) }
+                    // renderOut = { this.renderOut.bind(this) }
+                    DefaultCMF = {this.props.DefaultCMF}
+                /> : null}
             </div>
         );
     }
 }
 
-export default ModelViewer;
+export default Scene;
