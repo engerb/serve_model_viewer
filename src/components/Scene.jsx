@@ -1,5 +1,7 @@
 import React from "react";
-import { Canvas, useFrame } from 'react-three-fiber'
+import { Canvas, useFrame, useThree, extend, useLoader } from 'react-three-fiber'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+extend({ OrbitControls });
 
 function Box(props) {
     // This reference will give us direct access to the mesh
@@ -25,6 +27,21 @@ function Box(props) {
         </mesh>
     )
 }
+
+const CameraControls = () => {
+    // Get a reference to the Three.js Camera, and the canvas html element.
+    // We need these to setup the OrbitControls component.
+    // https://threejs.org/docs/#examples/en/controls/OrbitControls
+    const {
+      camera,
+      gl: { domElement },
+    } = useThree();
+    // Ref to the controls, so that we can update them on every frame using useFrame
+    const controls = React.useRef();
+    useFrame((state) => controls.current.update());
+    return <orbitControls ref={controls} args={[camera, domElement]} />;
+};
+
 class Scene extends React.Component {
     constructor(props) {
         super(props);
@@ -39,6 +56,7 @@ class Scene extends React.Component {
             <div className="modelViewer">
                 {/* <div className={`modelViewer ${this.state.visible}`} ref={ref => (this.mount = ref)} />  */}
                 <Canvas>
+                    <CameraControls />
                     <ambientLight />
                     <pointLight position={[10, 10, 10]} />
                     <Box position={[-1.2, 0, 0]} />
