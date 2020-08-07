@@ -10,16 +10,16 @@ body {
     height: 100vh;
     position: relative;
 
-    canvas {
-        opacity: 0;
-        transition: opacity 2s ease-in;
-    }
+    // canvas {
+    //     opacity: 0;
+    //     transition: opacity 2s ease-in;
+    // }
     
-    &.visible {
-        canvas {
-            opacity: 1;
-        }
-    }
+    // &.visible {
+    //     canvas {
+    //         opacity: 1;
+    //     }
+    // }
 }
 
 .customizer {

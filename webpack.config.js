@@ -1,6 +1,4 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-const webpack = require('webpack')
-const path = require('path');
 
 module.exports = {
     module: {
@@ -45,23 +43,12 @@ module.exports = {
         }, 
         ],
     },
-    resolve: {
-        alias: {
-            three$: 'three/build/three.min.js',
-            'three/.*$': 'three',
-        }
-    },
     plugins: [
         new HtmlWebPackPlugin({
             hash: true,
             template: './src/index.html',
             filename: './index.html',
             favicon: './src/assets/img/favicon.svg'
-        }),
-        new webpack.ProvidePlugin({
-            THREE: 'three',
-            TWEEN: 'tween',
-            // CCapture: 'ccapture',
         }),
     ]
 };
