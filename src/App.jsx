@@ -4,10 +4,6 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 import DefaultCMF from './DefaultCMF';
 
-// import 'three';
-// import 'three/examples/js/controls/OrbitControls';
-// import 'three/examples/js/loaders/GLTFLoader';
-// import 'three/examples/js/loaders/DRACOLoader';
 // import 'three/examples/js/loaders/RGBELoader';
 
 // import CCapture from '../node_modules/ccapture.js/src/CCapture.js';

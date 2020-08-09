@@ -10,7 +10,7 @@ import { draco } from 'drei'
 
 export default function Model(props) {
   const group = useRef()
-  const { nodes, materials } = useLoader(GLTFLoader, '/serve.glb', draco('/draco-gltf/'))
+  const { nodes, materials } = useLoader(GLTFLoader, require('./serve.glb').default, draco('/draco-gltf/'))
   return (
     <group ref={group} {...props} dispose={null}>
       <group position={[0, 0.26, 0]}>

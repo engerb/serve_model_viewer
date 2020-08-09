@@ -1,4 +1,5 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     module: {
@@ -14,9 +15,6 @@ module.exports = {
             'sass-loader',
             ],
         },
-        // test for glb or somethin to signify uncompressed
-        // run draco
-        // give compressed to file-loader instead
         {
             test: /\.(png|svg|jpg|gif|glb|hdr|zip)$/,
             use: [{
@@ -30,14 +28,14 @@ module.exports = {
                 extensions: ['.js', '.jsx', '.jsm']
             },
             use: {
-                loader: "babel-loader"
+                loader: 'babel-loader'
             }
         },
         {
             test: /\.html$/,
             use: [
                 {
-                    loader: "html-loader",
+                    loader: 'html-loader',
                 }
             ]
         }, 
@@ -49,6 +47,11 @@ module.exports = {
             template: './src/index.html',
             filename: './index.html',
             favicon: './src/assets/img/favicon.svg'
+        }),
+        new CopyPlugin({
+            patterns: [
+              { from: './node_modules/three/examples/js/libs/draco', to: './draco-gltf' },
+            ],
         }),
     ]
 };
