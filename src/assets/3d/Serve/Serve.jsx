@@ -69,11 +69,9 @@ export default function Model(props) {
             geometry={nodes.lid_top.geometry} 
             geometry-groups={[{start: 0, count: Infinity, materialIndex: 0}, {start: 0, count: Infinity, materialIndex: 1}]} 
             position={[0, -0.81, 0.33]}>
-            <meshPhysicalMaterial attachArray="material" roughness={0.4} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_lid_base.aoMap} >
-
-            </meshPhysicalMaterial>
-            <meshPhysicalMaterial attachArray="material" roughness={0.5} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_lid_base.aoMap} transparency={0} opcaity={1} transparent>
-
+            <meshPhysicalMaterial attachArray="material" roughness={0.4} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_lid_base.aoMap} />
+            <meshPhysicalMaterial attachArray="material" roughness={0.5} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_lid_base.aoMap} transparency={0} opacity={1} transparent>
+              {/* texture loader and callback bind */}
             </meshPhysicalMaterial>
           </mesh>
         </group>
@@ -82,11 +80,9 @@ export default function Model(props) {
           geometry={nodes.bin.geometry} 
           geometry-groups={[{start: 0, count: Infinity, materialIndex: 0}, {start: 0, count: Infinity, materialIndex: 1}]} 
           position={[0, -0.26, 0]}>
-            <meshPhysicalMaterial attachArray="material" roughness={0.4} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_bin_base.aoMap} >
-
-            </meshPhysicalMaterial>
-            <meshPhysicalMaterial attachArray="material" roughness={0.5} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_bin_base.aoMap} transparency={0} opcaity={1} transparent>
-
+            <meshPhysicalMaterial attachArray="material" roughness={0.4} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_bin_base.aoMap} />
+            <meshPhysicalMaterial attachArray="material" roughness={0.5} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_bin_base.aoMap} transparency={0} opacity={1} transparent>
+              {/* texture loader and callback bind */}
             </meshPhysicalMaterial>
         </mesh>
 
@@ -100,24 +96,18 @@ export default function Model(props) {
         <mesh material={materials.mat_light_blocker} material-color={0x111111} geometry={nodes.blocker.geometry} position={[0, -0.26, 0]} />
         <mesh material={materials.mat_strip_eyes} geometry={nodes.eye_lense.geometry} position={[0, -0.26, 0]} />
         <mesh material={materials.mat_metal_black_rough} material-color={0x1D1D1D} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.eye_plate.geometry} position={[0, -0.26, 0]} />
-        {/* <mesh material={materials.mat_front_decal} geometry={nodes.front_decal.geometry} position={[0, -0.26, 0]} /> */}
         <mesh material={materials.mat_plastic_white} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.liner.geometry} position={[0, -0.26, 0]} />
-        {/* <mesh material={materials.mat_bin_vinyl} geometry={nodes.mat_bin_vinyl_ref.geometry} position={[0, -0.29, 0]} /> */}
-        {/* <mesh material={materials.mat_lid_vinyl} geometry={nodes.mat_lid_vinyl_ref.geometry} position={[0, -0.29, 0]} /> */}
-        {/* <mesh
-          material={materials.mat_rear_bottom_decal}
-          geometry={nodes.rear_bottom_decal.geometry}
-          position={[0, -0.26, 0]}
-        />
-        <mesh
-          material={materials.mat_rear_top_decal}
-          geometry={nodes.rear_top_decal.geometry}
-          position={[0, -0.26, 0]}
-        /> */}
         <mesh material={materials.mat_screen} material-color={0x0A0716} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.screen.geometry} position={[0, -0.26, 0]} />
         <mesh material={materials.mat_tail_lights} material-color={0x9F1313} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.tail_lights.geometry} position={[0, -0.26, 0]} />
+        {/* All need refs and when to show, load in textures */}
+        {/* <mesh material={materials.mat_front_decal} geometry={nodes.front_decal.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_rear_bottom_decal} geometry={nodes.rear_bottom_decal.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_rear_top_decal} geometry={nodes.rear_top_decal.geometry} position={[0, -0.26, 0]} /> */}
+        {/* all refs can get deleted */}
         {/* <mesh material={materials.tex_cloud_ref} geometry={nodes.tex_cloud_ref.geometry} position={[0, -0.29, 0]} /> */}
         {/* <mesh material={materials.tex_floor_ref} geometry={nodes.tex_floor_ref.geometry} position={[0, -0.29, 0]} /> */}
+        {/* <mesh material={materials.mat_bin_vinyl} geometry={nodes.mat_bin_vinyl_ref.geometry} position={[0, -0.29, 0]} /> */}
+        {/* <mesh material={materials.mat_lid_vinyl} geometry={nodes.mat_lid_vinyl_ref.geometry} position={[0, -0.29, 0]} /> */}
       </group>
       <mesh material={materials.mat_floor} material-color={0x000000} material-alphaMap={materials.tex_floor_ref.map} geometry={nodes.floor.geometry} />
     </group>
