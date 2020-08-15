@@ -12,6 +12,13 @@ export default function Model(props) {
   const group = useRef()
   const { nodes, materials } = useLoader(GLTFLoader, require('./serve.glb').default, draco('/draco-gltf/'))
   console.log(materials)
+  console.log(nodes)
+
+  var materialsTest = [
+      new THREE.MeshBasicMaterial({ color: 'red' }),
+      new THREE.MeshBasicMaterial({ color: 'green' }),
+  ];
+  console.log(materialsTest)
   return (
     <group ref={group} {...props} dispose={null}>
       <group position={[0, 0.26, 0]}>
@@ -66,7 +73,9 @@ export default function Model(props) {
           <mesh material={materials.mat_lid_base} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.lid_top.geometry} position={[0, -0.81, 0.33]} />
         </group>
         <mesh material={materials.mat_aluminum} geometry={nodes.aluminum.geometry} position={[0, -0.26, 0]} />
-        <mesh material={materials.mat_bin_base} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.bin.geometry} position={[0, -0.26, 0]} />
+        {/* <mesh material={materials.mat_bin_base} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.bin.geometry} position={[0, -0.26, 0]} /> */}
+        <mesh geometry={nodes.bin.geometry} geometry-groups={[]} material={materialsTest} position={[0, -0.26, 0]} />
+
         <mesh material={materials.mat_lense} geometry={nodes.black_glass.geometry} position={[0, -0.26, 0]} />
         <mesh material={materials.mat_plastic_black} geometry={nodes.black_plastic.geometry} position={[0, -0.26, 0]} />
         <mesh
