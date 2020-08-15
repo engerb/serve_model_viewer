@@ -1,44 +1,31 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useRef, Component, useEffect } from "react";
 import { Canvas, useFrame, useThree, extend, useLoader } from 'react-three-fiber'
-import { OrbitControls, PerspectiveCamera } from 'drei'
+import { ACESFilmicToneMapping, sRGBEncoding } from "three";
+import { OrbitControls, PerspectiveCamera, Stats } from 'drei'
 
 import Model from '../assets/3d/Serve/Serve';
+import Lighting from './Lighting';
 
-function Cube(props) {
-    // This reference will give us direct access to the mesh
-    const mesh = React.useRef()
-
-    // Set up state for the hovered and active state
-    const [hovered, setHover] = React.useState(false)
-    const [active, setActive] = React.useState(false)
-
-    // Rotate mesh every frame, this is outside of React without overhead
-    useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01))
-
-    return (
-        <mesh
-            {...props}
-            ref={mesh}
-            scale={active ? [1.5, 1.5, 1.5] : [1, 1, 1]}
-            onClick={(e) => setActive(!active)}
-            onPointerOver={(e) => setHover(true)}
-            onPointerOut={(e) => setHover(false)}>
-            <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
-            <meshStandardMaterial attach="material" color={hovered ? 'hotpink' : 'orange'} />
-        </mesh>
-    )
-}
-
-class Scene extends React.Component {
+class Scene extends Component {
     constructor(props) {
         super(props);
         
+        this.state = {
+            hdri: require('../assets/3d/venice_sunset_1k.hdr').default
+        }
     }
 
     render() {
         return (
             <div className="modelViewer">
-                <Canvas>
+                <Canvas
+                    gl={{ preserveDrawingBuffer: true }}
+                    invalidateFrameloop
+                    pixelRatio={window.devicePixelRatio}
+                    onCreated={({ gl }) => {
+                      gl.toneMapping = ACESFilmicToneMapping
+                      gl.outputEncoding = sRGBEncoding
+                    }}>
                     <PerspectiveCamera 
                         makeDefault
                         position={[1.5, 1, 1.7]}
@@ -55,14 +42,11 @@ class Scene extends React.Component {
                         minPolarAngle={0.3}
                         maxPolarAngle={1.7}
                     />
-                    <React.Suspense fallback={null}>
+                    <Suspense fallback={null}>
                         <Model />
-                    </React.Suspense>
-                    <ambientLight />
-                    <pointLight position={[10, 10, 10]} />
-                    {/* <Cube position={[-1.2, 0, 0]} /> */}
-                    {/* <Cube position={[1.2, 0, 0]} /> */}
-
+                    </Suspense>
+                    <Lighting image={this.state.hdri}/>
+                    <Stats />
                 </Canvas>
             </div>
         );

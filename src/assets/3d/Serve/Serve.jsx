@@ -11,27 +11,20 @@ import { draco } from 'drei'
 export default function Model(props) {
   const group = useRef()
   const { nodes, materials } = useLoader(GLTFLoader, require('./serve.glb').default, draco('/draco-gltf/'))
+  console.log(materials)
   return (
     <group ref={group} {...props} dispose={null}>
       <group position={[0, 0.26, 0]}>
         <group position={[0.16, 0, 0]}>
           <group position={[0.02, -0.11, 0.23]}>
-            <mesh
-              material={materials.mat_metal_black_smooth}
-              geometry={nodes.motor_fl.geometry}
-              position={[-0.4, 0, 0]}
-            />
-            <mesh material={materials.mat_aluminum} geometry={nodes.rim_fl.geometry} position={[-0.4, 0, 0]} />
-            <mesh material={materials.mat_tire} geometry={nodes.tire_rubber_fl.geometry} position={[-0.4, 0, 0]} />
+            {/* <mesh material={materials.mat_aluminum} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.cap_fl.geometry} /> */}
+            <mesh material={materials.mat_metal_black_smooth} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.hub_fl.geometry} />
+            <mesh material={materials.mat_tire} material-aoMapIntensity={0.5} material-normalScale={[-2, -2]} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.tire_fl.geometry} />
           </group>
           <group position={[0.02, -0.11, -0.23]}>
-            <mesh
-              material={materials.mat_metal_black_smooth}
-              geometry={nodes.motor_rl.geometry}
-              position={[-0.4, 0, 0.46]}
-            />
-            <mesh material={materials.mat_aluminum} geometry={nodes.rim_rl.geometry} position={[-0.4, 0, 0.46]} />
-            <mesh material={materials.mat_tire} geometry={nodes.tire_rubber_rl.geometry} position={[-0.4, 0, 0.46]} />
+            {/* <mesh material={materials.mat_aluminum} geometry={nodes.cap_rl.geometry} /> */}
+            <mesh material={materials.mat_metal_black_smooth} geometry={nodes.hub_rl.geometry} />
+            <mesh material={materials.mat_tire} geometry={nodes.tire_rl.geometry} />
           </group>
           <mesh
             material={materials.mat_metal_black_smooth}
@@ -41,22 +34,14 @@ export default function Model(props) {
         </group>
         <group position={[-0.16, 0, 0]}>
           <group position={[-0.02, -0.11, 0.23]}>
-            <mesh
-              material={materials.mat_metal_black_smooth}
-              geometry={nodes.motor_fr.geometry}
-              position={[-0.03, 0, 0]}
-            />
-            <mesh material={materials.mat_aluminum} geometry={nodes.rim_fr.geometry} position={[-0.03, 0, 0]} />
-            <mesh material={materials.mat_tire} geometry={nodes.tire_rubber_fr.geometry} position={[-0.03, 0, 0]} />
+            {/* <mesh material={materials.mat_aluminum} geometry={nodes.cap_fr.geometry} /> */}
+            <mesh material={materials.mat_metal_black_smooth} geometry={nodes.hub_fr.geometry} />
+            <mesh material={materials.mat_tire} geometry={nodes.tire_fr.geometry} />
           </group>
           <group position={[-0.02, -0.11, -0.23]}>
-            <mesh
-              material={materials.mat_metal_black_smooth}
-              geometry={nodes.motor_rr.geometry}
-              position={[-0.03, 0, 0.46]}
-            />
-            <mesh material={materials.mat_aluminum} geometry={nodes.rim_rr.geometry} position={[-0.03, 0, 0.46]} />
-            <mesh material={materials.mat_tire} geometry={nodes.tire_rubber_rr.geometry} position={[-0.03, 0, 0.46]} />
+            {/* <mesh material={materials.mat_aluminum} geometry={nodes.cap_rr.geometry} /> */}
+            <mesh material={materials.mat_metal_black_smooth} geometry={nodes.hub_rr.geometry} />
+            <mesh material={materials.mat_tire} geometry={nodes.tire_rr.geometry} />
           </group>
           <mesh
             material={materials.mat_metal_black_smooth}
@@ -67,20 +52,22 @@ export default function Model(props) {
         <group position={[0, 0.55, -0.33]}>
           <mesh
             material={materials.mat_plastic_white}
+            material-roughnessMap={materials.tex_cloud_ref.map}
             geometry={nodes.lid_inside.geometry}
             position={[0, -0.81, 0.33]}
           />
           <mesh
             material={materials.mat_plastic_black}
+            material-roughnessMap={materials.tex_cloud_ref.map}
             geometry={nodes.lid_liner.geometry}
             position={[0, -0.81, 0.33]}
           />
-          <mesh material={materials.mat_strip_eyes} geometry={nodes.strip.geometry} position={[0, -0.81, 0.33]} />
-          <mesh material={materials.mat_lid_base} geometry={nodes.lid_top.geometry} position={[0, -0.81, 0.33]} />
+          <mesh material={materials.mat_strip_eyes} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.strip.geometry} position={[0, -0.81, 0.33]} />
+          <mesh material={materials.mat_lid_base} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.lid_top.geometry} position={[0, -0.81, 0.33]} />
         </group>
-        <mesh material={materials.mat_aluminum} geometry={nodes.aluminum.geometry} position={[0, 0.7, -0.23]} />
-        <mesh material={materials.mat_bin_base} geometry={nodes.bin.geometry} position={[0, -0.26, 0]} />
-        <mesh material={materials.mat_lense} geometry={nodes.black_glass.geometry} position={[0, 0.7, -0.23]} />
+        <mesh material={materials.mat_aluminum} geometry={nodes.aluminum.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_bin_base} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.bin.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_lense} geometry={nodes.black_glass.geometry} position={[0, -0.26, 0]} />
         <mesh material={materials.mat_plastic_black} geometry={nodes.black_plastic.geometry} position={[0, -0.26, 0]} />
         <mesh
           material={materials.mat_plastic_black}
@@ -89,12 +76,27 @@ export default function Model(props) {
         />
         <mesh material={materials.mat_light_blocker} geometry={nodes.blocker.geometry} position={[0, -0.26, 0]} />
         <mesh material={materials.mat_strip_eyes} geometry={nodes.eye_lense.geometry} position={[0, -0.26, 0]} />
-        <mesh material={materials.mat_metal_black_rough} geometry={nodes.eye_plate.geometry} position={[0, -0.26, 0]} />
-        <mesh material={materials.mat_plastic_white} geometry={nodes.liner.geometry} position={[0, -0.26, 0]} />
-        <mesh material={materials.mat_screen} geometry={nodes.screen.geometry} position={[0, -0.26, 0]} />
-        <mesh material={materials.mat_tail_lights} geometry={nodes.tail_lights.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_metal_black_rough} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.eye_plate.geometry} position={[0, -0.26, 0]} />
+        {/* <mesh material={materials.mat_front_decal} geometry={nodes.front_decal.geometry} position={[0, -0.26, 0]} /> */}
+        <mesh material={materials.mat_plastic_white} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.liner.geometry} position={[0, -0.26, 0]} />
+        {/* <mesh material={materials.mat_bin_vinyl} geometry={nodes.mat_bin_vinyl_ref.geometry} position={[0, -0.29, 0]} /> */}
+        {/* <mesh material={materials.mat_lid_vinyl} geometry={nodes.mat_lid_vinyl_ref.geometry} position={[0, -0.29, 0]} /> */}
+        {/* <mesh
+          material={materials.mat_rear_bottom_decal}
+          geometry={nodes.rear_bottom_decal.geometry}
+          position={[0, -0.26, 0]}
+        />
+        <mesh
+          material={materials.mat_rear_top_decal}
+          geometry={nodes.rear_top_decal.geometry}
+          position={[0, -0.26, 0]}
+        /> */}
+        <mesh material={materials.mat_screen} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.screen.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_tail_lights} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.tail_lights.geometry} position={[0, -0.26, 0]} />
+        {/* <mesh material={materials.tex_cloud_ref} geometry={nodes.tex_cloud_ref.geometry} position={[0, -0.29, 0]} /> */}
+        {/* <mesh material={materials.tex_floor_ref} geometry={nodes.tex_floor_ref.geometry} position={[0, -0.29, 0]} /> */}
       </group>
-      <mesh material={materials.mat_floor} geometry={nodes.floor.geometry} />
+      <mesh material={materials.mat_floor} material-alphaMap={materials.tex_floor_ref.map} geometry={nodes.floor.geometry} />
     </group>
   )
 }
