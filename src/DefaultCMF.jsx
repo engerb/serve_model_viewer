@@ -1,5 +1,5 @@
 const DefaultCMF = {
-    binWraps: [
+    binDecals: [
         {
             img: require('./assets/3d/Serve/wraps/bin_1.png').default,
             name: 'Bin 1',
@@ -26,7 +26,7 @@ const DefaultCMF = {
             selected: false,
         },
     ],
-    lidWraps: [
+    lidDecals: [
         {
             img: require('./assets/3d/Serve/wraps/lid_1.png').default,
             name: 'Lid 1',
@@ -53,9 +53,18 @@ const DefaultCMF = {
             selected: false,
         },
     ],
+    frontDecals: [
+
+    ],
+    rearTopDecals: [
+
+    ],
+    rearBottomDecals: [
+
+    ],
     colors: [
         {
-        color: '#1A1A1A',
+            color: '#1A1A1A',
             name: 'Black',
             selectedBin: false,
             selectedLid: false,

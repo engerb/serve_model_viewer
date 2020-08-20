@@ -5,27 +5,32 @@ import {RGBELoader} from "three/examples/jsm/loaders/RGBELoader";
 import {UnsignedByteType} from "three";
 
 const Lighting = (props) => {
-    const light = useRef()
     const { gl, scene } = useThree();
+    const [currentImage, setCurrentImage] = useState(null)
 
-    // bind a parent state to know when loaded / ready
+    const loader = new RGBELoader();
+    loader.setDataType(UnsignedByteType);
 
     useEffect(() => {
-        const pmremGenerator = new PMREMGenerator(gl);
-        const loader = new RGBELoader();
-        loader.setDataType(UnsignedByteType);
-        pmremGenerator.compileEquirectangularShader();
+        if (props.image !== currentImage) {
+            setCurrentImage(props.image);
 
-        loader.load(
-            props.image,
-            texture => {
-                const textureData = pmremGenerator.fromEquirectangular(texture).texture;
-                scene.environment = textureData;
-                texture.dispose();
-                pmremGenerator.dispose();
-            }
-        )
-    }, [scene]);    
+            console.log("light")
+
+            const pmremGenerator = new PMREMGenerator(gl);
+            pmremGenerator.compileEquirectangularShader();
+
+            loader.load(
+                props.image,
+                texture => {
+                    const textureData = pmremGenerator.fromEquirectangular(texture).texture;
+                    scene.environment = textureData;
+                    texture.dispose();
+                    pmremGenerator.dispose();
+                }
+            )
+        }
+    }, [scene, props]);    
 
     return null
 }
