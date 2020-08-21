@@ -2,7 +2,7 @@ import React from 'react';
 import Scene from './components/Scene';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import DefaultCMF from './DefaultCMF';
+// import DefaultCMF from './DefaultCMF';
 
 // import 'three/examples/js/loaders/RGBELoader';
 
@@ -29,7 +29,7 @@ class App extends React.Component {
                         <Scene 
                             customizer = {true}
                             bg = {'white'}
-                            DefaultCMF = {DefaultCMF}
+                            // DefaultCMF = {DefaultCMF}
                         />
                     </Route>
                 </Switch>

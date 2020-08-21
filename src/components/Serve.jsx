@@ -9,87 +9,28 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { sRGBEncoding, TextureLoader, convertSRGBToLinear } from "three";
 import { draco } from 'drei'
 
-export default function Serve(props) {
+import useStore from './Store';
+
+export default function Serve() {
   const group = useRef();
-  const { nodes, materials } = useLoader(GLTFLoader, require('./serve.glb').default, draco('/draco-gltf/'))
+  const { nodes, materials } = useLoader(GLTFLoader, require('../assets/3d/Serve/serve.glb').default, draco('/draco-gltf/'))
 
+  const binDecalUrl = useStore(state => state.binDecalUrl)
+  const lidDecalUrl = useStore(state => state.lidDecalUrl)
+  const frontDecalUrl = useStore(state => state.frontDecalUrl)
+  const rearTopDecalUrl = useStore(state => state.rearTopDecalUrl)
+  const rearBottomDecalUrl = useStore(state => state.rearBottomDecalUrl)
+  const binColor = useStore(state => state.binColor)
+  const lidColor = useStore(state => state.lidColor)
 
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
+  const testMethodBin = useStore(state => state.testMethodBin)
+  const testMethodLid = useStore(state => state.testMethodLid)
 
-  const [speed, setSpeed] = useState(0)
-  const [turnRad, setTurnRad] = useState(0)
-  const [lidOpen, setLidOpen] = useState(false)
-  const [showHubCaps, setshowHubCaps] = useState(true)
-
-  // const [binDecalUrl, setBinDecalUrl] = useState(props.binDecalUrl) 
-  // const [lidDecalUrl, setLidDecalUrl] = useState(props.lidDecalUrl) 
-  // const [frontDecalUrl, setFrontDecalUrl] = useState(props.frontDecalUrl) 
-  // const [rearTopDecalUrl, setRearTopDecalUrl] = useState(props.rearTopDecalUrl) 
-  // const [rearBottomDecalUrl, setRearBottomDecalUrl] = useState(props.rearBottomDecalUrl) 
-
-  // const [binColor, setBinColor] = useState(props.binColor) 
-  // const [lidColor, setLidColor] = useState(props.lidColor) 
-
-  // const [binDecalRoughness, setBinDecalRoughness] = useState(props.binDecalRoughness) 
-  // const [lidDecalRoughness, setLidDecalRoughness] = useState(props.lidDecalRoughness) 
-  // const [frontDecalRoughness, setFrontDecalRoughness] = useState(props.frontDecalRoughness) 
-  // const [rearTopDecalRoughness, setRearTopDecalRoughness] = useState(props.rearTopDecalRoughness) 
-  // const [rearBottomDecalRoughness, setRearBottomDecalRoughness] = useState(props.rearBottomDecalRoughness) 
-
-  // var binDecal = null
-  // var lidDecal = null
-  // var frontDecal = null
-  // var rearTopDecal = null
-  // var rearBottomDecal = null
-  // const [binDecal, setBinDecal] = useState( (props.binDecalUrl ? useLoader(TextureLoader, props.binDecalUrl) : null) ) 
-  // const [binDecalUrl, setBinDecal] = useState(props.binDecalUrl) 
-  // console.log((props.binDecalUrl !== null ? "yes" : "nooooo"))
-  // const binDecal = useLoader(TextureLoader, 'https://images.pexels.com/photos/302804/pexels-photo-302804.jpeg');
-  // const binDecal = useLoader(TextureLoader, props.binDecalUrl);
-  // binDecal.flipY = false;
-  // binDecal.encoding = THREE.sRGBEncoding
-  // https://images.pexels.com/photos/302804/pexels-photo-302804.jpeg
-  // const binDecal = useLoader(TextureLoader, 'https://images.pexels.com/photos/302804/pexels-photo-302804.jpeg');
-  // const [lidDecal, setLidDecal] = useState(null) 
-  // const [frontDecal, setFrontDecal] = useState(null) 
-  // const [rearTopDecal, setRearTopDecal] = useState(null) 
-  // const [rearBottomDecal, setRearBottomDecal] = useState(null) 
-
-
-  // useEffect(() => {
-  //   console.log("things!")
-
-  //   // console.log(props.binDecalUrl);
-  //   // setBinDecal("yolo");
-  //   // const [img] = useLoader(THREE.TextureLoader, [props.binDecalUrl]);
-  //   // const test = ((props.binDecalUrl !== null) ? (useLoader(THREE.TextureLoader, props.binDecalUrl)) : null);
-  //   // setBinDecal((props.binDecalUrl ? useLoader(THREE.TextureLoader, props.binDecalUrl) : null))
-
-  //   // binDecal = (props.binDecalUrl ? useLoader(TextureLoader, props.binDecalUrl) : null)
-  //   // lidDecal = (lidDecalUrl ? useLoader(THREE.TextureLoader, lidDecalUrl) : null)
-  //   // frontDecal = (frontDecalUrl ? useLoader(THREE.TextureLoader, frontDecalUrl) : null)
-  //   // rearTopDecal = (rearTopDecalUrl ? useLoader(THREE.TextureLoader, rearTopDecalUrl) : null)
-  //   // rearBottomDecal = (rearBottomDecalUrl ? useLoader(THREE.TextureLoader, rearBottomDecalUrl) : null)
-  // }, [props]);
-
-  // const loadDecal = (url) => {
-  //   const img = (url ? useLoader(TextureLoader, url) : null)
-  //   if (url) {
-  //     img.flipY = false;
-  //     img.encoding = sRGBEncoding;
-  //   }
-
-  //   return img;
-  // }
-  
+  // useFrame(() => (group.current.rotation.x = group.current.rotation.y += 0.01))
+  // Turn off backface culling
 
   return (
-    <group ref={group} {...props} dispose={null}
-      // onClick={e => setActive(!active)}
-      // onPointerOver={e => setHover(true)}
-      // onPointerOut={e => setHover(false)}>
-      >
+    <group ref={group} >
       <group position={[0, 0.26, 0]}>
         <group position={[0.16, 0, 0]}>
           <group position={[0.02, -0.11, 0.23]}>
@@ -143,20 +84,40 @@ export default function Serve(props) {
           <mesh material={materials.mat_strip_eyes} material-color={0xACACAC} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.strip.geometry} position={[0, -0.81, 0.33]} />
           <mesh 
             geometry={nodes.lid_top.geometry} 
-            geometry-groups={[{start: 0, count: Infinity, materialIndex: 0}, {start: 0, count: Infinity, materialIndex: 1}]} 
-            position={[0, -0.81, 0.33]}>
-            <meshPhysicalMaterial attachArray="material" color={props.lidColor} onUpdate={self => (self.color.set(props.lidColor), self.color.convertSRGBToLinear())} roughness={0.4} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_lid_base.aoMap} />
-            <meshPhysicalMaterial attachArray="material" map={useLoader(TextureLoader, props.lidDecalUrl)} onUpdate={self => props.lidDecalUrl && (self.map.flipY = false, self.map.encoding = sRGBEncoding)} roughness={0.5} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_lid_base.aoMap} transparency={0} opacity={1} transparent />
-          </mesh>
-        </group>
+            material={materials.mat_lid_vinyl}
+            material-roughnessMap={materials.tex_cloud_ref.map}
+            material-map={lidDecalUrl}
+            material-transparent={true}
+            onClick={testMethodLid}
+            position={[0, -0.81, 0.33]} />
+          <mesh 
+            geometry={nodes.lid_top.geometry} 
+            material={materials.mat_lid_base}
+            material-color={lidColor}
+            material-roughnessMap={materials.tex_cloud_ref.map}
+            onUpdate={self => (
+              self.material.color.set(lidColor), 
+              self.material.color.convertSRGBToLinear())}
+            position={[0, -0.81, 0.33]} />
+          </group>
         <mesh material={materials.mat_aluminum} geometry={nodes.aluminum.geometry} position={[0, -0.26, 0]} />
         <mesh 
           geometry={nodes.bin.geometry} 
-          geometry-groups={[{start: 0, count: Infinity, materialIndex: 0}, {start: 0, count: Infinity, materialIndex: 1}]} 
-          position={[0, -0.26, 0]}>
-            <meshPhysicalMaterial attachArray="material" color={props.binColor} onUpdate={self => (self.color.set(props.binColor), self.color.convertSRGBToLinear())} roughness={0.4} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_bin_base.aoMap} />
-            <meshPhysicalMaterial attachArray="material" map={useLoader(TextureLoader, props.binDecalUrl)} onUpdate={self => props.binDecalUrl && (self.map.flipY = false, self.map.encoding = sRGBEncoding)} roughness={0.5} roughnessMap={materials.tex_cloud_ref.map} color={0xFFFFFF} aoMap={materials.mat_bin_base.aoMap} transparency={0} opacity={1} transparent />
-        </mesh>
+          material={materials.mat_bin_vinyl}
+          material-roughnessMap={materials.tex_cloud_ref.map}
+          material-map={binDecalUrl}
+          material-transparent={true}
+          onClick={testMethodBin}
+          position={[0, -0.26, 0]} />
+        <mesh 
+          geometry={nodes.bin.geometry} 
+          material={materials.mat_bin_base}
+          material-color={binColor}
+          material-roughnessMap={materials.tex_cloud_ref.map}
+          onUpdate={self => (
+            self.material.color.set(binColor), 
+            self.material.color.convertSRGBToLinear())}
+          position={[0, -0.26, 0]} />
 
         <mesh material={materials.mat_lense} material-color={0x0A0716} geometry={nodes.black_glass.geometry} position={[0, -0.26, 0]} />
         <mesh material={materials.mat_plastic_black} geometry={nodes.black_plastic.geometry} position={[0, -0.26, 0]} />
