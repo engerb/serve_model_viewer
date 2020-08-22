@@ -80,7 +80,7 @@ const defaultCMF = {
     ]
 }
 
-const [useStore, api] = create((set, get) => ({
+const useStore = create((set, get) => ({
     binIndex: defaultCMF.binIndex,
     binRoughness: defaultCMF.binRoughness,
     binDecals: defaultCMF.binDecals,
