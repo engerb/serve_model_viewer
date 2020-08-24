@@ -97,6 +97,10 @@ const useStore = create((set, get) => ({
     hdriIndex: defaultCMF.hdriIndex,
     hdris: defaultCMF.hdris,
 
+    // camera angle
+    // serve angle
+    // camera angle on serve
+
     hdri: defaultCMF.hdris[ defaultCMF.hdriIndex ],
     binDecal: defaultCMF.binIndex !== null ? loadTexture(defaultCMF.binDecals[ defaultCMF.binIndex ] , false) : null,
     lidDecal: defaultCMF.lidIndex !== null ? loadTexture(defaultCMF.lidDecals[ defaultCMF.lidIndex ] , false) : null,
@@ -108,7 +112,7 @@ const useStore = create((set, get) => ({
 
     activeMenu: null,
     setActiveMenu: (menuState) => { 
-        menuState !== get().menuState ?
+        menuState !== get().activeMenu ?
         set({activeMenu: menuState}) :
         set({activeMenu: null}) 
     },  

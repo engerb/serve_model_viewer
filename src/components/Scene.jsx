@@ -32,9 +32,10 @@ export default function Scene() {
                     dampingFactor={0.3}
                     minPolarAngle={0.3}
                     maxPolarAngle={1.7}
+                    onChange={() => {console.log("hello")}}
                 />
                 <Suspense fallback={null}>
-                    <Serve />
+                    <Serve Customizer = {true} />
                 </Suspense>
                 <Lighting />
                 <Stats />
