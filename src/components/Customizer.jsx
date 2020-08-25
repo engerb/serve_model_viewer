@@ -1,30 +1,134 @@
-import React from "react";
+import React, {useRef} from "react";
 import DefaultCMF from './DefaultCMF'
 import useStore from './Store';
 
-class Customizer extends React.Component {
-    constructor(props) {
-        super(props);
+export default function Customizer(props) {
+    const imageInput = useRef();
 
-        this.state = DefaultCMF;
+    // States
+    const textures = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return useStore(state => state.lidDecals);
+        } else if (menu === 'bin') {
+            return useStore(state => state.binDecals);
+        } else if (menu === 'frontDecal' || menu === 'rearTopDecal' || menu === 'rearBottomDecal') {
+            return useStore(state => state.generalDecals);
+        }
+    })();
 
-        // const binRoughness = useStore(state => state.binRoughness)
-        // const lidRoughness = useStore(state => state.lidRoughness)
-        // const showHubCaps = useStore(state => state.showHubCaps)
+    const selectedTextureIndex = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return useStore(state => state.lidIndex);
+        } else if (menu === 'bin') {
+            return useStore(state => state.binIndex);
+        } else if (menu === 'frontDecal') {
+            return useStore(state => state.frontIndex);
+        } else if (menu === 'rearTopDecal') {
+            return useStore(state => state.rearTopIndex);
+        } else if (menu === 'rearBottomDecal') {
+            return useStore(state => state.rearBottomIndex);
+        }
+    })();
 
-        // Send up first of the textures for model load
-        // props.setDefaults({
-        //     binWrap: this.state.binWraps[ this.state.binWraps.findIndex(obj => obj.selected) ].img,
-        //     lidWrap: this.state.lidWraps[ this.state.lidWraps.findIndex(obj => obj.selected) ].img,
-        //     binColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedBin) ].color,
-        //     lidColor: this.state.colors[ this.state.colors.findIndex(obj => obj.selectedLid) ].color,
-        // });
+    const colors = ((menu = props.menu) => {
+        if (menu === 'lid' || menu === 'bin') {
+            return useStore(state => state.colors);
+        } 
+    })();
 
-        // this.newWrap = this.newWrap.bind(this);
-        console.log(props)
-    }
+    const selectedColorIndex = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return useStore(state => state.lidColorIndex);
+        } else if (menu === 'bin') {
+            return useStore(state => state.binColorIndex);
+        } 
+    })();
 
-    checkContrast( hex ) {
+    const roughness = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return useStore(state => state.binRoughness);
+        } else if (menu === 'bin') {
+            return useStore(state => state.lidRoughness);
+        } 
+    })();
+
+    // Copywriting
+    const titleCopy = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return <h3>Customize the lid</h3>;
+        } else if (menu === 'bin') {
+            return <h3>Customize the bin</h3>;
+        } else if (menu === 'frontDecal') {
+            return <h3>Front of Serve</h3>;
+        } else if (menu === 'rearTopDecal') {
+            return <h3>Rear top of Serve</h3>;
+        } else if (menu === 'rearBottomDecal') {
+            return <h3>Rear bottom of Serve</h3>;
+        } else if (menu === 'config') {
+            return <h3>Advanced options</h3>;
+        } 
+    })();
+
+    const colorCopy = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return <p>Base lid colour</p>;
+        } else if (menu === 'bin') {
+            return <p>Base bin colour</p>;
+        } 
+    })();
+
+    const decalCopy = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return <p>Vinyl decals / wrap on lid</p>;
+        } else if (menu === 'bin') {
+            return <p>Vinyl decals / wrap on bin</p>;
+        } else if (menu === 'frontDecal') {
+            return <p>Vinyl decals on front</p>;
+        } else if (menu === 'rearTopDecal') {
+            return <p>Vinyl decals on top rear</p>;
+        } else if (menu === 'rearBottomDecal') {
+            return <p>Vinyl decals on bottom rear</p>;
+        } 
+    })();
+
+    // Methods
+    const addTexture = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return useStore(state => state.addLidDecal);
+        } else if (menu === 'bin') {
+            return useStore(state => state.addBinDecal);
+        } else if (menu === 'frontDecal' || menu === 'rearTopDecal' || menu === 'rearBottomDecal') {
+            return useStore(state => state.addGeneralDecal);
+        }
+    })(); 
+
+    const setTextureIndex = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return useStore(state => state.setLidDecal);
+        } else if (menu === 'bin') {
+            return useStore(state => state.setBinDecal);
+        } else if (menu === 'frontDecal') {
+            return useStore(state => state.setFrontDecal);
+        } else if (menu === 'rearTopDecal') {
+            return useStore(state => state.setRearTopDecal);
+        } else if (menu === 'rearBottomDecal') {
+            return useStore(state => state.setRearBottomDecal);
+        }
+    })();
+
+    const setColorIndex = ((menu = props.menu) => {
+        if (menu === 'lid') {
+            return useStore(state => state.setLidColor);
+        } else if (menu === 'bin') {
+            return useStore(state => state.setBinColor);
+        } 
+    })();
+
+    // Stuff for rotation / rendering / lighting, etc
+    // const html buttons, etc
+
+    // helpers
+    const checkContrast = ( hex ) => {
         const threshold = 160; // close to half 256 ~130
 			
         const r = parseInt( hex.substring(1, 3), 16);
@@ -40,182 +144,101 @@ class Customizer extends React.Component {
         }	
     }
 
-    setColor( index, menuState = this.state.menuState ) {
-        const selectAttr = ((menuState == 'binColors') ? 'selectedBin' : 'selectedLid');
-
-        // Copy and mutate colour object
-        const newObj = this.state.colors;
-        newObj[ newObj.findIndex(obj => obj[selectAttr]) ][selectAttr] = false;
-        newObj[ index ][selectAttr] = true; 
-
-        // Update state with mutated sub object
-        this.setState({
-            colors: newObj,
-        });
-
-        // Then apply new colour
-        if (menuState == 'binColors') {
-            // this.props.setBinColor( newObj[ index ].color );
-        } else {
-            // this.props.setLidColor( newObj[ index ].color );
-        }
-    }
-
-    setWrap( index, menuState = this.state.menuState ) {
-        // Copy and mutate correct wraps object
-        const newObj = this.state[menuState];
-        newObj[ newObj.findIndex(obj => obj.selected) ].selected = false;
-        newObj[ index ].selected = true; 
-
-        // Update state with mutated sub object
-        this.setState({
-            [menuState]: newObj,
-        });
-
-        // Then apply new wrap
-        if (menuState == 'binWraps') {
-            // this.props.setBinWrap( newObj[ index ].img );
-        } else {
-            // this.props.setLidWrap( newObj[ index ].img );
-        }
-    }
-
-    newWrap( event, menuState = this.state.menuState ) {
+    const addWrap = (event) => {
         event.stopPropagation();
         event.preventDefault();
-        
+
         // Get the file and name
         const file = event.target.files[0];
-        const fileName = event.target.files[0].name;
+        // const fileName = event.target.files[0].name;
+        // hash the name?
         const url = URL.createObjectURL(file);
-        
-        // Copy and mutate correct wraps object
-        const newObj = this.state[menuState];
-        newObj.push({
-            img: url,
-            name: fileName,
-            selected: false,
-        });
 
-        // Update state with mutated sub object
-        this.setState({
-            [menuState]: newObj,
-        });
-
-        // Then select newly added wrap
-        this.setWrap( newObj.length - 1, menuState );
+        addTexture( url );
+        setTextureIndex( textures.length - 1 );
+        // select
     }
 
-    render() {
-        const colors = (() => {
-            return ['binColors', 'lidColors'].map((menuState, menuKey) => {
-                return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
-                    {this.state.colors.map( (obj, index) => {
-                        return <div className = {`${this.checkContrast(obj.color)} ${( ( (menuState == 'binColors') ? obj.selectedBin : obj.selectedLid ) ) ? 'active' : ''} ${(obj.color == '#FFFFFF') ? 'stroke' : ''}`} 
+    // UI
+    const colorUI = (()=>{
+        if (colors) {
+            return <div>
+                    {colorCopy}
+                    <div className = {`colors ${props.menu}`}>
+                    {colors.map( (color, index) => {
+                        return <div className = {`${checkContrast(color)} ${ selectedColorIndex === index ? 'active' : ''} ${(color == '#FFFFFF') ? 'stroke' : ''}`} 
                             key = { index } 
                             data-index = { index } 
-                            style = { {backgroundColor: `${obj.color}`} } 
-                            onClick = {(() => {
-                                // Can not re-select is already selected
-                                if ((menuState == 'binColors' && !obj.selectedBin) || (menuState == 'lidColors' && !obj.selectedLid)) {
-                                    return (event) => this.setColor( event.target.getAttribute('data-index'), menuState )
-                                }
-                            })()}
+                            style = { {backgroundColor: `${color}`} } 
+                            onClick = {((event) => {
+                                event.stopPropagation();
+                                event.preventDefault();      
+                                setColorIndex( Number(event.target.getAttribute('data-index')) ); 
+                            })}
                         />
                     })}
-                    
+
                     {/* // optionally add more colours  */}
                     {/* <div className = 'customColor'/> */}
                 </div>
-            });
-        })();
+            </div>
+        } else {
+            return null;
+        }
+    })()
 
-        const wraps = (() => {
-            // return ['binWraps', 'lidWraps'].map((menuState, menuKey) => {
-            //     return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : 'hidden'}`} key = { menuKey }>
-            //         {this.state[menuState].map( (obj, index) => {
-            //             return <div className = {`${ obj.selected ? 'active' : ''}`} 
-            //                 key = { index } 
-            //                 data-index = { index } 
-            //                 style={{
-            //                     backgroundImage: `url(${obj.img})`, // Event when loaded?
-            //                     backgroundColor: `${this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binWraps') ? 'selectedBin' : 'selectedLid') ]) ].color}`
-            //                 }} 
-            //                 onClick = {(() => {
-            //                     // Can not re-select is allready selected
-            //                     if (!obj.selected) {
-            //                         return (event) => this.setWrap( event.target.getAttribute('data-index'), menuState )
-            //                     }
-            //                 })()}
-            //             />
-            //         })}
+    const textureUI = (()=>{
+        if (textures) {
+            return <div>
+                    {decalCopy}
+                    <div className = {`decals ${props.menu}`}>
+                    {textures.map( (img, index) => {
+                        return <div className = {`${ selectedTextureIndex === index ? 'active' : ''}`} 
+                            key = { index } 
+                            data-index = { index } 
+                            style={{
+                                backgroundImage: `url(${img})`, // Event when loaded?
+                                backgroundColor: `${ (props.menu === 'lid' || props.menu === 'bin') ? colors[ selectedColorIndex ] : 'white' }`
+                            }} 
+                            onClick = {((event) => {
+                                event.stopPropagation();
+                                event.preventDefault();
+                                setTextureIndex( Number(event.target.getAttribute('data-index')) ); 
+                            })}
+                        />
+                    })}
 
-            //         <input id='myInput'
-            //             type = 'file'
-            //             accept = 'image/*'
-            //             ref = {`fileUploader_${menuState}`}
-            //             style = {{display: 'none'}}
-            //             onChange = { (event)=> this.newWrap(event, menuState) }
-            //         />
+                    <input id='myInput'
+                        type = 'file'
+                        accept = 'image/*'
+                        ref = {imageInput}
+                        style = {{display: 'none'}}
+                        onChange = { (event)=> addWrap(event) }
+                    />
 
-            //         <div className='addWrap' onClick={()=>{this.refs[`fileUploader_${menuState}`].click()}} />
-            //     </div>
-            // })
-        })();
-
-        const title = (() => {
-            if (this.state.menuState == 'lidWraps' || this.state.menuState == 'binWraps') {
-                return this.state[ this.state.menuState ][ this.state[ this.state.menuState ].findIndex(obj => obj.selected) ].name
-            } else if (this.state.menuState == 'binColors' || this.state.menuState == 'lidColors') {
-                return this.state.colors[ this.state.colors.findIndex(obj => obj[ ((this.state.menuState == 'binColors') ? 'selectedBin' : 'selectedLid') ]) ].name
-            } else {
-                return ''
-            }
-        })();
-
-        return (
-            <div className = 'customizer'>
-                <div className = 'actions' >
-                    {colors}
-                    {wraps} 
-                    <div className = {`options ${(this.state.menuState == 'options') ? 'active' : 'hidden'}`} >
-                        {/* speed and wheel angle too could be nice */}
-                        {/* <div className='button' onClick = {(event) => this.props.setLidPos(  )}>
-                            <p>Toggle lid</p>
-                        </div>
-                        <div className='button' onClick = {(event) => this.props.renderOut({ type: 'image' })}>
-                            <p>Render png</p>
-                        </div>
-                        <div className='button' onClick = {(event) => this.props.renderOut({ type: 'video' })}>
-                            <p>Render video</p>
-                        </div> */}
-                        <a className='button' href={ require('../assets/template.zip').default } target='_blank' download='template.zip'>
-                            <p>Download template</p>
-                        </a>
-                    </div>
-                </div>
-
-                <div className = {'label'}>
-                    <p>{this.state.menuStateCopy[ this.state.menuState ]}</p>
-                    <h3>{title}</h3>
-                </div>
-
-                <div className = {'menuStateSelector'}>
-                    {['binColors', 'binWraps', 'lidColors', 'lidWraps', 'options'].map((menuState, menuKey) => {
-                        return <div className = {`${menuState} ${(menuState == this.state.menuState) ? 'active' : ''}`} 
-                            key = { menuKey }
-                            onClick = {(() => {
-                                // Can not re-select is already selected
-                                if (menuState != this.state.menuState) {
-                                    return () => this.setState({ menuState: menuState })
-                                }
-                            })()}
-                        /> 
-                    })} 
+                    <div className='addWrap' onClick={()=>{imageInput.current.click()}} />
                 </div>
             </div>
-        );
-    }
-}
+        } else {
+            return null;
+        }
+    })()
 
-export default Customizer;
+    return (
+        <div 
+            className = 'floatingConfigBox'
+            style={{position: 'absolute', zIndex: '10000'}}
+                onClick={(e) => { 
+                        e.stopPropagation(); 
+                        // setActiveMenu('none');
+                    }}
+            // onPointerOver={(e) => {e.stopPropagation()}}
+            // onPointerOut={(e) => {e.stopPropagation()}}
+            // onClick={(e) => {e.stopPropagation()} }
+            >
+            {titleCopy}
+            {textureUI}
+            {colorUI}
+        </div>
+    )
+}

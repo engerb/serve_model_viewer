@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/engerb/serve_model_viewer#readme",
   "devDependencies": {
-    "@babel/core": "^7.11.1",
+    "@babel/core": "^7.11.4",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",
@@ -40,7 +40,7 @@
     "react-dom": "^16.13.1",
     "react-loader": "^2.4.7",
     "react-router-dom": "^5.2.0",
-    "react-three-fiber": "^4.2.19",
+    "react-three-fiber": "^4.2.20",
     "sass": "^1.26.10",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.2.1",

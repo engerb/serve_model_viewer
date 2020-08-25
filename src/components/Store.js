@@ -55,12 +55,15 @@ const defaultCMF = {
         require('../assets/3d/Serve/wraps/lid_5.png').default
     ],
     frontIndex: null, 
-    rearTopIndex: null,
+    rearTopIndex: 0,
     rearBottomIndex: null,
     generalDecals: [
-        // Postmates logo
+        require('../assets/3d/Serve/decals/decal_postmates.png').default,
+        require('../assets/3d/Serve/decals/decal_mustache.png').default,
+        require('../assets/3d/Serve/decals/decal_cat.png').default,
+        require('../assets/3d/Serve/decals/decal_smile.png').default,
+        require('../assets/3d/Serve/decals/decal_mask.png').default
         // X logo
-        // Mustache
         // Smile
         // Mask
     ],
@@ -120,34 +123,68 @@ const useStore = create((set, get) => ({
     showHubCaps: defaultCMF.showHubCaps,
     toggleHubCaps: () => {set({showHubCaps: !get().showHubCaps})},
 
+    // Or set speed / dir?
+    rotateServe: false,
+    toggleRotateServe: () => {set({rotateServe: !get().rotateServe})},
+
+    // Selects decals or unselects them
     setBinDecal: ( index ) => {
-        index !== null ? 
+        (index !== get().binIndex && index !== null) ? 
         loadTexture( get().binDecals[ index ] ).then((result) => { set({binDecal: result, binIndex: index}) }) :
-        set({binDecal: null, binIndex: index})
+        set({binDecal: null, binIndex: null})
     },
     setLidDecal: ( index ) => {
-        index !== null ?
+        (index !== get().lidIndex && index !== null) ?
         loadTexture( get().lidDecals[ index ] ).then((result) => { set({lidDecal: result, lidIndex: index}) }) :
-        set({lidDecal: null, lidIndex: index})
+        set({lidDecal: null, lidIndex: null})
     },
     
     setFrontDecal: ( index ) => {
-        index !== null ? 
+        (index !== get().frontIndex && index !== null) ? 
         loadTexture( get().generalDecals[ index ] ).then((result) => { set({frontDecal: result, frontIndex: index}) }) :
-        set({frontDecal: null, binIndex: index})
+        set({frontDecal: null, frontIndex: null})
     },
     setRearTopDecal: ( index ) => {
-        index !== null ?
+        (index !== get().rearTopIndex && index !== null) ?
         loadTexture( get().generalDecals[ index ] ).then((result) => { set({rearTopDecal: result, rearTopIndex: index}) }) :
-        set({rearTopDecal: null, lidIndex: index})
+        set({rearTopDecal: null, rearTopIndex: null})
     },
     setRearBottomDecal: ( index ) => {
-        index !== null ?
+        (index !== get().rearBottomIndex && index !== null) ?
         loadTexture( get().generalDecals[ index ] ).then((result) => { set({rearBottomDecal: result, rearBottomIndex: index}) }) :
-        set({rearBottomDecal: null, lidIndex: index})
+        set({rearBottomDecal: null, rearBottomIndex: null})
     },
-    // methods
-    // stuff to store and add to DefaultCMF
+
+    // Color selection
+    setBinColor: ( index ) => {
+        set({binColor: loadColor(get().colors[ index ]), binColorIndex: index})
+    },
+
+    setLidColor: ( index ) => {
+        set({lidColor: loadColor(get().colors[ index ]), lidColorIndex: index})
+    },
+
+    // Set roughness
+    // Set metal colours
+
+    // Adds new decals
+    addBinDecal: ( img ) => {
+        let newDecals = get().binDecals;
+        newDecals.push(img);
+        set({binDecals: newDecals});
+    },
+
+    addLidDecal: ( img ) => {
+        let newDecals = get().lidDecals;
+        newDecals.push(img);
+        set({lidDecals: newDecals});
+    },
+
+    addGeneralDecal: ( img ) => {
+        let newDecals = get().generalDecals;
+        newDecals.push(img);
+        set({generalDecals: newDecals});
+    },
 }));
 
 export default useStore
