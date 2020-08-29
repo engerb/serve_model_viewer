@@ -123,6 +123,9 @@ const useStore = create((set, get) => ({
     showHubCaps: defaultCMF.showHubCaps,
     toggleHubCaps: () => {set({showHubCaps: !get().showHubCaps})},
 
+    canInteractWithModel: true,
+    setInteractWithModel: (newState) => {set({canInteractWithModel: newState})},
+
     // Or set speed / dir?
     rotateServe: false,
     toggleRotateServe: () => {set({rotateServe: !get().rotateServe})},

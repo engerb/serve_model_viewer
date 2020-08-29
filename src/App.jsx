@@ -19,12 +19,12 @@ class App extends React.Component {
         return (
             <Router>
                 <Switch>
-                    <Route path='/demo'>
+                    {/* <Route path='/demo'>
                         <Scene 
                             customizer = {false} 
                             bg = {'black'}
                         />
-                    </Route>
+                    </Route> */}
                     <Route path='/'>
                         <Scene 
                             customizer = {true}

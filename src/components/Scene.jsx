@@ -69,7 +69,7 @@ export default function Scene() {
                     <Serve Customizer = {true} />
                 </Suspense>
                 <Lighting />
-                <Stats />
+                {/* <Stats /> */}
             </Canvas>
         </div>
     )

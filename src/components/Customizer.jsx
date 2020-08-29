@@ -1,11 +1,14 @@
 import React, {useRef} from "react";
-import DefaultCMF from './DefaultCMF'
+// import DefaultCMF from './DefaultCMF'
 import useStore from './Store';
 
 export default function Customizer(props) {
     const imageInput = useRef();
 
+    // try: https://dev.to/michalczaplinski/super-easy-react-mount-unmount-animations-with-hooks-4foj
+
     // States
+    // Set this all up in a switch? 
     const textures = ((menu = props.menu) => {
         if (menu === 'lid') {
             return useStore(state => state.lidDecals);
@@ -124,6 +127,9 @@ export default function Customizer(props) {
         } 
     })();
 
+    const canInteractWithModel = useStore(state => state.canInteractWithModel)
+    const setInteractWithModel = useStore(state => state.setInteractWithModel)
+
     // Stuff for rotation / rendering / lighting, etc
     // const html buttons, etc
 
@@ -232,8 +238,8 @@ export default function Customizer(props) {
                         e.stopPropagation(); 
                         // setActiveMenu('none');
                     }}
-            // onPointerOver={(e) => {e.stopPropagation()}}
-            // onPointerOut={(e) => {e.stopPropagation()}}
+            onPointerOver={(e) => {e.stopPropagation(), setInteractWithModel(true)}}
+            onPointerOut={(e) => {e.stopPropagation(), setInteractWithModel(false)}}
             // onClick={(e) => {e.stopPropagation()} }
             >
             {titleCopy}
