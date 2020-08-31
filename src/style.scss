@@ -9,71 +9,201 @@ body {
     width: 100vw;
     height: 100vh;
     position: relative;
+}
 
-    // canvas {
-    //     opacity: 0;
-    //     transition: opacity 2s ease-in;
-    // }
+.customizeWrap {
+    transition: all 200ms;
+
+    &.open {
+        transform-origin: bottom left;
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    &.close {
+        transform-origin: bottom left;
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    &.fixed {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 1000;
+    }
+}
+
+.menuStateSelector {
+    display: flex;
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    z-index: 1001;
     
-    // &.visible {
-    //     canvas {
-    //         opacity: 1;
-    //     }
-    // }
+    div {
+        width: 30px;
+        height: 30px;
+        border-radius: 15px;
+        margin-right: 34px;
+        flex-shrink: 0;
+        flex-grow: 0;
+        cursor: pointer;
+        box-sizing: border-box;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+        &.active {
+            background-color: black;
+        }
+
+        &.options {
+            background-image: url('./assets/img/settings-black.png');
+            &.active {
+                background-image: url('./assets/img/settings-white.png');
+            }
+        }
+    }
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.button {
+    background-color: black;
+    border: 2px white solid;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    padding: 15px 20px;
+    cursor: pointer;
+
+    p {
+        color: white;
+        font-weight: 500;
+        margin: 15px 30px;
+    }
+
+    &:hover {
+        background-color: rgb(31, 31, 31);
+    }
 }
 
 .floatingConfigBox {
-    width: 300px;
     max-width: 100vw;
     box-sizing: border-box;
-    padding: 15px 20px;
-    background-color: white;
-    border-radius: 0 0 5px 5px;
-    box-shadow: 0 19px 38px rgba(0,0,0,0.10), 0 15px 12px rgba(0,0,0,0.12);
+    padding: 35px;
+    padding-bottom: 15px;
+    background-color: black;
+    border-radius: 13px;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.20);
 
-    position: absolute;
-    right: -450px;
-    z-index: 100;
-
-    &::before {
-        content: "";
-        background-color: rgba(0, 0, 0, 0.6);
-        top: 0;
-        left: -142px;
-        width: 442px;
-        height: 2px;
-        // border-radius: 20px;
+    .close {
+        width: 30px;
+        height: 30px;
+        background-color: black;
         position: absolute;
-    }
-
-    &::after {
-        content: "";
-        background-color: rgba(255, 255, 255, 0.8);
+        top: 30px;
+        right: 30px;
+        cursor: pointer;
+        border-radius: 17px;
         border: 2px white solid;
-        top: -8px;
-        left: -158px;
-        width: 16px;
-        height: 16px;
-        border-radius: 10px;
-        position: absolute;
+
+        &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            background-color: white;
+            left: 5px;
+            top: 14px;
+            width: 20px;
+            height: 2px;
+            border-radius: 1px;
+            transform: rotate(45deg);
+        }
+
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            background-color: white;
+            left: 5px;
+            top: 14px;
+            width: 20px;
+            height: 2px;
+            border-radius: 1px;
+            transform: rotate(-45deg);
+        }
+
+        &:hover {
+            background-color: rgb(31, 31, 31);
+        }
     }
 
+    &.floating {
+        width: 350px;
+        position: absolute;
+        top: -47px;
+        left: 100px;
+        z-index: 100;
+
+        &::before {
+            content: "";
+            display: block;
+            background-color: rgba(0, 0, 0, 0.6);
+            top: 47px;
+            left: -92px;
+            width: 92px;
+            height: 2px;
+            position: absolute;
+            z-index: 98;
+        }
+    
+        &::after {
+            content: "";
+            display: block;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 2px white solid;
+            top: 42px;
+            left: -100px;
+            width: 8px;
+            height: 8px;
+            border-radius: 5px;
+            z-index: 99;
+            position: absolute;
+        }
+    }
+
+    &.fixed {
+        position: absolute;
+        left: 15px;
+        bottom: 60px;
+        z-index: 1000;
+        width: 400px;
+    }
+    
     @media (max-width: 400px) {
         // fix it on the screen instead
     }
 
     p { 
         margin: 0;
-        font-size: 12pt;
-        font-weight: 400;
-        color: #6E6E6E;
+        font-size: 10pt;
+        font-weight: 500;
+        color: #ececec;
     }
 
     h3 {
         margin: 0;
+        margin-bottom: 25px;
         font-size: 18pt;
         font-weight: 500;
-        color: #0A0A0A;
+        color: white;
     }
 
     .decals, .colors {
@@ -174,215 +304,6 @@ body {
         &.decals.lid {
             div {
                 background-size: 140%;
-            }
-        }
-    }
-}
-
-.customizer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 400px;
-    max-width: 100vw;
-
-    box-sizing: border-box;
-    padding: 15px 20px;
-
-    @media (max-width: 400px) {
-        background-color: white;
-    }
-
-    .actions {
-        margin-top: 15px;
-        margin-bottom: 5px;
-
-        div {
-            &.hidden {
-                display: none;
-            }
-            
-            &.active {
-                display: flex;
-                flex-wrap: wrap;
-                
-                div {
-                    cursor: pointer;
-                    flex-shrink: 0;
-                    flex-grow: 0;
-                    box-sizing: border-box;
-                    background-size: contain;
-                    background-repeat: no-repeat;
-                }
-
-                &.binColors, &.lidColors {
-
-                    div {
-                        width: 20px;
-                        height: 20px;
-                        margin-right: 15px;
-                        margin-bottom: 15px;
-                        border-radius: 10px;
-                        
-
-                        &.stroke {
-                            border: 1px #B8B8B8 solid;
-                        }
-
-                        &.active {
-                            &.black {
-                                background-image: url('./assets/img/check-black.png');
-                            }
-
-                            &.white {
-                                background-image: url('./assets/img/check-white.png');
-                            }
-                        }
-                    }
-                }
-
-                &.binWraps, &.lidWraps {
-                    div {
-                        width: 40px;
-                        height: 40px;
-                        margin-right: 15px;
-                        margin-bottom: 15px;
-                        border-radius: 20px;
-                        position: relative;
-
-                        &.active {
-                            &::before {
-                                content: "";
-                                background-color: rgba(0, 0, 0, 0.6);
-                                background-image: url('./assets/img/check-white.png');
-                                background-size: contain;
-                                background-repeat: no-repeat;
-                                top: 0;
-                                left: 0;
-                                width: 40px;
-                                height: 40px;
-                                border-radius: 20px;
-                                position: absolute;
-                            }
-                        }
-                    }
-
-                    .addWrap {
-                        background-color: #B8B8B8;
-                        background-image: url('./assets/img/plus-white.png');
-                        background-size: contain;
-                    }
-                }
-
-                &.options {
-                    .button {
-                        background-color: black;
-                        border-radius: 4px;
-                        margin-right: 15px;
-                        margin-bottom: 15px;
-                        p {
-                            color: white;
-                            font-weight: 500;
-                            margin: 15px 30px;
-                        }
-                    }
-                }
-
-                &.binWraps {
-                    div {
-                        background-size: 280%;
-                    }
-                    
-                }
-                &.lidWraps {
-                    div {
-                        background-size: 140%;
-                    }
-                }
-            }
-        }
-    }
-
-    .label {
-        margin-bottom: 20px;
-
-        p { 
-            margin: 0;
-            font-size: 12pt;
-            font-weight: 400;
-            color: #6E6E6E;
-        }
-
-        h3 {
-            margin: 0;
-            font-size: 18pt;
-            font-weight: 500;
-            color: #0A0A0A;
-        }
-    }
-
-    .menuStateSelector {
-        display: flex;
-        position: relative;
-        
-
-        @media (max-width: 400px) {
-            justify-content: space-between;
-        }
-
-        div {
-            width: 30px;
-            height: 30px;
-            border-radius: 15px;
-            margin-right: 34px;
-            cursor: pointer;
-            flex-shrink: 0;
-            flex-grow: 0;
-            box-sizing: border-box;
-            background-size: contain;
-            background-repeat: no-repeat;
-
-            @media (max-width: 400px) {
-                margin-right: 0;
-            }
-
-            &.active {
-                background-color: black;
-            }
-        }
-
-        .binColors {
-            background-image: url('./assets/img/bin-colour-black.png');
-            &.active {
-                background-image: url('./assets/img/bin-colour-white.png');
-            }
-        }
-
-        .lidColors  {
-            background-image: url('./assets/img/lid-colour-black.png');
-            &.active {
-                background-image: url('./assets/img/lid-colour-white.png');
-            }
-        }
-
-        .binWraps {
-            background-image: url('./assets/img/bin-wrap-black.png');
-            &.active {
-                background-image: url('./assets/img/bin-wrap-white.png');
-            }
-        }
-
-        .lidWraps {
-            background-image: url('./assets/img/lid-wrap-black.png');
-            &.active {
-                background-image: url('./assets/img/lid-wrap-white.png');
-            }
-        }
-
-        .options {
-            background-image: url('./assets/img/settings-black.png');
-            &.active {
-                background-image: url('./assets/img/settings-white.png');
             }
         }
     }

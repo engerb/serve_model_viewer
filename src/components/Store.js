@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { sRGBEncoding, TextureLoader, Color } from "three";
+import { sRGBEncoding, TextureLoader, Color, Math } from "three";
 
 // Can return the texture object or a promise wrap for it so that the state is only changed when ready
 const loadTexture = (url, promise = true) => {
@@ -187,6 +187,14 @@ const useStore = create((set, get) => ({
         let newDecals = get().generalDecals;
         newDecals.push(img);
         set({generalDecals: newDecals});
+    },
+
+    servePose: Math.degToRad(0),
+    setServePose: ( deg ) => {
+        set({servePose: Math.degToRad(deg)});
+    },
+    incServePose: ( deg ) => {
+        set({servePose: get().servePose + Math.degToRad(deg)});
     },
 }));
 

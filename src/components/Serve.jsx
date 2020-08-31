@@ -54,15 +54,15 @@ export default function Serve(props) {
   // const [rotate, setRotate] = useState(false)
   const hoverColor = 0x222222;
 
-  // useFrame(() => {
-  //   if (rotateServe) {
-  //     // group.current.rotation.x = group.current.rotation.y += 0.01;
-  //     group.current.rotation.y += 0.01;
-  //     invalidate();
-  //   }
-  // })
+  useFrame(() => {
+    if (rotateServe) {
+      group.current.rotation.y += 0.01;
+      invalidate();
+    }
+  })
 
-  // const [pose, setPose] = useState(0)
+  const servePose = useStore(state => state.servePose)
+  // const setServePose = useStore(state => state.setServePose);
 
   return (
     <group 
@@ -74,7 +74,7 @@ export default function Serve(props) {
       // onPointerOver={(e) => {e.stopPropagation()}}
       // onPointerOut={(e) => {e.stopPropagation()}}
       // onClick={(e) => {e.stopPropagation()} }
-      // rotation-y={pose}
+      rotation-y={servePose}
       dispose={null} >
       <group position={[0, 0.26, 0]}>
         {/* {props.Customizer && 
@@ -90,171 +90,63 @@ export default function Serve(props) {
         <group position={[0.16, 0, 0]}>
           <group position={[0.02, -0.11, 0.23]}>
             <mesh
-              onPointerOver={(e) => {canInteractWithModel && 
-                e.stopPropagation(); 
-                setHubCapHover(true)
-              }}
-              onPointerOut={(e) => {canInteractWithModel && 
-                e.stopPropagation(); 
-                setHubCapHover(false)
-              }}
-              onClick={(e) => {canInteractWithModel &&
-                e.stopPropagation(); 
-                setActiveMenu('hubCaps');
-                toggleHubCaps()
-              }}
+              onPointerOver={(e) => {canInteractWithModel && ( e.stopPropagation(), setHubCapHover(true) )}}
+              onPointerOut={(e) => {canInteractWithModel && ( e.stopPropagation(), setHubCapHover(false) )}}
+              onClick={(e) => {canInteractWithModel && ( e.stopPropagation(), toggleHubCaps(), setActiveMenu('hubCaps') )}}
+
               material={materials.mat_aluminum}
               material-emissive={hubCapHover ? hoverColor : 0x000000}
               material-opacity={showHubCaps ? 1 : (hubCapHover ? 0.6 : 0)}
               material-transparent={true}
               material-side={FrontSide} material-aoMapIntensity={1.5} material-color={0xe8c6e1} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.cap_fl.geometry} />
-            <mesh
-              onPointerOver={(e) => {e.stopPropagation()}}
-              onPointerOut={(e) => {e.stopPropagation()}}
-              onClick={(e) => {e.stopPropagation()} }
-              material={materials.mat_metal_black_smooth} material-side={FrontSide} material-color={0x1D1D1D} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.hub_fl.geometry} />
-            <mesh
-              onPointerOver={(e) => {e.stopPropagation()}}
-              onPointerOut={(e) => {e.stopPropagation()}}
-              onClick={(e) => {e.stopPropagation()} } 
-              material={materials.mat_tire} material-side={FrontSide} material-color={0x111111} material-aoMapIntensity={0.5} material-normalScale={[-2, -2]} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.tire_fl.geometry} />
+            <mesh material={materials.mat_metal_black_smooth} material-side={FrontSide} material-color={0x1D1D1D} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.hub_fl.geometry} />
+            <mesh material={materials.mat_tire} material-side={FrontSide} material-color={0x111111} material-aoMapIntensity={0.5} material-normalScale={[-2, -2]} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.tire_fl.geometry} />
           </group>
           <group position={[0.02, -0.11, -0.23]}>
             <mesh
-              onPointerOver={(e) => {canInteractWithModel && 
-                e.stopPropagation(); 
-                setHubCapHover(true)
-              }}
-              onPointerOut={(e) => {canInteractWithModel && 
-                e.stopPropagation(); 
-                setHubCapHover(false)
-              }}
-              onClick={(e) => {canInteractWithModel &&
-                e.stopPropagation(); 
-                setActiveMenu('hubCaps');
-                toggleHubCaps()
-              }}
+              onPointerOver={(e) => {canInteractWithModel && ( e.stopPropagation(), setHubCapHover(true) )}}
+              onPointerOut={(e) => {canInteractWithModel && ( e.stopPropagation(), setHubCapHover(false) )}}
+              onClick={(e) => {canInteractWithModel && ( e.stopPropagation(), toggleHubCaps(), setActiveMenu('hubCaps') )}}
+
               material={materials.mat_aluminum} geometry={nodes.cap_rl.geometry} />
-            <mesh
-              onPointerOver={(e) => {e.stopPropagation()}}
-              onPointerOut={(e) => {e.stopPropagation()}}
-              onClick={(e) => {e.stopPropagation()} }
-              material={materials.mat_metal_black_smooth} geometry={nodes.hub_rl.geometry} />
-            <mesh
-              onPointerOver={(e) => {e.stopPropagation()}}
-              onPointerOut={(e) => {e.stopPropagation()}}
-              onClick={(e) => {e.stopPropagation()} }
-              material={materials.mat_tire} geometry={nodes.tire_rl.geometry} />
+            <mesh material={materials.mat_metal_black_smooth} geometry={nodes.hub_rl.geometry} />
+            <mesh material={materials.mat_tire} geometry={nodes.tire_rl.geometry} />
           </group>
-          <mesh
-            onPointerOver={(e) => {e.stopPropagation()}}
-            onPointerOut={(e) => {e.stopPropagation()}}
-            onClick={(e) => {e.stopPropagation()} }
-            material={materials.mat_metal_black_smooth}
-            material-side={FrontSide}
-            geometry={nodes.boggy_arm_l.geometry}
-            position={[-0.16, -0.26, 0]}
-          />
+          <mesh material={materials.mat_metal_black_smooth} material-side={FrontSide} geometry={nodes.boggy_arm_l.geometry} position={[-0.16, -0.26, 0]} />
         </group>
         <group position={[-0.16, 0, 0]}>
           <group position={[-0.02, -0.11, 0.23]}>
             <mesh
-              onPointerOver={(e) => {canInteractWithModel && 
-                e.stopPropagation(); 
-                setHubCapHover(true)
-              }}
-              onPointerOut={(e) => {canInteractWithModel && 
-                e.stopPropagation(); 
-                setHubCapHover(false)
-              }}
-              onClick={(e) => {canInteractWithModel &&
-                e.stopPropagation(); 
-                setActiveMenu('hubCaps');
-                toggleHubCaps()
-              }}
+              onPointerOver={(e) => {canInteractWithModel && ( e.stopPropagation(), setHubCapHover(true) )}}
+              onPointerOut={(e) => {canInteractWithModel && ( e.stopPropagation(), setHubCapHover(false) )}}
+              onClick={(e) => {canInteractWithModel && ( e.stopPropagation(), toggleHubCaps(), setActiveMenu('hubCaps') )}}
+
               material={materials.mat_aluminum} geometry={nodes.cap_fr.geometry} />
-            <mesh
-              meshProps
-              material={materials.mat_metal_black_smooth} geometry={nodes.hub_fr.geometry} />
-            <mesh
-              onPointerOver={(e) => {e.stopPropagation()}}
-              onPointerOut={(e) => {e.stopPropagation()}}
-              onClick={(e) => {e.stopPropagation()} }
-              material={materials.mat_tire} geometry={nodes.tire_fr.geometry} />
+            <mesh meshProps material={materials.mat_metal_black_smooth} geometry={nodes.hub_fr.geometry} />
+            <mesh material={materials.mat_tire} geometry={nodes.tire_fr.geometry} />
           </group>
           <group position={[-0.02, -0.11, -0.23]}>
             <mesh
-              onPointerOver={(e) => {canInteractWithModel && 
-                e.stopPropagation(); 
-                setHubCapHover(true)
-              }}
-              onPointerOut={(e) => {canInteractWithModel && 
-                e.stopPropagation(); 
-                setHubCapHover(false)
-              }}
-              onClick={(e) => {canInteractWithModel &&
-                e.stopPropagation(); 
-                setActiveMenu('hubCaps');
-                toggleHubCaps()
-              }}
+              onPointerOver={(e) => {canInteractWithModel && ( e.stopPropagation(), setHubCapHover(true) )}}
+              onPointerOut={(e) => {canInteractWithModel && ( e.stopPropagation(), setHubCapHover(false) )}}
+              onClick={(e) => {canInteractWithModel && ( e.stopPropagation(), toggleHubCaps(), setActiveMenu('hubCaps') )}}
+
               material={materials.mat_aluminum} geometry={nodes.cap_rr.geometry} />
-            <mesh
-              onPointerOver={(e) => {e.stopPropagation()}}
-              onPointerOut={(e) => {e.stopPropagation()}}
-              onClick={(e) => {e.stopPropagation()} }
-              material={materials.mat_metal_black_smooth} geometry={nodes.hub_rr.geometry} />
-            <mesh
-              onPointerOver={(e) => {e.stopPropagation()}}
-              onPointerOut={(e) => {e.stopPropagation()}}
-              onClick={(e) => {e.stopPropagation()} }
-              material={materials.mat_tire} geometry={nodes.tire_rr.geometry} />
-            
+            <mesh material={materials.mat_metal_black_smooth} geometry={nodes.hub_rr.geometry} />
+            <mesh material={materials.mat_tire} geometry={nodes.tire_rr.geometry} />
           </group>
-          <mesh
-            onPointerOver={(e) => {e.stopPropagation()}}
-            onPointerOut={(e) => {e.stopPropagation()}}
-            onClick={(e) => {e.stopPropagation()} }
-            material={materials.mat_metal_black_smooth}
-            geometry={nodes.boggy_arm_r.geometry}
-            position={[0.16, -0.26, 0]}
-          />
+          <mesh material={materials.mat_metal_black_smooth} geometry={nodes.boggy_arm_r.geometry} position={[0.16, -0.26, 0]} />
         </group>
         <group position={[0, 0.55, -0.33]}>
           {(props.Customizer && activeMenu === 'lid') && 
             <Html position={[0, -0.02, 0.55]}>
-              <Customizer menu = 'lid' />
+              <Customizer responsiveFloating menu = 'lid' />
               {/* <div style={{width: '10px', height: '10px', backgroundColor: "red"}} /> */}
             </Html>
           }
-          <mesh
-            
-            onPointerOver={(e) => {e.stopPropagation()}}
-            onPointerOut={(e) => {e.stopPropagation()}}
-            onClick={(e) => {e.stopPropagation()} }
-            material={materials.mat_plastic_white}
-            material-side={FrontSide}
-            material-color={0xEEEEEE}
-            material-roughnessMap={materials.tex_cloud_ref.map}
-            geometry={nodes.lid_inside.geometry}
-            position={[0, -0.81, 0.33]}
-          />
-          <mesh
-            
-            onPointerOver={(e) => {e.stopPropagation()}}
-            onPointerOut={(e) => {e.stopPropagation()}}
-            onClick={(e) => {e.stopPropagation()} }
-            material={materials.mat_plastic_black}
-            material-color={0x111111}
-            material-roughnessMap={materials.tex_cloud_ref.map}
-            geometry={nodes.lid_liner.geometry}
-            position={[0, -0.81, 0.33]}
-          />
-          <mesh
-             
-            onPointerOver={(e) => {e.stopPropagation()}}
-            onPointerOut={(e) => {e.stopPropagation()}}
-            onClick={(e) => {e.stopPropagation()} }
-            material={materials.mat_strip_eyes} material-side={FrontSide} material-color={0xACACAC} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.strip.geometry} position={[0, -0.81, 0.33]} />
+          <mesh material={materials.mat_plastic_white} material-side={FrontSide} material-color={0xEEEEEE} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.lid_inside.geometry} position={[0, -0.81, 0.33]} />
+          <mesh material={materials.mat_plastic_black} material-color={0x111111} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.lid_liner.geometry} position={[0, -0.81, 0.33]} />
+          <mesh material={materials.mat_strip_eyes} material-side={FrontSide} material-color={0xACACAC} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.strip.geometry} position={[0, -0.81, 0.33]} />
           <mesh
             onUpdate={self => self.material.needsUpdate = true}
             geometry={nodes.lid_top.geometry} 
@@ -267,37 +159,15 @@ export default function Serve(props) {
             material-transparent={true}
             material-emissive={lidHover ? hoverColor : 0x000000}
             position={[0, -0.81, 0.33]} />
-          <mesh
-             
-            geometry={nodes.lid_top.geometry} 
-            material={materials.mat_lid_base}
-            material-side={FrontSide}
-            material-color={lidColor}
-            material-roughnessMap={materials.tex_cloud_ref.map}
-            material-emissive={lidHover ? hoverColor : 0x000000}
+          <mesh geometry={nodes.lid_top.geometry} material={materials.mat_lid_base} material-side={FrontSide} material-color={lidColor} material-roughnessMap={materials.tex_cloud_ref.map} material-emissive={lidHover ? hoverColor : 0x000000}
 
-            onPointerOver={(e) => {canInteractWithModel && 
-              e.stopPropagation(); 
-              setLidHover(true)
-            }}
-            onPointerOut={(e) => {canInteractWithModel && 
-              e.stopPropagation(); 
-              setLidHover(false)
-            }}
-            onClick={(e) => {canInteractWithModel &&
-              e.stopPropagation(); 
-              setActiveMenu('lid');
-            }}
+            onPointerOver={(e) => {canInteractWithModel && ( e.stopPropagation(), setLidHover(true) )}}
+            onPointerOut={(e) => {canInteractWithModel && ( e.stopPropagation(), setLidHover(false) )}}
+            onClick={(e) => {canInteractWithModel && ( e.stopPropagation(), setActiveMenu('lid') )}}
 
             position={[0, -0.81, 0.33]} />
           </group>
-        <mesh
-          
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} } 
-          // material={materials.mat_aluminum} 
-          geometry={nodes.aluminum.geometry} position={[0, -0.26, 0]}>
+        <mesh geometry={nodes.aluminum.geometry} position={[0, -0.26, 0]}>
             <meshPhysicalMaterial 
               attach='material' 
               clone={materials.mat_aluminum}
@@ -316,7 +186,7 @@ export default function Serve(props) {
           <Html position={[.23, .43, 0]} // left
             // position={[-.23, .43, 0]} // right
             >
-            <Customizer menu = 'bin' />
+            <Customizer responsiveFloating menu = 'bin' />
             {/* <div style={{width: '10px', height: '10px', backgroundColor: "red"}} /> */}
           </Html>
         }
@@ -340,103 +210,38 @@ export default function Serve(props) {
           material-roughnessMap={materials.tex_cloud_ref.map}
           material-emissive={binHover ? hoverColor : 0x000000}
 
-          onPointerOver={(e) => {canInteractWithModel && 
-            e.stopPropagation(); 
-            setBinHover(true)
-          }}
-          onPointerOut={(e) => {canInteractWithModel && 
-            e.stopPropagation(); 
-            setBinHover(false)
-          }}
-          onClick={(e) => {canInteractWithModel &&
-            e.stopPropagation(); 
-            setActiveMenu('bin');
-          }}
+          onPointerOver={(e) => {canInteractWithModel && ( e.stopPropagation(), setBinHover(true) )}}
+          onPointerOut={(e) => {canInteractWithModel && ( e.stopPropagation(), setBinHover(false) )}}
+          onClick={(e) => {canInteractWithModel && ( e.stopPropagation(), setActiveMenu('bin') )}}
 
           position={[0, -0.26, 0]} />
 
+        <mesh material={materials.mat_lense} material-side={FrontSide} material-color={0x0A0716} geometry={nodes.black_glass.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_plastic_black} geometry={nodes.black_plastic.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_plastic_black} geometry={nodes.black_plastic_base.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_light_blocker} material-side={FrontSide} material-color={0x111111} geometry={nodes.blocker.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_strip_eyes} geometry={nodes.eye_lense.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_metal_black_rough} material-side={FrontSide} material-color={0x1D1D1D} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.eye_plate.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_plastic_white} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.liner.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_screen} material-side={FrontSide} material-color={0x0A0716} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.screen.geometry} position={[0, -0.26, 0]} />
+        <mesh material={materials.mat_tail_lights} material-side={FrontSide} material-color={0x9F1313} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.tail_lights.geometry} position={[0, -0.26, 0]} />
         <mesh
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} }
-          material={materials.mat_lense} material-side={FrontSide} material-color={0x0A0716} geometry={nodes.black_glass.geometry} position={[0, -0.26, 0]} />
-        <mesh
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} }
-          material={materials.mat_plastic_black} geometry={nodes.black_plastic.geometry} position={[0, -0.26, 0]} />
-        <mesh
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} }
-          material={materials.mat_plastic_black}
-          geometry={nodes.black_plastic_base.geometry}
-          position={[0, -0.26, 0]}
-        />
-        <mesh
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} }
-          material={materials.mat_light_blocker} material-side={FrontSide} material-color={0x111111} geometry={nodes.blocker.geometry} position={[0, -0.26, 0]} />
-        <mesh
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} }
-          material={materials.mat_strip_eyes} geometry={nodes.eye_lense.geometry} position={[0, -0.26, 0]} />
-        <mesh
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} }
-          material={materials.mat_metal_black_rough} material-side={FrontSide} material-color={0x1D1D1D} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.eye_plate.geometry} position={[0, -0.26, 0]} />
-        <mesh
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} }
-          material={materials.mat_plastic_white} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.liner.geometry} position={[0, -0.26, 0]} />
-        <mesh
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} }
-          material={materials.mat_screen} material-side={FrontSide} material-color={0x0A0716} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.screen.geometry} position={[0, -0.26, 0]} />
-        <mesh
-          onPointerOver={(e) => {e.stopPropagation()}}
-          onPointerOut={(e) => {e.stopPropagation()}}
-          onClick={(e) => {e.stopPropagation()} }
-          material={materials.mat_tail_lights} material-side={FrontSide} material-color={0x9F1313} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.tail_lights.geometry} position={[0, -0.26, 0]} />
-        <mesh
-          onPointerOver={(e) => {canInteractWithModel && 
-            e.stopPropagation(); 
-            setFrontHover(true)
-          }}
-          onPointerOut={(e) => {canInteractWithModel && 
-            e.stopPropagation(); 
-            setFrontHover(false)
-          }}
-          onClick={(e) => {canInteractWithModel &&
-            e.stopPropagation(); 
-            setActiveMenu('frontDecal');
-          }}
+          onPointerOver={(e) => {canInteractWithModel && ( e.stopPropagation(), setFrontHover(true) )}}
+          onPointerOut={(e) => {canInteractWithModel && ( e.stopPropagation(), setFrontHover(false) )}}
+          onClick={(e) => {canInteractWithModel && ( e.stopPropagation(), setActiveMenu('frontDecal') )}}
+
           onUpdate={self => self.material.needsUpdate = true}
           material={materials.mat_front_decal} material-color={0xFFFFFF} material-emissive={frontHover ? hoverColor : 0x000000} material-opacity={frontDecal ? 1 : (frontHover ? 0.6 : 0)} material-map={frontDecal} material-transparent={true} material-roughnessMap={materials.tex_cloud_ref.map} material-side={FrontSide} geometry={nodes.front_decal.geometry} position={[0, -0.26, 0]} />
         {(props.Customizer && activeMenu === 'frontDecal') && 
           <Html position={[0, 0.2, 0.3]} >
-            <Customizer menu = 'frontDecal' />
+            <Customizer responsiveFloating menu = 'frontDecal' />
             {/* <div style={{width: '10px', height: '10px', backgroundColor: "red"}} /> */}
           </Html>
         }
         <mesh
-          onPointerOver={(e) => {canInteractWithModel && 
-            e.stopPropagation(); 
-            setRearTopHover(true)
-          }}
-          onPointerOut={(e) => {canInteractWithModel && 
-            e.stopPropagation(); 
-            setRearTopHover(false)
-          }}
-          onClick={(e) => {canInteractWithModel &&
-            e.stopPropagation(); 
-            setActiveMenu('rearTopDecal');
-          }}
+          onPointerOver={(e) => {canInteractWithModel && ( e.stopPropagation(), setRearTopHover(true) )}}
+          onPointerOut={(e) => {canInteractWithModel && ( e.stopPropagation(), setRearTopHover(false) )}}
+          onClick={(e) => {canInteractWithModel && ( e.stopPropagation(), setActiveMenu('rearTopDecal') )}}
 
           onUpdate={self => self.material.needsUpdate = true}
           material={materials.mat_rear_top_decal} material-color={0xFFFFFF} material-emissive={rearTopHover ? hoverColor : 0x000000} material-opacity={rearTopDecal ? 1 : (rearTopHover ? 0.6 : 0)} material-map={rearTopDecal} material-transparent={true} material-roughnessMap={materials.tex_cloud_ref.map} material-side={FrontSide} geometry={nodes.rear_top_decal.geometry} position={[0, -0.26, 0]} />
@@ -444,28 +249,20 @@ export default function Serve(props) {
           <Html 
             position={[0, 0.55, -0.32]}
             >
-            <Customizer menu = 'rearTopDecal' />
+            <Customizer responsiveFloating menu = 'rearTopDecal' />
             {/* <div style={{width: '10px', height: '10px', backgroundColor: "red"}} /> */}
           </Html>
         }
         <mesh
-          onPointerOver={(e) => {canInteractWithModel && 
-            e.stopPropagation(); 
-            setRearBottomHover(true)
-          }}
-          onPointerOut={(e) => {canInteractWithModel && 
-            e.stopPropagation(); 
-            setRearBottomHover(false)
-          }}
-          onClick={(e) => {canInteractWithModel &&
-            e.stopPropagation(); 
-            setActiveMenu('rearBottomDecal');
-          }}
+          onPointerOver={(e) => {canInteractWithModel && ( e.stopPropagation(), setRearBottomHover(true) )}}
+          onPointerOut={(e) => {canInteractWithModel && ( e.stopPropagation(), setRearBottomHover(false) )}}
+          onClick={(e) => {canInteractWithModel && ( e.stopPropagation(), setActiveMenu('rearBottomDecal') )}}
+
           onUpdate={self => self.material.needsUpdate = true}
           material={materials.mat_rear_bottom_decal} material-color={0xFFFFFF} material-emissive={rearBottomHover ? hoverColor : 0x000000} material-opacity={rearBottomDecal ? 1 : (rearBottomHover ? 0.6 : 0)} material-map={rearBottomDecal} material-transparent={true} material-roughnessMap={materials.tex_cloud_ref.map} material-side={FrontSide} geometry={nodes.rear_bottom_decal.geometry} position={[0, -0.26, 0]} />
         {(props.Customizer && activeMenu === 'rearBottomDecal') && 
           <Html position={[0, 0.21, -0.28]}>
-            <Customizer menu = 'rearBottomDecal' />
+            <Customizer responsiveFloating menu = 'rearBottomDecal' />
             {/* <div style={{width: '10px', height: '10px', backgroundColor: "red"}} /> */}
           </Html>
         }

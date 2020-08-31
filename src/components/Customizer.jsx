@@ -1,9 +1,11 @@
-import React, {useRef} from "react";
+import React, {useRef, useEffect, useState, useCallback} from "react";
 // import DefaultCMF from './DefaultCMF'
 import useStore from './Store';
 
 export default function Customizer(props) {
     const imageInput = useRef();
+    const floatingConfigBox = useRef();
+    const mainRef = useRef();
 
     // try: https://dev.to/michalczaplinski/super-easy-react-mount-unmount-animations-with-hooks-4foj
 
@@ -67,7 +69,7 @@ export default function Customizer(props) {
             return <h3>Rear top of Serve</h3>;
         } else if (menu === 'rearBottomDecal') {
             return <h3>Rear bottom of Serve</h3>;
-        } else if (menu === 'config') {
+        } else if (menu === 'options') {
             return <h3>Advanced options</h3>;
         } 
     })();
@@ -129,9 +131,46 @@ export default function Customizer(props) {
 
     const canInteractWithModel = useStore(state => state.canInteractWithModel)
     const setInteractWithModel = useStore(state => state.setInteractWithModel)
+    const setActiveMenu = useStore(state => state.setActiveMenu)
 
     // Stuff for rotation / rendering / lighting, etc
     // const html buttons, etc
+    const rotateServe = useStore(state => state.rotateServe)
+    const toggleRotateServe = useStore(state => state.toggleRotateServe);
+
+    const servePose = useStore(state => state.servePose)
+    const setServePose = useStore(state => state.setServePose);
+    const incServePose = useStore(state => state.incServePose);
+    
+    const options = ((menu = props.menu)=>{
+        if (menu === 'options') {
+            return <div className='buttons'>
+                {/* <div className='button' onClick = {(event) => this.props.setLidPos(  )}>
+                    <p>Toggle lid</p>
+                </div> */}
+                {/* <div className='button' onClick = {(event) => this.props.renderOut({ type: 'image' })}>
+                    <p>Render png</p>
+                </div> */}
+                <div className='button' onClick={(e) => {
+                    e.stopPropagation(); 
+                    if (rotateServe) {
+                        toggleRotateServe();
+                        setServePose(0);
+                    } else {
+                        incServePose( 45 );
+                    }
+                    }}>
+                    <p>Rotate 45deg</p>
+                </div>
+                <div className='button' onClick={(e) => {e.stopPropagation(); toggleRotateServe()}}>
+                    <p>{rotateServe ? 'Stop rotation' : 'Start rotation'}</p>
+                </div>
+                <a className='button' href={ require('../assets/template.zip').default } target='_blank' download='template.zip'>
+                    <p>Download template</p>
+                </a>
+            </div>
+        }
+    })();
 
     // helpers
     const checkContrast = ( hex ) => {
@@ -156,13 +195,10 @@ export default function Customizer(props) {
 
         // Get the file and name
         const file = event.target.files[0];
-        // const fileName = event.target.files[0].name;
-        // hash the name?
         const url = URL.createObjectURL(file);
 
         addTexture( url );
         setTextureIndex( textures.length - 1 );
-        // select
     }
 
     // UI
@@ -172,7 +208,7 @@ export default function Customizer(props) {
                     {colorCopy}
                     <div className = {`colors ${props.menu}`}>
                     {colors.map( (color, index) => {
-                        return <div className = {`${checkContrast(color)} ${ selectedColorIndex === index ? 'active' : ''} ${(color == '#FFFFFF') ? 'stroke' : ''}`} 
+                        return <div className = {`${checkContrast(color)} ${ selectedColorIndex === index ? 'active' : ''} ${(color == '#1A1A1A') ? 'stroke' : ''}`} 
                             key = { index } 
                             data-index = { index } 
                             style = { {backgroundColor: `${color}`} } 
@@ -230,21 +266,91 @@ export default function Customizer(props) {
         }
     })()
 
+    // Decide if we need to calculate the box
+    const [mouseDown, _setMouseDown] = useState(false);
+    const mouseDownRef = useRef(mouseDown);
+    const setMouseDown = data => {
+        mouseDownRef.current = data;
+        _setMouseDown(data);
+    };
+
+    const handleEvents = (e) => {
+        if (e.type === 'mousedown') {
+            setMouseDown(true)
+        } else if (e.type === 'mouseup') {
+            setMouseDown(false)
+        }
+
+        if (e.type === 'resize') {
+            placeFloatingBox()
+        }
+
+        if (e.type === 'mousemove' && mouseDownRef.current) {
+            placeFloatingBox()
+        }
+    }
+
+    // 
+    const placeFloatingBox = () => {
+        console.log('placing...')
+
+        // calculate and place the floating box
+    }
+
+    let closeMenuTimeout = null;
+    const [menuOpen, setMenuOpen] = useState('close');
+    const closeMenu = () => {
+        setMenuOpen('close')
+        closeMenuTimeout = setTimeout(() => {
+            setActiveMenu('none');
+        }, 200);
+    }
+
+    useEffect(() => {
+        setMenuOpen('open')
+
+        // subscribe events
+        // if (props.responsiveFloating) {
+        //     placeFloatingBox();
+        //     window.addEventListener('resize', handleEvents);
+        //     window.addEventListener('mousedown', handleEvents);
+        //     window.addEventListener('mouseup', handleEvents);
+        //     window.addEventListener('mousemove', handleEvents);
+        // }
+
+        return () => {
+            clearTimeout(closeMenuTimeout);
+            setMenuOpen('close')
+            setInteractWithModel(true)
+
+            // unsubscribe events
+            // if (props.responsiveFloating) {
+            //     window.removeEventListener('resize', handleEvents);
+            //     window.removeEventListener('mousedown', handleEvents);
+            //     window.removeEventListener('mouseup', handleEvents);
+            //     window.removeEventListener('mousemove', handleEvents);
+            // }
+        };
+      }, []);
+
     return (
-        <div 
-            className = 'floatingConfigBox'
-            style={{position: 'absolute', zIndex: '10000'}}
-                onClick={(e) => { 
-                        e.stopPropagation(); 
-                        // setActiveMenu('none');
-                    }}
-            onPointerOver={(e) => {e.stopPropagation(), setInteractWithModel(true)}}
-            onPointerOut={(e) => {e.stopPropagation(), setInteractWithModel(false)}}
-            // onClick={(e) => {e.stopPropagation()} }
-            >
-            {titleCopy}
-            {textureUI}
-            {colorUI}
+        <div className = {`customizeWrap ${props.responsiveFloating ? 'floating' : 'fixed'} ${menuOpen}`} ref = {mainRef}>
+            <div 
+                className = {`floatingConfigBox ${props.responsiveFloating ? 'floating' : 'fixed'}`}
+                ref = {floatingConfigBox}
+                onPointerOver={(e) => {e.stopPropagation(), setInteractWithModel(false)}}
+                onPointerOut={(e) => {e.stopPropagation(), setInteractWithModel(true)}}
+                onClick={(e) => {e.stopPropagation()}}
+                >
+                <div
+                    className = 'close'
+                    onClick={(e) => {e.stopPropagation(), closeMenu()}}
+                />
+                {titleCopy}
+                {textureUI}
+                {colorUI}
+                {options}
+            </div>
         </div>
     )
 }
