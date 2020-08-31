@@ -1,6 +1,5 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const webpack = require('webpack')
-const path = require('path');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     module: {
@@ -16,9 +15,6 @@ module.exports = {
             'sass-loader',
             ],
         },
-        // test for glb or somethin to signify uncompressed
-        // run draco
-        // give compressed to file-loader instead
         {
             test: /\.(png|svg|jpg|gif|glb|hdr|zip)$/,
             use: [{
@@ -28,25 +24,22 @@ module.exports = {
         {
             test: /\.(js|jsx|jsm)$/,
             exclude: /node_modules/,
+            resolve: {
+                extensions: ['.js', '.jsx', '.jsm']
+            },
             use: {
-                loader: "babel-loader"
+                loader: 'babel-loader'
             }
         },
         {
             test: /\.html$/,
             use: [
                 {
-                    loader: "html-loader",
+                    loader: 'html-loader',
                 }
             ]
         }, 
         ],
-    },
-    resolve: {
-        alias: {
-            three$: 'three/build/three.min.js',
-            'three/.*$': 'three',
-        }
     },
     plugins: [
         new HtmlWebPackPlugin({
@@ -55,10 +48,10 @@ module.exports = {
             filename: './index.html',
             favicon: './src/assets/img/favicon.svg'
         }),
-        new webpack.ProvidePlugin({
-            THREE: 'three',
-            TWEEN: 'tween',
-            // CCapture: 'ccapture',
+        new CopyPlugin({
+            patterns: [
+              { from: './node_modules/three/examples/js/libs/draco', to: './draco-gltf' },
+            ],
         }),
     ]
 };
