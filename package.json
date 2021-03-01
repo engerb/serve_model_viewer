@@ -44,7 +44,7 @@
     "sass": "^1.26.10",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.2.1",
-    "three": "^0.115.0",
+    "three": "^0.125.0",
     "tween": "^0.9.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
