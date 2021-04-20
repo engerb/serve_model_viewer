@@ -2253,7 +2253,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-three/fiber@npm:latest":
+"@react-three/fiber@npm:^6.0.15, @react-three/fiber@npm:latest":
   version: 6.0.15
   resolution: "@react-three/fiber@npm:6.0.15"
   dependencies:
@@ -4142,7 +4142,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bluebird@npm:^3.5.5":
+"bluebird@npm:^3.5.5, bluebird@npm:^3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 4f2288662f3d4eadbb82d4daa4a7d7976a28fa3c7eb4102c9b4033b03e5be4574ba123ac52a7c103cde4cb7b2d2afc1dbe41817ca15a29ff21ecd258d0286047
@@ -4605,6 +4605,13 @@ __metadata:
   version: 0.12.0
   resolution: "caseless@npm:0.12.0"
   checksum: 147f48bff9bebf029d7050e2335da3f8d295f26d157edf08d8c3282c804dae04a462c4cd6efa8179755686aa3aeaca5c28f3e7f3559698bc0484c65e46c36c5b
+  languageName: node
+  linkType: hard
+
+"cesium@npm:^1.69.0":
+  version: 1.80.0
+  resolution: "cesium@npm:1.80.0"
+  checksum: f3d583cc6b8c682e33cdb00d804edf8b757bbe1ef902505e6af3219bd87e89a7ca58b873ccd1aa72e9784bda1cf83db82b245b78a2d8b394f6d728023d31059f
   languageName: node
   linkType: hard
 
@@ -6096,6 +6103,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"draco3d@npm:^1.4.0":
+  version: 1.4.1
+  resolution: "draco3d@npm:1.4.1"
+  checksum: 88808962a49f9ccf67d3de25fa9838b11177c8ab993d6c0abb7cdc2ef82890472108db927f16fb8391b0f93f592bbe0d9a3e522a90b59e1263ffeaf6590eaeb4
+  languageName: node
+  linkType: hard
+
 "draco3dgltf@npm:^1.4.0":
   version: 1.4.1
   resolution: "draco3dgltf@npm:1.4.1"
@@ -7374,7 +7388,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-extra@npm:^9.0.1":
+"fs-extra@npm:^9.0.0, fs-extra@npm:^9.0.1":
   version: 9.1.0
   resolution: "fs-extra@npm:9.1.0"
   dependencies:
@@ -7742,6 +7756,44 @@ fsevents@^1.2.7:
   version: 0.0.0
   resolution: "glsl-noise@npm:0.0.0"
   checksum: ccc61f184bfff08f624e0ddd646cca76bcad1ecdb82986d3e65ff94fa876a207d7b46f5d937f6957e05440af6020238c25cff089dcafdb1b8ce234e38cce26c0
+  languageName: node
+  linkType: hard
+
+"gltf-pipeline@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "gltf-pipeline@npm:3.0.2"
+  dependencies:
+    bluebird: ^3.7.2
+    cesium: ^1.69.0
+    draco3d: ^1.4.0
+    fs-extra: ^9.0.0
+    mime: ^2.4.5
+    object-hash: ^2.0.3
+    yargs: ^15.3.1
+  bin:
+    gltf-pipeline: bin/gltf-pipeline.js
+  checksum: 12f09062b76e5cd0a410d7d0f88cedb9a55cd8c2e9596781404775b1d68f9217c3dc8fbe18e0cbc77bfa3ad115de0b69ba900a3f6d5d933af1f3822642014c5b
+  languageName: node
+  linkType: hard
+
+"gltfjsx@npm:^4.1.5":
+  version: 4.1.5
+  resolution: "gltfjsx@npm:4.1.5"
+  dependencies:
+    draco3dgltf: ^1.4.0
+    import-jsx: ^4.0.0
+    ink: ^3.0.7
+    is-var-name: ^2.0.0
+    jsdom: ^16.4.0
+    jsdom-global: ^3.0.2
+    meow: ^7.1.1
+    prettier: ^2.1.2
+    react: ^16.13.1
+    three: ^0.122.0
+    use-error-boundary: ^2.0.4
+  bin:
+    gltfjsx: cli.js
+  checksum: 46ce1c5702442cf19808148fcf1f667280bd5d49100552fd8dd5017ca8dd53324868ac39f4b484af2a9f042ab8f56a17e6d0c9c552bfd355caa8baaaf9680b12
   languageName: node
   linkType: hard
 
@@ -10397,7 +10449,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"mime@npm:^2.4.4":
+"mime@npm:^2.4.4, mime@npm:^2.4.5":
   version: 2.5.2
   resolution: "mime@npm:2.5.2"
   bin:
@@ -11008,6 +11060,13 @@ fsevents@^1.2.7:
     define-property: ^0.2.5
     kind-of: ^3.0.3
   checksum: d91d46e54297cad0544f04e4dff4694f92aca9661f59ad7e803a1ba94a2bb24b38ca4fd59ea827d24c9bdc6f7148d5c838287ee4b2b9c5df9b445b1c0d7a066c
+  languageName: node
+  linkType: hard
+
+"object-hash@npm:^2.0.3":
+  version: 2.1.1
+  resolution: "object-hash@npm:2.1.1"
+  checksum: fe49a0864cba7ac4055c604295692ae75f5f4d22ba929aaaa987469809d17ab030d1111e8f0d425a070fa4a78b8021b55260e26e98b66b59e0f7be2bd9069fb8
   languageName: node
   linkType: hard
 
@@ -14075,6 +14134,7 @@ resolve@1.18.1:
   resolution: "serve_model_viewer@workspace:."
   dependencies:
     "@react-three/drei": ^4.1.8
+    "@react-three/fiber": ^6.0.15
     "@react-three/gltfjsx": ^4.1.5
     "@svgr/webpack": ^5.5.0
     "@testing-library/jest-dom": ^5.11.4
@@ -14083,12 +14143,16 @@ resolve@1.18.1:
     eslint-config-react: ^1.1.7
     eslint-config-react-app: ^6.0.0
     gh-pages: ^3.1.0
+    gltf-pipeline: ^3.0.2
+    gltfjsx: ^4.1.5
     react: ^17.0.2
     react-dom: ^17.0.2
     react-scripts: 4.0.3
     react-three-fiber: ^6.0.13
     sass: ^1.32.11
     svgr: ^2.0.0
+    three: ^0.127.0
+    tween: ^0.9.0
     web-vitals: ^1.0.1
     zustand: ^3.4.1
   languageName: unknown
@@ -15202,6 +15266,13 @@ resolve@1.18.1:
   languageName: node
   linkType: hard
 
+"three@npm:^0.127.0":
+  version: 0.127.0
+  resolution: "three@npm:0.127.0"
+  checksum: 7e1013918a5972e2e8fd98a4516381eeb07238b979a7041921b2a90095c74a02e64346e4693ed658b0208adc01df58dc7fbe43b1fedf7360e063719e6f22099a
+  languageName: node
+  linkType: hard
+
 "throat@npm:^5.0.0":
   version: 5.0.0
   resolution: "throat@npm:5.0.0"
@@ -15470,6 +15541,13 @@ resolve@1.18.1:
   dependencies:
     safe-buffer: ^5.0.1
   checksum: 03db75a4f994fee610d3485c492e95105ed265a9fecd49d14c98e9982f973ecc0220d0c1bc264e37802e423a1274bb63788a873e4e07009408ae3ac517347fd7
+  languageName: node
+  linkType: hard
+
+"tween@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "tween@npm:0.9.0"
+  checksum: f3a48eae5ff81e82c7e3c452ec6edcb2ec8a5b12c3f1b66d297ab38d385af76513fb70084f69ea8ec59533da9e805e70bc9ef5d1c27d3a981b31124b4827279e
   languageName: node
   linkType: hard
 
@@ -16645,7 +16723,7 @@ resolve@1.18.1:
   languageName: node
   linkType: hard
 
-"yargs@npm:^15.4.1":
+"yargs@npm:^15.3.1, yargs@npm:^15.4.1":
   version: 15.4.1
   resolution: "yargs@npm:15.4.1"
   dependencies:

@@ -5,5 +5,23 @@ body {
     font-family: 'Montserrat', sans-serif; 
     -webkit-font-smoothing: subpixel-antialiased;
     -webkit-text-stroke: 1px transparent;
-    background-color: black;
+    // background-color: black;
+}
+
+// .modelViewer {
+//     width: 100vw;
+//     height: 100vh;
+//     position: relative;
+// }
+
+html,
+body,
+#root {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  outline: none;
+  width: 100%;
+  height: 100vh;
 }
