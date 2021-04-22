@@ -11,6 +11,10 @@ body {
     position: relative;
 }
 
+.noTouchy {
+    pointer-events: none;
+}
+
 .customizeWrap {
     transition: all 200ms;
 

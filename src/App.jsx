@@ -1,41 +1,42 @@
-import React from 'react';
-import Scene from './components/Scene';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import React from 'react'
+// import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import ServeModelViewer from './components/ServeModelViewer'
 
-// import DefaultCMF from './DefaultCMF';
-
-// import 'three/examples/js/loaders/RGBELoader';
-
-// import CCapture from '../node_modules/ccapture.js/src/CCapture.js';
-// import '../node_modules/ccapture.js/src/tar.js';
-
-class App extends React.Component {
-    constructor() {
-        super();
-
-    }
-
-    render() {
-        return (
-            <Router>
-                <Switch>
-                    {/* <Route path='/demo'>
-                        <Scene 
-                            customizer = {false} 
-                            bg = {'black'}
-                        />
-                    </Route> */}
-                    <Route path='/'>
-                        <Scene 
-                            customizer = {true}
-                            bg = {'white'}
-                            // DefaultCMF = {DefaultCMF}
-                        />
-                    </Route>
-                </Switch>
-            </Router>
-        );
-    }
+export default () => {
+    return (
+        <ServeModelViewer 
+            stats
+            backgroundScene
+            rollScene
+            orbitControls
+            bgColor = {'black'}
+            lidar
+            lidarOnly
+            powerEfficiencyMode
+        />
+        // <Router>
+        //     <Switch>
+        //         <Route path='/demo'>
+        //             <ServeModelViewer 
+        //                 // stats
+        //                 backgroundScene
+        //                 rollScene
+        //                 orbitControls
+        //                 customizer
+        //                 // bgColor = {'green'}
+        //                 powerEfficiencyMode
+        //             />
+        //         </Route>
+        //         <Route path='/'>
+        //             <ServeModelViewer 
+        //                 // stats
+        //                 orbitControls
+        //                 customizer
+        //                 // bgColor = {'green'}
+        //                 powerEfficiencyMode
+        //             />
+        //         </Route>
+        //     </Switch>
+        // </Router>
+    )
 }
-
-export default App;
