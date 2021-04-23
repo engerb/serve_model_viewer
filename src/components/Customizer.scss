@@ -1,0 +1,168 @@
+.Customizer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    box-sizing: border-box;
+    padding: 50px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .GlobalActions {
+        display: flex;
+        justify-content: flex-end;
+        flex-grow: 1;
+
+        &.black {
+            color: white;
+        }
+
+        &.white {
+            color: black;
+        }
+
+        .Button {
+            height: 50px;
+            cursor: pointer;
+            position: relative;
+            box-sizing: border-box;
+            padding: 0 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            background-color: black;
+            color: white;
+            width: fit-content;
+            margin-left: 30px;
+
+            border: 2px white solid;
+            font-size: 1rem;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-weight: 600;
+            line-height: 1.5;
+            letter-spacing: 0.00938em;
+        }
+    }
+
+    .Actions {
+        .ItemActions {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 30px;
+    
+            &.black {
+                color: white;
+            }
+    
+            &.white {
+                color: black;
+            }
+    
+            .picker {
+                width: 90px !important;
+                height: 90px !important;
+                margin-right: 30px;
+            }
+    
+            h1 {
+                font-size: 5em;
+                line-height: 0.7em;
+                letter-spacing: -3px;
+            }
+        }
+    
+        .OtherActions {
+            &.black {
+                color: white;
+            }
+    
+            &.white {
+                color: black;
+            }
+    
+            .MuiFormGroup-row {
+                &.sliders {
+                    flex-shrink: 0;
+    
+                    label {
+                        flex-shrink: 0;
+                        width: 200px;
+                        display: flex;
+                        flex-direction: column-reverse;
+                        align-items: baseline;
+                        margin-left: 4px;
+                        margin-right: 30px;
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+    
+            .Textures {
+                display: flex;
+                position: relative;
+    
+                .addWrap {
+                    height: 50px;
+                    cursor: pointer;
+                    position: relative;
+                    box-sizing: border-box;
+                    padding: 0 30px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 10px;
+                    background-color: black;
+                    color: white;
+    
+                    border: 2px white solid;
+                    font-size: 1rem;
+                    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                    font-weight: 600;
+                    line-height: 1.5;
+                    letter-spacing: 0.00938em;
+                }
+    
+                .Texture {
+                    background-position: center center;
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    width: 50px;
+                    height: 50px;
+                    background-color: rgba(255, 255, 255, 0.452);
+                    margin-bottom: 20px;
+                    margin-right: 20px;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    position: relative;
+    
+                    &.bin {
+                        background-position: top right;
+                        background-size: 310%;
+                    }
+    
+                    &.lid {
+                        background-position: top left;
+                        background-size: 66px;
+                    }
+    
+                    &.active {
+                        &::before {
+                            content: "";
+                            border: 4px #52af77 solid;
+                            top: -5px;
+                            left: -5px;
+                            width: 52px;
+                            height: 52px;
+                            border-radius: 14px;
+                            position: absolute;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
