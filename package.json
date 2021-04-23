@@ -1,59 +1,59 @@
 {
   "name": "serve_model_viewer",
-  "version": "1.0.0",
-  "description": "Model viewer for Serve rover 1.5 and up",
+  "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "start-dev": "webpack-dev-server --open --mode development",
-    "build": "webpack --mode production",
-    "start": "node server.js",
-    "postinstall": "npm install express serve-static path"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/engerb/serve_model_viewer.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/engerb/serve_model_viewer/issues"
-  },
-  "homepage": "https://github.com/engerb/serve_model_viewer#readme",
-  "devDependencies": {
-    "@babel/core": "^7.11.4",
-    "@babel/preset-env": "^7.11.0",
-    "@babel/preset-react": "^7.10.4",
-    "babel-loader": "^8.1.0",
-    "ccapture.js": "^1.1.0",
-    "copy-webpack-plugin": "^6.0.3",
-    "css-loader": "^3.6.0",
-    "drei": "0.0.71",
-    "fibers": "^4.0.3",
-    "file-loader": "^5.1.0",
-    "gltf-pipeline": "^2.1.10",
-    "gltfjsx": "^2.0.4",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "node-sass": "^4.14.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-loader": "^2.4.7",
-    "react-router-dom": "^5.2.0",
-    "react-three-fiber": "^4.2.20",
-    "sass": "^1.26.10",
-    "sass-loader": "^8.0.2",
-    "style-loader": "^1.2.1",
-    "three": "^0.115.0",
-    "tween": "^0.9.0",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0",
-    "zustand": "^3.0.1"
-  },
+  "homepage": "https://engerb.github.io/serve_model_viewer/",
   "dependencies": {
-    "express": "^4.17.1",
-    "path": "^0.12.7",
-    "serve-static": "^1.14.1"
+    "@material-ui/core": "^4.11.3",
+    "@react-three/drei": "^4.1.8",
+    "@react-three/fiber": "^6.0.15",
+    "@react-three/gltfjsx": "^4.1.5",
+    "@svgr/webpack": "^5.5.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "eslint-config-react-app": "^6.0.0",
+    "gh-pages": "^3.1.0",
+    "gltf-pipeline": "^3.0.2",
+    "gltfjsx": "^4.1.5",
+    "react": "^17.0.2",
+    "react-colorful": "^5.1.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "sass": "^1.32.11",
+    "svgr": "^2.0.0",
+    "three": "^0.127.0",
+    "tween": "^0.9.0",
+    "web-vitals": "^1.0.1",
+    "zustand": "^3.4.1"
+  },
+  "scripts": {
+    "start": "PUBLIC_URL=/ react-scripts start",
+    "build": "react-scripts build",
+    "predeploy": "react-scripts build",
+    "deploy": "gh-pages -d build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint-config-react": "^1.1.7"
   }
 }

@@ -1,17 +1,15 @@
 # Serve model viewer
-Built with React and Three.js, you can view the hosted app [here](https://serve-cmf.herokuapp.com/).
+Built with React and Three.js, you can view the hosted app [here](https://engerb.github.io/serve_model_viewer/).
 
-![Demo](demo/demo.gif?raw=true "Demo")
+<!-- ![Demo](demo/demo.gif?raw=true "Demo") -->
 
 # How to run
-* Install node_modules: `npm install`
-* Run (dev): `npm run-script start-dev`
+* Install dependancies: `yarn`
+* Run (dev): `yarn start`
 
 # How to build and deploy
-* Build: `npm run-script build`
-* Deploy contents of `dist` to server
-* ...
-* Profit!
+* Build: `yarn build`
+* Deploy to Github Pages: `yarn deploy`
 
 # Exporting Serve from Blender
 * Select all of the model to export in Blender, export `serve_src.glb` with `selection only` and `materials` selected, no compression! This seems to not work.
