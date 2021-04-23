@@ -17,7 +17,7 @@ export default (props) => {
                 <Environment preset='sunset' /> 
             </Suspense>
             <OrbitControls target={[0, 0.5, 0]} minDistance={1} maxDistance={5} enableDamping={true} dampingFactor={0.3} minPolarAngle={0.3} maxPolarAngle={1.7} />
-            <hemisphereLight skyColor={"blue"} groundColor={0xffffff} intensity={0.2} position={[0, 50, 0]} />
+            <hemisphereLight skyColor={'blue'} groundColor={0xffffff} intensity={0.2} position={[0, 50, 0]} />
             <directionalLight position={[8, 20, 8]} shadow-camera-left={-4} shadow-camera-bottom={-4} shadow-camera-right={16} shadow-camera-top={16} shadow-mapSize-height={1024} shadow-mapSize-width={1024} castShadow />
             {/* <Stats /> */}
         </Canvas>

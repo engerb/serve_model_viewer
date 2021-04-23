@@ -28,7 +28,7 @@
     "zustand": "^3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PUBLIC_URL=/ react-scripts start",
     "build": "react-scripts build",
     "predeploy": "react-scripts build",
     "deploy": "gh-pages -d build",

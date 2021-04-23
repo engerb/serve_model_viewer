@@ -2,10 +2,10 @@ import create from 'zustand';
 import { sRGBEncoding, TextureLoader } from 'three'
 import { invalidate } from '@react-three/fiber'
 
-const binDecals = ['/wraps/bin_1.png', '/wraps/bin_2.png', '/wraps/bin_3.png', '/wraps/bin_4.png', '/wraps/bin_5.png']
-const lidDecals = ['/wraps/lid_1.png', '/wraps/lid_2.png', '/wraps/lid_3.png', '/wraps/lid_4.png', '/wraps/lid_5.png']
-const generalDecals = ['/decals/decal_cat.png', '/decals/decal_mask.png', '/decals/decal_mustache.png', '/decals/decal_postmates.png', '/decals/decal_smile.png']
-const armBandDecals = ['/engrave/engrave_maze.png', '/engrave/engrave_word.png']
+const binDecals = ['bin_1.png', 'bin_2.png', 'bin_3.png', 'bin_4.png', 'bin_5.png']
+const lidDecals = ['lid_1.png', 'lid_2.png', 'lid_3.png', 'lid_4.png', 'lid_5.png']
+const generalDecals = ['serve_logo_word_stacked.png', 'decal_cat.png', 'decal_mask.png', 'decal_mustache.png', 'decal_postmates.png', 'decal_smile.png']
+const armBandDecals = ['engrave_maze.png', 'engrave_word.png']
 
 const loadTexture = (url) => {
     if (!url) {
@@ -55,41 +55,40 @@ const useStore = create((set, get) => ({
             name: 'Lid',
             color: '#ffffff',
             open: false,
-            selectedIndex: 0,
-            texture: loadTexture(lidDecals[0]),
+            selectedIndex: 3,
+            texture: loadTexture(lidDecals[3]),
             textures: lidDecals
         },
         bin: {
             name: 'Bin',
             color: '#ffffff',
-            texture: '/wraps/bin_1.png',
-            selectedIndex: 0,
-            texture: loadTexture(binDecals[0]),
+            selectedIndex: 3,
+            texture: loadTexture(binDecals[3]),
             textures: binDecals
         },
         front_decal: {
             name: 'Front decal',
-            texture: null,
             selectedIndex: null,
+            texture: null,
             textures: generalDecals
         },
         rear_bottom_decal: {
             name: 'Rear bottom decal',
-            texture: null,
             selectedIndex: null,
+            texture: null,
             textures: generalDecals
         },
         rear_top_decal: {
             name: 'Rear top decal',
-            texture: null,
-            selectedIndex: null,
+            selectedIndex: 0,
+            texture: loadTexture(generalDecals[0]),
             textures: generalDecals
         },
         side_arm_decal: {
             name: 'Side arm',
             engraveDepth: -0.2,
-            texture: null,
-            selectedIndex: null,
+            selectedIndex: 1,
+            texture: loadTexture(armBandDecals[1]),
             textures: armBandDecals
         },
     },
