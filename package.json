@@ -2,6 +2,7 @@
   "name": "serve_model_viewer",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://engerb.github.io/serve_model_viewer/",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@react-three/drei": "^4.1.8",
