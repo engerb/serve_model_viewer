@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react'
+import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
+import { Math } from 'three'
 import useStore from './Store' 
 
 
 export default (props) => {
   const group = useRef()
   const { nodes, materials } = useGLTF('serve.glb')
-  const [setCurrent, items] = useStore(state => [state.setCurrent, state.items])
+  const [setCurrent, items, setItem] = useStore(state => [state.setCurrent, state.items, state.setItem])
   
   const [hovered, setHovered] = useState(null)
   useEffect(() => {
@@ -23,21 +25,39 @@ export default (props) => {
     </svg>`
     document.body.style.cursor = `url('data:image/svg+xml;base64,${btoa(hovered ? cursor : auto)}'), auto`
   }, [hovered])
+
+  useFrame((state, delta) => {
+    if (items.scene.rotateServe) {
+      items.scene.serveAngle_slider.value = (items.scene.serveAngle_slider.value + 0.01) % 6.28319 // 360rad
+      setItem()
+      // invalidate()
+    }
+
+    // if (items.scene.wheelSpeed > 0) {
+    //   // wheel_fl.current.rotation.x += items.scene.wheelSpeed
+    //   wheelRotation = (wheelRotation + 0.01) % 6.28319 // 360rad
+    //   console.log(wheelRotation)
+    //   // wheel_rl.current.rotation.x += items.scene.wheelSpeed
+    //   // wheel_fr.current.rotation.x += items.scene.wheelSpeed
+    //   // wheel_rr.current.rotation.x += items.scene.wheelSpeed
+    //   setItem()
+    // }
+  })
   
   return (
-    <group rotation-y={items.wheels.serveAngle} ref={group} {...props} dispose={null}
+    <group rotation-y={items.scene.serveAngle_slider.value} ref={group} {...props} dispose={null}
       onPointerOver={(e) => (e.stopPropagation(), e.object.name ? setHovered(e.object.name) : setHovered(null))}
       onPointerOut={(e) => e.intersections.length === 0 && setHovered(null)}
       onPointerMissed={() => (setCurrent(null))}
       onPointerDown={(e) => (e.stopPropagation(), e.object.name ? (setCurrent(e.object.name)) : setCurrent(null))}>
       <group position={[0, 0.26, 0]}>
         <group position={[0.16, 0, 0]}>
-          <group rotation-y={items.wheels.wheelAngle} position={[0.02, -0.11, 0.23]}>
+          <group rotation-x={items.wheels.wheelRotation} rotation-y={items.wheels.wheelAngle_slider.value} position={[0.02, -0.11, 0.23]}>
             {items.wheels.showHubs && <mesh name={'wheels'} geometry={nodes.cap_fl.geometry} material={nodes.cap_fl.material} material-transparent={true} material-aoMapIntensity={1.5} material-roughnessMap={materials.tex_cloud_ref.map} />}
             <mesh name={'wheels'} geometry={nodes.hub_fl.geometry} material-color={0x1D1D1D} material-roughnessMap={materials.tex_cloud_ref.map} material={nodes.hub_fl.material} />
             <mesh name={'wheels'} geometry={nodes.tire_fl.geometry} material={nodes.tire_fl.material} material-color={0x333333} material-aoMapIntensity={0.5} material-normalScale={[-2, -2]} material-roughnessMap={materials.tex_cloud_ref.map} />
           </group>
-          <group position={[0.02, -0.11, -0.23]}>
+          <group rotation-x={items.wheels.wheelRotation} position={[0.02, -0.11, -0.23]}>
             {items.wheels.showHubs && <mesh name={'wheels'} geometry={nodes.cap_rl.geometry} material={nodes.cap_rl.material} />}
             <mesh name={'wheels'} geometry={nodes.hub_rl.geometry} material={nodes.hub_rl.material} />
             <mesh name={'wheels'} geometry={nodes.tire_rl.geometry} material={nodes.tire_rl.material} />
@@ -45,12 +65,12 @@ export default (props) => {
           <mesh geometry={nodes.boggy_arm_l.geometry} material-color={0x444444} material={nodes.boggy_arm_l.material} position={[-0.16, -0.26, 0]} />
         </group>
         <group position={[-0.16, 0, 0]}>
-          <group rotation-y={items.wheels.wheelAngle} position={[-0.02, -0.11, 0.23]}>
+          <group rotation-x={items.wheels.wheelRotation} rotation-y={items.wheels.wheelAngle_slider.value} position={[-0.02, -0.11, 0.23]}>
             {items.wheels.showHubs && <mesh name={'wheels'} geometry={nodes.cap_fr.geometry} material={nodes.cap_fr.material} />}
             <mesh name={'wheels'} geometry={nodes.hub_fr.geometry} material={nodes.hub_fr.material} />
             <mesh name={'wheels'} geometry={nodes.tire_fr.geometry} material={nodes.tire_fr.material} />
           </group>
-          <group position={[-0.02, -0.11, -0.23]}>
+          <group rotation-x={items.wheels.wheelRotation} position={[-0.02, -0.11, -0.23]}>
             {items.wheels.showHubs && <mesh name={'wheels'} geometry={nodes.cap_rr.geometry} material={nodes.cap_rr.material} />}
             <mesh name={'wheels'} geometry={nodes.hub_rr.geometry} material={nodes.hub_rr.material} />
             <mesh name={'wheels'} geometry={nodes.tire_rr.geometry} material={nodes.tire_rr.material} />
@@ -77,7 +97,7 @@ export default (props) => {
         <mesh name={'front_decal'} material={materials.mat_front_decal} material-color={0xFFFFFF} material-alphaTest={0.8} material-opacity={items.front_decal.texture ? 1 : 0} material-map={items.front_decal.texture} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.front_decal.geometry} position={[0, -0.26, 0]} onUpdate={self => self.material.needsUpdate = true} />
         <mesh name={'rear_bottom_decal'} material={materials.mat_rear_bottom_decal} material-color={0xFFFFFF} material-alphaTest={0.8} material-opacity={items.rear_bottom_decal.texture ? 1 : 0} material-map={items.rear_bottom_decal.texture} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.rear_bottom_decal.geometry} position={[0, -0.26, 0]} onUpdate={self => self.material.needsUpdate = true} />
         <mesh name={'rear_top_decal'} material={materials.mat_rear_top_decal} material-color={0xFFFFFF} material-alphaTest={0.8} material-opacity={items.rear_top_decal.texture ? 1 : 0} material-map={items.rear_top_decal.texture} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.rear_top_decal.geometry} position={[0, -0.26, 0]} onUpdate={self => self.material.needsUpdate = true} />
-        <mesh name={'side_arm_decal'} material={materials.mat_side_arm_aluminum} material-color={items.aluminum.color} material-alphaTest={0.1} material-opacity={items.side_arm_decal.texture ? 1 : 0} material-flatShading={false} material-bumpScale={items.side_arm_decal.engraveDepth} material-bumpMap={items.side_arm_decal.texture} material-alphaMap={items.side_arm_decal.texture} material-transparent={true} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.side_arm_decal.geometry} position={[0, -0.26, 0]} onUpdate={self => self.material.needsUpdate = true} />
+        <mesh name={'side_arm_decal'} material={materials.mat_side_arm_aluminum} material-color={items.aluminum.color} material-alphaTest={0.1} material-opacity={items.side_arm_decal.texture ? 1 : 0} material-flatShading={false} material-bumpScale={items.side_arm_decal.engraveDepth_slider.value} material-bumpMap={items.side_arm_decal.texture} material-alphaMap={items.side_arm_decal.texture} material-transparent={true} material-roughnessMap={materials.tex_cloud_ref.map} geometry={nodes.side_arm_decal.geometry} position={[0, -0.26, 0]} onUpdate={self => self.material.needsUpdate = true} />
 
         {/* Screen */}
         <mesh geometry={nodes.screen.geometry} material={materials.mat_screen} material-roughnessMap={materials.tex_cloud_ref.map} material-color={0x0A0716} position={[0, -0.26, 0]} />
@@ -98,7 +118,7 @@ export default (props) => {
       </group>
 
       {/* Floor */}
-      {items.wheels.showShadow && <mesh material={materials.mat_floor} material-transparent={true} material-color={0x000000} material-alphaMap={materials.tex_floor_ref.map} geometry={nodes.floor.geometry} />}
+      {items.scene.showShadow && <mesh material={materials.mat_floor} material-transparent={true} material-color={0x000000} material-alphaMap={materials.tex_floor_ref.map} geometry={nodes.floor.geometry} />}
     </group>
   )
 }

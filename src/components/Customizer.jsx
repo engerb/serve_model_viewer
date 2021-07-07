@@ -57,21 +57,69 @@ const PurpleSwitch = withStyles({
 })(Switch)
 
 export default (props) => {
-    const [current, setCurrent, items, background, setBackground, setItem, loadTexture] = useStore(state => [state.current, state.setCurrent, state.items, state.background, state.setBackground, state.setItem, state.loadTexture])
+    const [current, setCurrent, items, scene, setItem, loadTexture] = useStore(state => [state.current, state.setCurrent, state.items, state.items.scene, state.setItem, state.loadTexture])
     const currentItem = current ? items[current] : null
     const imageInput = useRef()
+
+    const checkContrast = (hex) => {
+        const threshold = 160 // close to half 256 ~130
+			
+        const r = parseInt( hex.substring(1, 3), 16)
+        const g = parseInt( hex.substring(3, 5), 16)
+        const b = parseInt( hex.substring(5, 7), 16)
+            
+        const cBrightness = ((r * 299) + (g * 587) + (b * 114)) / 1000
+        
+        if (cBrightness > threshold) {
+            return 'white'
+        } else { 
+            return 'black'
+        }	
+    }
+
+    const isHex = (h) => {
+        let a = parseInt(h,16);
+        return (a.toString(16) === h)
+    }
+
+    const renderGuide = (show = true) => {
+        if (show) {
+            const ratio = (window.innerWidth / window.innerHeight) / (scene.width_render_px_slider.value / scene.height_render_px_slider.value) // val > 1 means wider
+            scene.renderWidth = ratio > 1 ? String(100 - (ratio * 20)) + '%' : '100%'
+            scene.renderHeight = ratio < 1 ? String(ratio * 100) + '%' : '100%'
+        } else {
+            scene.renderWidth = '100%'
+            scene.renderHeight = '100%'
+        }
+        
+        setItem()
+    }
 
     return (
         <div className={`Customizer`}>
             {currentItem &&
-                <div className={`Actions ${background}`}> 
-                    <div className={`ItemActions ${background}`}> 
+                <div className={`Actions ${checkContrast(scene.color)}`}> 
+                    <div className={`ItemActions ${checkContrast(scene.color)}`}> 
                         {currentItem.color &&
-                            <HexColorPicker className='picker' color={currentItem.color} onChange={(color) => (currentItem.color = color, setItem(currentItem))} />
+                            <div className={`ColorPicker`}>
+                                <HexColorPicker className='picker' color={currentItem.color} onChange={(color) => (currentItem.color = color, setItem())} />
+                                <input type='text' value={currentItem.color} onChange={(e) => {
+                                    console.log(e.target.value)
+                                    let str = String(e.target.value)
+                                    str = str.replace('#', '')
+                                    str = str.substring(0, 6)
+                                    
+                                    if (isHex(str)) {
+                                        currentItem.color = '#' + str
+                                    }
+
+                                    setItem()
+                                }}/>
+                            </div>
                         }
                         <h1>{currentItem.name}</h1>
                     </div>
-                    <div className={`OtherActions ${background}`}>
+                    <div className={`OtherActions ${checkContrast(scene.color)}`}>
                         {'textures' in currentItem &&
                             <div className={'Textures'}>
                                 {currentItem.textures.map( (texture, index) => {
@@ -92,7 +140,7 @@ export default (props) => {
                                                 currentItem.selectedIndex = index
                                                 currentItem.texture = loadTexture(texture)
                                             }
-                                            setItem(currentItem)
+                                            setItem()
                                         })}
                                     />
                                 })}
@@ -103,35 +151,26 @@ export default (props) => {
                         }
                         <FormGroup row className={'sliders'}>
                             {Object.entries(currentItem).map(([key, value]) => {
-                                if (typeof value === 'number' && !key.includes('Index')) {
+                                if (key.includes('slider')) {
                                     return <FormControlLabel key={key}
                                         control={
                                             <PrettoSlider
-                                                value={(key.includes('Angle') ? parseInt(Math.radToDeg(value)) : value)}
+                                                value={((key.includes('angle') || key.includes('Angle')) ? parseInt(Math.radToDeg(currentItem[key].value)) : currentItem[key].value)}
                                                 valueLabelDisplay='auto'
-                                                onChange={(e, val) => (currentItem[key] = (key.includes('Angle') ? Math.degToRad(val) : val), setItem(currentItem))}
-                                                step={0.01}
-                                                min={key.includes('Angle')
-                                                    ? key.includes('wheel')
-                                                        ? -30
-                                                        : 0
-                                                    : key.includes('Depth')
-                                                        ? -1
-                                                        : 0
-                                                }
-                                                max={key.includes('Angle')
-                                                    ? key.includes('wheel')
-                                                        ? 30
-                                                        : 360
-                                                    : key.includes('Depth')
-                                                        ? 1
-                                                        : 100
-                                                }
-                                                name={key}
+                                                onChange={(e, val) => (
+                                                    currentItem[key].value = ((key.includes('angle') || key.includes('Angle')) ? Math.degToRad(val) : val), setItem(),
+                                                    key.includes('render_px') ? renderGuide(true) : null
+                                                )}
+                                                step={currentItem[key].step ? currentItem[key].step : 0.01}
+                                                min={currentItem[key].range ? currentItem[key].range[0] : 0}
+                                                max={currentItem[key].range ? currentItem[key].range[1] : 100}
+                                                name={currentItem[key].name ? currentItem[key].name : key}
                                                 color='primary'
+                                                onMouseEnter={(e) => (key.includes('render_px') ? renderGuide(true) : null)}
+                                                onMouseLeave={(e) => (key.includes('render_px') ? renderGuide(false) : null)}
                                             />
                                         }
-                                        label={key}
+                                        label={currentItem[key].name ? currentItem[key].name : key}
                                     />
                                 }
                             })}
@@ -143,7 +182,7 @@ export default (props) => {
                                         control={
                                             <PurpleSwitch
                                                 checked={value}
-                                                onChange={(e) => (currentItem[key] = e.target.checked, setItem(currentItem))}
+                                                onChange={(e) => (currentItem[key] = e.target.checked, setItem())}
                                                 name={key}
                                                 color='primary'
                                             />
@@ -172,14 +211,14 @@ export default (props) => {
                                 currentItem.selectedIndex = currentItem.textures.length - 1
                                 currentItem.texture = loadTexture(url)
 
-                                setItem(currentItem)
+                                setItem()
                             }
                         } }
                     />
                 </div>
             }
-            <div className={`GlobalActions ${background}`}>
-                <FormControlLabel
+            <div className={`GlobalActions ${checkContrast(scene.color)}`}>
+                {/* <FormControlLabel
                     control={
                         <PurpleSwitch
                             checked={background == 'black' ? true : false}
@@ -189,8 +228,8 @@ export default (props) => {
                         />
                     }
                     label={`Dark Mode`}
-                />
-                <div className={`Button`}
+                /> */}
+                {/* <div className={`Button`}
                     onClick={(e)=>{
                         e.stopPropagation()
                         e.preventDefault()
@@ -211,6 +250,13 @@ export default (props) => {
                         }
                     }}>
                     📷 Save PNG
+                </div> */}
+                <div className={`Button`}
+                    onClick={(e)=>{
+                        e.stopPropagation()
+                        setCurrent('scene')
+                    }}>
+                    Scene and rendering
                 </div>
             </div>
         </div>

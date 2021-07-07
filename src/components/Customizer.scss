@@ -10,6 +10,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    pointer-events: none;
 
     .GlobalActions {
         display: flex;
@@ -38,6 +39,7 @@
             color: white;
             width: fit-content;
             margin-left: 30px;
+            text-align: center;
 
             border: 2px white solid;
             font-size: 1rem;
@@ -45,6 +47,7 @@
             font-weight: 600;
             line-height: 1.5;
             letter-spacing: 0.00938em;
+            pointer-events: auto;
         }
     }
 
@@ -53,6 +56,40 @@
             display: flex;
             align-items: baseline;
             margin-bottom: 30px;
+
+            .ColorPicker {
+                .picker {
+                    width: 90px !important;
+                    height: 90px !important;
+                    margin-right: 30px;
+                    margin-bottom: 10px;
+                    pointer-events: auto;
+                }
+
+                input {
+                    width: 90px !important;
+                    height: 30px !important;
+                    position: relative;
+                    box-sizing: border-box;
+                    padding: 0 10px;
+                    border-radius: 5px;
+                    background-color: black;
+                    color: white;
+                    width: fit-content;
+
+                    border: 1px white solid;
+                    font-size: 1rem;
+                    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+                    font-weight: 500;
+                    line-height: 1.5;
+                    letter-spacing: 0.00938em;
+                    pointer-events: auto;
+                }
+
+                input:focus, textarea:focus, select:focus{
+                    outline: none;
+                }
+            }
     
             &.black {
                 color: white;
@@ -60,12 +97,6 @@
     
             &.white {
                 color: black;
-            }
-    
-            .picker {
-                width: 90px !important;
-                height: 90px !important;
-                margin-right: 30px;
             }
     
             h1 {
@@ -87,6 +118,7 @@
             .MuiFormGroup-row {
                 &.sliders {
                     flex-shrink: 0;
+                    pointer-events: auto;
     
                     label {
                         flex-shrink: 0;
@@ -98,6 +130,10 @@
                         margin-right: 30px;
                         margin-bottom: 20px;
                     }
+                }
+
+                &.switch {
+                    pointer-events: auto;
                 }
             }
     
@@ -124,6 +160,7 @@
                     font-weight: 600;
                     line-height: 1.5;
                     letter-spacing: 0.00938em;
+                    pointer-events: auto;
                 }
     
                 .Texture {
@@ -138,6 +175,7 @@
                     border-radius: 10px;
                     cursor: pointer;
                     position: relative;
+                    pointer-events: auto;
     
                     &.bin {
                         background-position: top right;
