@@ -28,7 +28,7 @@ export default (props) => {
 
   useFrame((state, delta) => {
     if (items.scene.rotateServe) {
-      items.scene.serveAngle_slider.value = (items.scene.serveAngle_slider.value + 0.01) % 6.28319 // 360rad
+      items.scene.serveAngle_slider.value = (items.scene.serveAngle_slider.value + items.scene.rotateSpeed_slider.value) % 6.28319 // 360rad
       setItem()
       // invalidate()
     }

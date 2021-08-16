@@ -57,7 +57,7 @@ const PurpleSwitch = withStyles({
 })(Switch)
 
 export default (props) => {
-    const [current, setCurrent, items, scene, setItem, loadTexture] = useStore(state => [state.current, state.setCurrent, state.items, state.items.scene, state.setItem, state.loadTexture])
+    const [current, setCurrent, items, scene, setItem, loadTexture, rendering, setRendering] = useStore(state => [state.current, state.setCurrent, state.items, state.items.scene, state.setItem, state.loadTexture, state.rendering, state.setRendering])
     const currentItem = current ? items[current] : null
     const imageInput = useRef()
 
@@ -83,16 +83,56 @@ export default (props) => {
     }
 
     const renderGuide = (show = true) => {
+        if (rendering) {
+            return
+        }
+
         if (show) {
-            const ratio = (window.innerWidth / window.innerHeight) / (scene.width_render_px_slider.value / scene.height_render_px_slider.value) // val > 1 means wider
-            scene.renderWidth = ratio > 1 ? String(100 - (ratio * 20)) + '%' : '100%'
-            scene.renderHeight = ratio < 1 ? String(ratio * 100) + '%' : '100%'
+            scene.renderWidth = String(scene.width_render_px_slider.value / 2) + 'px'
+            scene.renderHeight = String(scene.height_render_px_slider.value / 2) + 'px'
         } else {
             scene.renderWidth = '100%'
             scene.renderHeight = '100%'
         }
         
         setItem()
+    }
+
+    const render = (action = 'render frame') => {
+        scene.renderWidth = String(scene.width_render_px_slider.value / 2) + 'px'
+        scene.renderHeight = String(scene.height_render_px_slider.value / 2) + 'px'
+        setRendering(true)
+
+        if (action === 'render video') {
+            // const frameCount = 24 * 4
+            // const inc = 6.28319 / frameCount // 360rad
+            // // items.scene.serveAngle_slider.value = 0
+            // // setItem()
+
+            // for (let f = 0; f < frameCount; f++) {
+            //     items.scene.serveAngle_slider.value = (items.scene.serveAngle_slider.value + inc) % 6.28319
+            //     setItem()
+            // }
+        } else {
+            const canvas = document.getElementsByTagName('canvas')[0]
+                    
+            if (canvas) {
+                const url = canvas.toDataURL( 'image/png' )
+                const link = document.createElement('a')
+
+                link.setAttribute('href', url)
+                link.setAttribute('target', '_blank')
+                link.setAttribute('download', 'render')
+
+                link.click()
+            } else {
+                console.warn('Could not find canvas to render from!')
+            }
+        }
+
+        // scene.renderWidth = '100%'
+        // scene.renderHeight = '100%'
+        setRendering(false)
     }
 
     return (
@@ -166,8 +206,8 @@ export default (props) => {
                                                 max={currentItem[key].range ? currentItem[key].range[1] : 100}
                                                 name={currentItem[key].name ? currentItem[key].name : key}
                                                 color='primary'
-                                                onMouseEnter={(e) => (key.includes('render_px') ? renderGuide(true) : null)}
-                                                onMouseLeave={(e) => (key.includes('render_px') ? renderGuide(false) : null)}
+                                                onMouseEnter={(e) => (key.includes('render') ? renderGuide(true) : null)}
+                                                onMouseLeave={(e) => (key.includes('render') ? renderGuide(false) : null)}
                                             />
                                         }
                                         label={currentItem[key].name ? currentItem[key].name : key}
@@ -189,6 +229,25 @@ export default (props) => {
                                         }
                                         label={key}
                                     />
+                                }
+                            })}
+                        </FormGroup>
+                        <FormGroup row className={'buttons'}>
+                            {Object.entries(currentItem).map(([key, value]) => {
+                                if (key.includes('button')) {
+                                    return <div className={`Button`} key={key}
+                                        onMouseEnter={(e) => (key.includes('render') ? renderGuide(true) : null)}
+                                        onMouseLeave={(e) => (key.includes('render') ? renderGuide(false) : null)}
+                                        onClick={(e)=>{
+                                            e.stopPropagation()
+                                            e.preventDefault()
+
+                                            if (key.includes('render')) {
+                                                render(currentItem[key].action)
+                                            }
+                                        }}>
+                                        {currentItem[key].name}
+                                    </div>
                                 }
                             })}
                         </FormGroup>

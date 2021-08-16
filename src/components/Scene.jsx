@@ -7,7 +7,7 @@ import Serve from './Serve'
 import Customizer from './Customizer'
 
 export default (props) => {
-    const [setCurrent, scene] = useStore(state => [state.setCurrent, state.items.scene])
+    const [setCurrent, scene, rendering] = useStore(state => [state.setCurrent, state.items.scene, state.rendering])
 
     return (
         <>

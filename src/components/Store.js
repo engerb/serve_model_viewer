@@ -30,8 +30,8 @@ const loadTexture = (url) => {
 const useStore = create((set, get) => ({
     current: null,
     setCurrent: (current) => {set({current: current})},
-    // background: 'black',
-    // setBackground: (background) => {set({background: background})},
+    rendering: false,
+    setRendering: (render) => {set({rendering: render})},
     binDecals: binDecals,
     lidDecals: lidDecals,
     generalDecals: generalDecals,
@@ -43,8 +43,6 @@ const useStore = create((set, get) => ({
         wheels: {
             name: 'Wheels',
             showHubs: true,
-            // wheelAngle: 0,
-            // wheelSpeed: 0,
             wheelRotation: 0, 
             wheelAngle_slider: {
                 name: 'Wheel angle',
@@ -61,7 +59,6 @@ const useStore = create((set, get) => ({
         },
         scene: {
             name: 'Scene',
-            // serveAngle: 0,
             serveAngle_slider: {
                 name: 'Serve angle',
                 value: 0, 
@@ -69,28 +66,45 @@ const useStore = create((set, get) => ({
                 step: 1,
             },
             rotateServe: false,
-            // squareRender: false,
             showShadow: true,
-            // width_px: 1024,
-            // height_px: 1024,
             width_render_px_slider: {
                 name: 'Render width (px)',
-                value: 1024, 
+                value: 2048, 
                 range: [128, 4096],
                 step: 128,
             },
             height_render_px_slider: {
                 name: 'Render height (px)',
-                value: 1024, 
+                value: 2048, 
                 range: [128, 4096],
                 step: 128,
             },
-            // renderPNG_button: {
-
-            // },
-            // renderAnimation_button: {
-
-            // },
+            animationTime_slider: {
+                name: 'Render animation time (secs @24fps)',
+                value: 4, 
+                range: [1, 10],
+                step: 1,
+            },
+            animationWobble_slider: {
+                name: 'Render animation wobble up/down',
+                value: 1, 
+                range: [1, 5],
+                step: 1,
+            },
+            rotateSpeed_slider: {
+                name: 'Rotate speed',
+                value: 0.01, 
+                range: [0.01, 0.5],
+                step: 0.01,
+            },
+            renderPNG_button: {
+                name: 'Render PNG 📷',
+                action: 'render frame'
+            },
+            renderAnimation_button: {
+                name: 'Render turntable (apng) 🎥',
+                action: 'render video'
+            },
             renderWidth: '100%',
             renderHeight: '100%',
             color: '#000000',

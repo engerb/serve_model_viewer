@@ -12,6 +12,31 @@
     align-items: flex-start;
     pointer-events: none;
 
+    .Button {
+        height: 50px;
+        cursor: pointer;
+        position: relative;
+        box-sizing: border-box;
+        padding: 0 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        background-color: black;
+        color: white;
+        width: fit-content;
+        // margin-left: 30px;
+        text-align: center;
+
+        border: 2px white solid;
+        font-size: 1rem;
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-weight: 600;
+        line-height: 1.5;
+        letter-spacing: 0.00938em;
+        pointer-events: auto;
+    }
+
     .GlobalActions {
         display: flex;
         justify-content: flex-end;
@@ -26,28 +51,28 @@
         }
 
         .Button {
-            height: 50px;
-            cursor: pointer;
-            position: relative;
-            box-sizing: border-box;
-            padding: 0 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            background-color: black;
-            color: white;
-            width: fit-content;
+        //     height: 50px;
+        //     cursor: pointer;
+        //     position: relative;
+        //     box-sizing: border-box;
+        //     padding: 0 30px;
+        //     display: flex;
+        //     justify-content: center;
+        //     align-items: center;
+        //     border-radius: 10px;
+        //     background-color: black;
+        //     color: white;
+        //     width: fit-content;
             margin-left: 30px;
-            text-align: center;
+        //     text-align: center;
 
-            border: 2px white solid;
-            font-size: 1rem;
-            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-            font-weight: 600;
-            line-height: 1.5;
-            letter-spacing: 0.00938em;
-            pointer-events: auto;
+        //     border: 2px white solid;
+        //     font-size: 1rem;
+        //     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        //     font-weight: 600;
+        //     line-height: 1.5;
+        //     letter-spacing: 0.00938em;
+        //     pointer-events: auto;
         }
     }
 
@@ -134,6 +159,13 @@
 
                 &.switch {
                     pointer-events: auto;
+                }
+
+                &.buttons {
+                    .Button {
+                        margin-right: 30px;
+                        margin-top: 30px;
+                    }
                 }
             }
     
