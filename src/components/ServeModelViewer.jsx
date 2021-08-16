@@ -86,12 +86,12 @@ export default (props) => {
                     </>
                 }
 
-                {/* <Suspense fallback={null}>
+                <Suspense fallback={null}>
                     <Serve rollScene={props.rollScene} customizer={props.customizer} />
-                </Suspense> */}
+                </Suspense>
                 
 
-                {/* <Lighting /> */}
+                <Lighting />
                 {props.stats &&
                     <Stats />
                 }

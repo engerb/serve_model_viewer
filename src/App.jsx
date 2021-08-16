@@ -9,9 +9,9 @@ export default () => {
             backgroundScene
             rollScene
             orbitControls
-            bgColor = {'black'}
-            lidar
-            lidarOnly
+            // bgColor = {'black'}
+            // lidar
+            // lidarOnly
             powerEfficiencyMode
         />
         // <Router>
